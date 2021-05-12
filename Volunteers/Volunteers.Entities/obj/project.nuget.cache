@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "tJzUrTNYIjxOMTrL/oA8O6eZ13AUT3czJ+O41uC6+OxM4bsli0QldHeoWyFpX+28sJyEBDgzCqJLJ7TV/N78BA==",
+  "dgSpecHash": "4LxsEumBjijKVKFV+orfpHWBGpGZhWjIsTlFw1AMd1ySp/YMFAL+shjDlQ8LoM0ESbmUqepM2oH3CkLYDgKK9g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.Entities\\Volunteers.Entities.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "E:\\volunteers\\Volunteers\\Volunteers.Entities\\Volunteers.Entities.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Юрий\\.nuget\\packages\\stylecop.analyzers\\1.1.118\\stylecop.analyzers.1.1.118.nupkg.sha512"
+  ],
   "logs": []
 }
