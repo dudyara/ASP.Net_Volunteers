@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj": {}
+    "E:\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj": {
+    "E:\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj",
+        "projectUniqueName": "E:\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj",
         "projectName": "Volunteers.API",
-        "projectPath": "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj",
-        "packagesPath": "C:\\Users\\пк\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.API\\obj\\",
+        "projectPath": "E:\\volunteers\\Volunteers\\Volunteers.API\\Volunteers.API.csproj",
+        "packagesPath": "C:\\Users\\Юрий\\.nuget\\packages\\",
+        "outputPath": "E:\\volunteers\\Volunteers\\Volunteers.API\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\пк\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Юрий\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -68,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

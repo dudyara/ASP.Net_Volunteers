@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj": {}
+    "E:\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj": {
+    "E:\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj",
+        "projectUniqueName": "E:\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj",
         "projectName": "Volunteers.Tests",
-        "projectPath": "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj",
-        "packagesPath": "C:\\Users\\пк\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\пк\\source\\repos\\volunteers\\Volunteers\\Volunteers.Tests\\obj\\",
+        "projectPath": "E:\\volunteers\\Volunteers\\Volunteers.Tests\\Volunteers.Tests.csproj",
+        "packagesPath": "C:\\Users\\Юрий\\.nuget\\packages\\",
+        "outputPath": "E:\\volunteers\\Volunteers\\Volunteers.Tests\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\пк\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Юрий\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -42,6 +39,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.1.118, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -57,7 +62,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }
