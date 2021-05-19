@@ -1,6 +1,7 @@
 ﻿namespace Volunteers.API.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Volunteers.Services.Services;
 
     /// <summary>
     /// TestController.
@@ -12,10 +13,12 @@
         /// <summary>
         /// It's a test method Index.
         /// </summary>
+        /// <param name="service">Сервис.</param>
         [HttpGet]
-        public string Index()
+        public string GetHelloWorld(
+            [FromServices] TestService service)
         {
-            return "Hello, World";
+            return service.GetHelloWorld();
         }
 
         /// <summary>
