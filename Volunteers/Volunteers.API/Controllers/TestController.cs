@@ -14,11 +14,13 @@
         /// It's a test method Index.
         /// </summary>
         /// <param name="service">Сервис.</param>
+        /// <param name="name">Имя.</param>
         [HttpGet]
         public string GetHelloWorld(
-            [FromServices] TestService service)
+            [FromServices] TestService service,
+            [FromQuery] string name)
         {
-            return service.GetHelloWorld();
+            return service.GetHelloWorld() + " " + name;
         }
 
         /// <summary>
