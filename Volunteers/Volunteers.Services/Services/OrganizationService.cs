@@ -65,5 +65,36 @@
             var orgDto = Mapper.Map<OrganizationDto>(org);
             return orgDto;
         }
+
+        /// <summary>
+        /// Выдача организаций по типы их активности
+        /// </summary>
+        /// <param name="ids">id активность</param>
+        /// <returns></returns>
+        public async Task<ActionResult<List<OrganizationDto>>> GetByIds(List<long> ids)
+        {
+            var organizations = await Repository.Get().Include(c => c.ActivityTypes).ToListAsync();
+            List<Organization> result = new List<Organization>();
+            int c = 0;
+            for (int i = 0; i < organizations.Count; i++)
+            {
+                for (int j = 0; j < organizations[i].ActivityTypes.Count; j++)
+                {
+                    for (int k = 0; k < ids.Count; k++)
+                    {
+                        if (organizations[i].ActivityTypes[j].Id == ids[k])
+                        {
+                            result.Add(organizations[i]);
+                            goto LoopEnd;
+                        }
+                    }
+                }
+
+            LoopEnd: c++;
+            }
+
+            var organizationDtos = Mapper.Map<List<OrganizationDto>>(result);
+            return organizationDtos;
+        }
     }
 }
