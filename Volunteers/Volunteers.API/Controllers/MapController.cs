@@ -1,6 +1,4 @@
-﻿
-
-namespace Volunteers.API.Controllers
+﻿/*namespace Volunteers.API.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -48,4 +46,4 @@ namespace Volunteers.API.Controllers
             return result;
         }
     }
-}
+}*/

@@ -8,10 +8,9 @@
     using Microsoft.EntityFrameworkCore;
     using Volunteers.Entities;
 
-    /// <summary>
-    /// Реализация репозитория 
-    /// </summary>
-    public class DbRepository : IDbRepository
+    /// <inheritdoc />
+    public class DbRepository<TEntity> : IDbRepository<TEntity>
+    where TEntity : class, IEntity
     {
         private readonly AppDbContext _context;
 
@@ -25,81 +24,71 @@
         }
 
         /// <inheritdoc />
-        public IQueryable<T> Get<T>()
-            where T : class, IEntity
+        public IQueryable<TEntity> Get()
         {
-            return _context.Set<T>().AsQueryable();
+            return _context.Set<TEntity>().AsQueryable();
         }
 
         /// <inheritdoc />
-        public IQueryable<T> Get<T>(Expression<Func<T, bool>> selector)
-            where T : class, IEntity
+        public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> selector)
         {
-            return _context.Set<T>().Where(selector).AsQueryable();
+            return _context.Set<TEntity>().Where(selector).AsQueryable();
         }
 
         /// <inheritdoc />
-        public async Task<long> Add<T>(T newEntity)
-            where T : class, IEntity
+        public IQueryable<TEntity> GetAll()
         {
-            var entity = await _context.Set<T>().AddAsync(newEntity);
+            return _context.Set<TEntity>().AsQueryable();
+        }
+
+        /// <inheritdoc />
+        public async Task<long> Add(TEntity newEntity)
+        {
+            var entity = await _context.Set<TEntity>().AddAsync(newEntity);
             return entity.Entity.Id;
         }
 
         /// <inheritdoc />
-        public async Task AddRange<T>(IEnumerable<T> newEntities)
-            where T : class, IEntity
+        public async Task AddRange(IEnumerable<TEntity> newEntities)
         {
-            await _context.Set<T>().AddRangeAsync(newEntities);
+            await _context.Set<TEntity>().AddRangeAsync(newEntities);
         }
 
         /// <inheritdoc />
-        public async Task Delete<T>(long id)
-            where T : class, IEntity
+        public async Task Delete(long id)
         {
-            var activeEntity = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
+            var activeEntity = await _context.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
             await Task.Run(() => _context.Update(activeEntity));
         }
 
         /// <inheritdoc />
-        public async Task Remove<T>(T entity)
-            where T : class, IEntity
+        public async Task Remove(TEntity entity)
         {
-            await Task.Run(() => _context.Set<T>().Remove(entity));
+            await Task.Run(() => _context.Set<TEntity>().Remove(entity));
         }
 
         /// <inheritdoc />
-        public async Task RemoveRange<T>(IEnumerable<T> entities)
-            where T : class, IEntity
+        public async Task RemoveRange(IEnumerable<TEntity> entities)
         {
-            await Task.Run(() => _context.Set<T>().RemoveRange(entities));
+            await Task.Run(() => _context.Set<TEntity>().RemoveRange(entities));
         }
 
         /// <inheritdoc />
-        public async Task Update<T>(T entity)
-            where T : class, IEntity
+        public async Task Update(TEntity entity)
         {
-            await Task.Run(() => _context.Set<T>().Update(entity));
+            await Task.Run(() => _context.Set<TEntity>().Update(entity));
         }
 
         /// <inheritdoc />
-        public async Task UpdateRange<T>(IEnumerable<T> entities) 
-            where T : class, IEntity
+        public async Task UpdateRange(IEnumerable<TEntity> entities)
         {
-            await Task.Run(() => _context.Set<T>().UpdateRange(entities));
+            await Task.Run(() => _context.Set<TEntity>().UpdateRange(entities));
         }
 
         /// <inheritdoc />
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
-        }
-
-        /// <inheritdoc />
-        public IQueryable<T> GetAll<T>() 
-            where T : class, IEntity
-        {
-            return _context.Set<T>().AsQueryable();
         }
     }
 }

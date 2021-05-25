@@ -1,12 +1,8 @@
 ﻿namespace Volunteers.Services.Services
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
-    using System.Web.Mvc;
-    using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -18,21 +14,16 @@
     /// <summary>
     /// RequestService
     /// </summary>
-    public class RequestService : BaseService
+    public class RequestService : BaseService<Request>
     {
-        private IDbRepository repository;
-        private IVolunteerMapper mapper;
-
         /// <summary>
         /// Метод заявок.
         /// </summary>
         /// <param name="mapper">Маппер.</param>
         /// <param name="repository">repository</param>
-        public RequestService(IVolunteerMapper mapper, IDbRepository repository)
+        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository)
             : base(mapper, repository)
         {
-            this.mapper = mapper;
-            this.repository = repository;
         }
 
         /// <summary>
@@ -40,8 +31,8 @@
         /// </summary>
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get()
         {
-            var requests = await repository.Get<Request>().ToListAsync();
-            var requestsDto = mapper.Map<List<RequestDto>>(requests);
+            var requests = await Repository.GetAll().ToListAsync();
+            var requestsDto = Mapper.Map<List<RequestDto>>(requests);
             return requestsDto;
         }
 
@@ -50,8 +41,8 @@
         /// </summary>
         public async Task<ActionResult<IEnumerable<RequestDto>>> GetPull()
         {
-            var requests = await repository.Get<Request>(x => x.RequestStatus == RequestStatus.Waiting).ToListAsync();
-            var requestsDto = mapper.Map<List<RequestDto>>(requests);
+            var requests = await Repository.Get(x => x.RequestStatus == RequestStatus.Waiting).ToListAsync();
+            var requestsDto = Mapper.Map<List<RequestDto>>(requests);
             return requestsDto;
         }
 
@@ -59,10 +50,11 @@
         /// GetOneRequest
         /// </summary>
         /// <param name="id">id.</param>
-        public async Task<ActionResult<RequestDto>> GetByID(long id)
+        public async Task<ActionResult<RequestDto>> GetById(long id)
         {
-            var request = await repository.Get<Request>().FirstOrDefaultAsync(x => x.Id == id);
-            var requestDto = mapper.Map<RequestDto>(request);
+            var request = await Repository.Get(x => x.Id == id)
+                .FirstOrDefaultAsync();
+            var requestDto = Mapper.Map<RequestDto>(request);
             return requestDto;
         }
 
@@ -77,12 +69,12 @@
                 return null;
             }
 
-            var request = mapper.Map<Request>(requestDto);
+            var request = Mapper.Map<Request>(requestDto);
             request.StartDate = DateTime.Now;
             request.RequestStatus = RequestStatus.Waiting;
             request.RequestPriority = RequestPriority.Undefined;
-            await repository.Add(request);
-            await repository.SaveChangesAsync();
+            await Repository.Add(request);
+            await Repository.SaveChangesAsync();
             return request;
         }
     }
