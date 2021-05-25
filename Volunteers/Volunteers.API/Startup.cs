@@ -1,7 +1,10 @@
 ﻿namespace Volunteers.API
 {
+    using DB;
+    using Entities;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -35,6 +38,10 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<AppDbContext>();
             services.Scan(scan =>
                 scan.FromAssemblyOf<BaseService>()
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))
@@ -52,6 +59,7 @@
             });
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
+            services.AddTransient<IDbRepository, DbRepository>(); 
         }
 
         /// <summary>
@@ -77,6 +85,7 @@
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

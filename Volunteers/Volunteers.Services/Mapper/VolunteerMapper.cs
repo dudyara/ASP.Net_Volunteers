@@ -1,12 +1,30 @@
 ﻿namespace Volunteers.Services.Mapper
 {
     using AutoMapper;
+    using Volunteers.Entities;
+    using Volunteers.Services.Dto;
 
     /// <summary>
     /// Базовый класс для маппера
     /// </summary>
     public class VolunteerMapper : IVolunteerMapper
     {
+        /// <summary>
+        /// ctor.
+        /// </summary>
+        public VolunteerMapper()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Request, RequestDto>();
+                cfg.CreateMap<CreateRequestDto, Request>();
+                cfg.CreateMap<Organization, OrganizationDto>();
+                cfg.CreateMap<OrganizationDto, Organization>();
+                cfg.CreateMap<ActivityType, ActivityTypeDto>();
+            });
+            Mapper = config.CreateMapper();
+        }
+
         /// <inheritdoc />
         public IConfigurationProvider ConfigurationProvider => Mapper.ConfigurationProvider;
 
