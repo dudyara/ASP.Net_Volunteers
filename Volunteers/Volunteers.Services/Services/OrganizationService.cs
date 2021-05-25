@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -13,21 +12,19 @@
     /// <summary>
     /// OrganizationService.
     /// </summary>
-    public class OrganizationService : BaseService
+    public class OrganizationService : BaseService<Organization>
     {
-        private readonly IVolunteerMapper mapper;
-        private readonly IDbRepository repository;
 
         /// <summary>
         /// OrganizationService.
         /// </summary>
         /// <param name="mapper">mapper.</param>
         /// <param name="repository">repository.</param>
-        public OrganizationService(IVolunteerMapper mapper, IDbRepository repository)
+        public OrganizationService(
+            IVolunteerMapper mapper,
+            IDbRepository<Organization> repository)
             : base(mapper, repository)
         {
-            this.mapper = mapper;
-            this.repository = repository;
         }
 
         /// <summary>
@@ -36,8 +33,8 @@
         /// <returns>.</returns>
         public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get()
         {
-            var orgs = await repository.Get<Organization>().ToListAsync();
-            var orgDto = mapper.Map<List<OrganizationDto>>(orgs);
+            var orgs = await Repository.GetAll().ToListAsync();
+            var orgDto = Mapper.Map<List<OrganizationDto>>(orgs);
             return orgDto;
         }
 
@@ -52,9 +49,9 @@
                 return null;
             }
 
-            var org = mapper.Map<Organization>(orgDto);
-            await repository.Add(org);
-            await repository.SaveChangesAsync();
+            var org = Mapper.Map<Organization>(orgDto);
+            await Repository.Add(org);
+            await Repository.SaveChangesAsync();
             return org;
         }
 
@@ -62,10 +59,10 @@
         /// GetOneOrganization
         /// </summary>
         /// <param name="id">id.</param>
-        public async Task<ActionResult<OrganizationDto>> GetByID(long id)
+        public async Task<ActionResult<OrganizationDto>> GetById(long id)
         {
-            var org = await repository.Get<Organization>().FirstOrDefaultAsync(x => x.Id == id);
-            var orgDto = mapper.Map<OrganizationDto>(org);
+            var org = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
+            var orgDto = Mapper.Map<OrganizationDto>(org);
             return orgDto;
         }
     }

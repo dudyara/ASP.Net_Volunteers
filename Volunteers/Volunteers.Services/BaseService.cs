@@ -2,31 +2,34 @@
 {
     using Mapper;
     using Volunteers.DB;
+    using Volunteers.Entities;
 
     /// <summary>
     /// Base service
     /// </summary>
-    public abstract class BaseService
+    /// <typeparam name="TEntity">Entity</typeparam>
+    public abstract class BaseService<TEntity>
+    where TEntity : class, IEntity
     {
-        /// <summary>
-        /// Repository
-        /// </summary>
-        private IDbRepository repository;
-
         /// <summary>
         /// ctor.
         /// </summary>
         /// <param name="mapper">Mapper</param>
         /// <param name="repository">Repository</param>
-        protected BaseService(IVolunteerMapper mapper, IDbRepository repository)
+        protected BaseService(IVolunteerMapper mapper, IDbRepository<TEntity> repository)
         {
             Mapper = mapper;
-            this.repository = repository;
+            Repository = repository;
         }
 
         /// <summary>
         /// Mapper.
         /// </summary>
         protected IVolunteerMapper Mapper { get; }
+
+        /// <summary>
+        /// Repository.
+        /// </summary>
+        protected IDbRepository<TEntity> Repository { get; }
     }
 }

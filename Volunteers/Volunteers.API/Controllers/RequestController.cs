@@ -23,9 +23,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.Get();
-            if (result == null)
-                return NotFound();
-            return result;
+            return result ?? NotFound();
         }
 
         /// <summary>
@@ -37,9 +35,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.GetPull();
-            if (result == null)
-                return NotFound();
-            return result;
+            return result ?? NotFound();
         }
 
         /// <summary>
@@ -49,12 +45,11 @@
         /// <param name="service">Сервис.</param>
         [HttpGet("{id}")]
         public async Task<ActionResult<RequestDto>> GetById(
-            long id, [FromServices] RequestService service)
+            [FromQuery] long id,
+            [FromServices] RequestService service)
         {
-            var result = await service.GetByID(id);
-            if (result == null)
-                return NotFound();
-            return result;
+            var result = await service.GetById(id);
+            return result ?? NotFound();
         }
 
         /// <summary>
@@ -65,7 +60,8 @@
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Request>> Create(
-            CreateRequestDto request, [FromServices] RequestService service)
+            [FromBody] CreateRequestDto request,
+            [FromServices] RequestService service)
         {
             var result = await service.Create(request);
 

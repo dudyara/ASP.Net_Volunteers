@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.API
 {
+    using System;
     using DB;
     using Entities;
     using Microsoft.AspNetCore.Builder;
@@ -38,15 +39,13 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<AppDbContext>();
             services.Scan(scan =>
-                scan.FromAssemblyOf<BaseService>()
+                scan.FromAssemblyOf<BaseService<IEntity>>()
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))
                     .AsSelf()
                     .WithTransientLifetime());
+
+            ConfigureDbConnection(services);
 
             services.AddSwaggerGen(c =>
             {
@@ -59,7 +58,8 @@
             });
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
-            services.AddTransient<IDbRepository, DbRepository>(); 
+            services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
+            services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volunteers API");
-            });  
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -91,6 +91,58 @@
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ConfigureDbConnection(IServiceCollection services)
+        {
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(GetConnectionString()));
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<AppDbContext>();
+        }
+
+        private string GetConnectionString()
+        {
+            var dbHost = Environment.GetEnvironmentVariable(EnvironmentVariable.DbHost);
+            if (string.IsNullOrEmpty(dbHost))
+                return Configuration.GetConnectionString("DefaultConnection");
+
+            var dbUser = Environment.GetEnvironmentVariable(EnvironmentVariable.DbUser);
+            var dbPass = Environment.GetEnvironmentVariable(EnvironmentVariable.DbPass);
+            var dbPort = Environment.GetEnvironmentVariable(EnvironmentVariable.DbPort);
+
+            return $"Host={dbHost};Port={dbPort};Database=VolunteerDb;Username={dbUser};Password={dbPass}";
+        }
+
+        /// <summary>
+        /// EnvironmentVariable
+        /// </summary>
+        public class EnvironmentVariable
+        {
+            /// <summary>
+            /// DbHost
+            /// </summary>
+            public const string DbHost = "dbhost";
+
+            /// <summary>
+            /// DbUser
+            /// </summary>
+            public const string DbUser = "dbuser";
+
+            /// <summary>
+            /// DbPass
+            /// </summary>
+            public const string DbPass = "dbpass";
+
+            /// <summary>
+            /// DbPort
+            /// </summary>
+            public const string DbPort = "dbport";
+
+            /// <summary>
+            /// UseSsl
+            /// </summary>
+            public const string UseSsl = "usessl";
         }
     }
 }

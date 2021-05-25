@@ -54,10 +54,10 @@
         /// <param name="id">id.</param>
         /// <param name="service">Сервис.</param>
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrganizationDto>> GetByID(
+        public async Task<ActionResult<OrganizationDto>> GetById(
             long id, [FromServices] OrganizationService service)
         {
-            var result = await service.GetByID(id);
+            var result = await service.GetById(id);
             if (result == null)
                 return NotFound();
             return result;
