@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
-    using Volunteers.Services.Services;
+    using Volunteers.Services.Services; 
 
     /// <summary>
     /// OrganizationController
@@ -58,6 +58,23 @@
             long id, [FromServices] OrganizationService service)
         {
             var result = await service.GetById(id);
+            if (result == null)
+                return NotFound();
+            return result;
+        }
+
+        /// <summary>
+        /// Получение организаций по id активностей
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <param name="ids">ids</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<List<OrganizationDto>>> GetOrganizations(
+            [FromServices] OrganizationService service,
+            [FromQuery] List<long> ids)
+        {
+            var result = await service.GetByIds(ids);
             if (result == null)
                 return NotFound();
             return result;
