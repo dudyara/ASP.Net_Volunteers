@@ -60,6 +60,7 @@
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
             services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
+            services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();
         }
 
         /// <summary>
