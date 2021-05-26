@@ -3,6 +3,7 @@
     using System;
     using DB;
     using Entities;
+    using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,12 @@
         /// <param name="services">services</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+              .AddFluentValidation(s =>
+               {
+                   s.RegisterValidatorsFromAssemblyContaining<Startup>();
+                   s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+               });
             services.Scan(scan =>
                 scan.FromAssemblyOf<BaseService<IEntity>>()
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))

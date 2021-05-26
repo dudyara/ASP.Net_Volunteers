@@ -54,7 +54,7 @@
         public List<ActivityType> ActivityTypes { get; set; } = new List<ActivityType>();
 
         /// <summary>
-        /// Список видов активностей, которыми занимается организация
+        /// Список телефонов организации
         /// </summary>
         public List<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
     }

@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.Services.Dto
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
@@ -40,7 +41,7 @@
         /// Телефон фонда.
         /// </summary>
         [Required]
-        public string PhoneNumber { get; set; }
+        public List<string> PhoneNumbers { get; set; }
 
         /// <summary>
         /// Адрес фонда.
