@@ -5,13 +5,20 @@
     /// </summary>
     public enum RequestStatus : long
     {
-        /// <summary>Ожидание рассмотрения.</summary>
-        Waiting = 1,
+        /// <summary>Приоритет не определен.</summary>
+        [Description("Не определен")]
+        Undefined = 0,
 
-        /// <summary>Ожидание исполнения.</summary>
-        Execution = 2,
+        /// <summary>Высокий приоритет.</summary>
+        [Description("Высокий приоритет")]
+        High = 1,
 
-        /// <summary>Заявка завершена.</summary>
-        Done = 3
+        /// <summary>Средний приоритет.</summary>
+        [Description("Средний приоритет")]
+        Middle = 2,
+
+        /// <summary>Низкий приоритет.</summary>
+        [Description("Низкий приоритет")]
+        Low = 3
     }
 }
