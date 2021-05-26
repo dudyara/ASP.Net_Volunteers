@@ -38,12 +38,6 @@
         public string Description { get; set; }
 
         /// <summary>
-        /// Телефон фонда.
-        /// </summary>
-        [Required]
-        public string PhoneNumber { get; set; }
-
-        /// <summary>
         /// Адрес фонда.
         /// </summary>
         [Required]
@@ -58,5 +52,10 @@
         /// Список видов активностей, которыми занимается организация
         /// </summary>
         public List<ActivityType> ActivityTypes { get; set; } = new List<ActivityType>();
+
+        /// <summary>
+        /// Список видов активностей, которыми занимается организация
+        /// </summary>
+        public List<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
     }
 }

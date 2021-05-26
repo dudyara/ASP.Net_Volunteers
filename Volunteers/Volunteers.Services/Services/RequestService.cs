@@ -27,35 +27,72 @@
         }
 
         /// <summary>
-        /// GetRequests.
-        /// </summary>
-        public async Task<ActionResult<IEnumerable<RequestDto>>> Get()
-        {
-            var requests = await Repository.GetAll().ToListAsync();
-            var requestsDto = Mapper.Map<List<RequestDto>>(requests);
-            return requestsDto;
-        }
-
-        /// <summary>
         /// GetPull.
         /// </summary>
-        public async Task<ActionResult<IEnumerable<RequestDto>>> GetPull()
+        /// <param name="status">status</param>
+        /// <param name="orgId">id</param>
+        public async Task<ActionResult<IEnumerable<RequestDto>>> GetPull(RequestStatus status, long orgId)
         {
-            var requests = await Repository.Get(x => x.RequestStatus == RequestStatus.Waiting).ToListAsync();
+            List<Request> requests = new List<Request>();
+            switch (status)
+            {
+                case RequestStatus.Waiting:
+                    requests = await Repository.Get(x => x.RequestStatus == RequestStatus.Waiting).ToListAsync();
+                    break;
+                default:
+                    requests = await Repository.Get(x => (x.Organization.Id == orgId) &&
+                        (x.RequestStatus == status)).ToListAsync();
+                    break;
+            }
+
             var requestsDto = Mapper.Map<List<RequestDto>>(requests);
             return requestsDto;
         }
 
         /// <summary>
-        /// GetOneRequest
+        /// Изменить статус заявки
         /// </summary>
-        /// <param name="id">id.</param>
-        public async Task<ActionResult<RequestDto>> GetById(long id)
+        /// <param name="requestId">requestId</param>
+        /// <param name="status">status</param>
+        /// <param name="organizationId">organizationId</param>
+        public async Task<ActionResult<Request>> ChangeStatus(long requestId, RequestStatus status, long organizationId)
         {
-            var request = await Repository.Get(x => x.Id == id)
-                .FirstOrDefaultAsync();
-            var requestDto = Mapper.Map<RequestDto>(request);
-            return requestDto;
+            var request = await Repository.Get(x => (x.Id == requestId)).FirstOrDefaultAsync();
+            switch (status)
+            {
+                case RequestStatus.Waiting:
+                    request.OrganizationId = null;
+                    request.RequestStatus = RequestStatus.Waiting;
+                    break;
+                case RequestStatus.Execution:
+                    if (request.RequestStatus == RequestStatus.Waiting)
+                        request.OrganizationId = organizationId;
+                    request.RequestStatus = RequestStatus.Execution;
+                    request.FinishDate = null;
+                    break;
+                case RequestStatus.Done:
+                    request.RequestStatus = RequestStatus.Done;
+                    request.FinishDate = DateTime.Now;
+                    break;
+            }
+
+            await Repository.Update(request);
+            await Repository.SaveChangesAsync();
+            return request;
+        }
+
+        /// <summary>
+        /// Написать комментарий
+        /// </summary>
+        /// <param name="requestId">requestId</param>
+        /// <param name="comment">comment</param>
+        public async Task<ActionResult<Request>> CreateComment(long requestId, string comment)
+        {
+            var request = await Repository.Get(x => (x.Id == requestId)).FirstOrDefaultAsync();
+            request.Comment = comment;
+            await Repository.Update(request);
+            await Repository.SaveChangesAsync();
+            return request;
         }
 
         /// <summary>
@@ -72,7 +109,6 @@
             var request = Mapper.Map<Request>(requestDto);
             request.StartDate = DateTime.Now;
             request.RequestStatus = RequestStatus.Waiting;
-            request.RequestPriority = RequestPriority.Undefined;
             await Repository.Add(request);
             await Repository.SaveChangesAsync();
             return request;

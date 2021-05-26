@@ -17,7 +17,12 @@
         /// <summary>
         /// Дата и время заявки.
         /// </summary>
-        public DateTime StartDate { get; set; }
+        public string StartDate { get; set; }
+
+        /// <summary>
+        /// Дата и время заявки.
+        /// </summary>
+        public string FinishDate { get; set; }
 
         /// <summary>
         /// ФИО Клиента.
@@ -30,13 +35,13 @@
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// Приоритет заявки.
-        /// </summary>
-        public RequestPriority RequestPriority { get; set; }
-
-        /// <summary>
         /// Описание заявки.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Комментарий фонда.
+        /// </summary>
+        public string Comment { get; set; }
     }
 }

@@ -27,11 +27,6 @@
         public RequestStatus RequestStatus { get; set; }
 
         /// <summary>
-        /// Приоритет заявки.
-        /// </summary>
-        public RequestPriority RequestPriority { get; set; }
-
-        /// <summary>
         /// Телефон клиента.
         /// </summary>
         [Required]
@@ -69,6 +64,11 @@
         /// ID Фонда.
         /// </summary>
         public long? OrganizationId { get; set; }
+
+        /// <summary>
+        /// Комментарий
+        /// </summary>
+        public string? Comment { get; set; }
 
         /// <summary>
         /// Фонд, принявший заявку.
