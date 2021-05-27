@@ -11,6 +11,7 @@ namespace Volunteers.Services.Dto
         /// <summary>
         /// Id
         /// </summary>
+        
         public long Id { get; set; }
 
         /// <summary>
