@@ -29,20 +29,10 @@
         /// </summary>
         public string PhoneNumber { get; set; }
 
-        /*/// <summary>
+        /// <summary>
         /// Приоритет заявки.
         /// </summary>
-        public RequestPriorityDto RequestPriority { get; set; }*/
-
-        /// <summary>
-        /// Russian
-        /// </summary>
-        public string RussianRequestPriority { get; set; }
-
-        /// <summary>
-        /// English
-        /// </summary>
-        public string EnglishRequestPriority { get; set; }
+        public RequestPriorityDto RequestPriority { get; set; }
 
         /// <summary>
         /// Описание заявки.
