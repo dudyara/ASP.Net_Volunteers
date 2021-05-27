@@ -1,7 +1,5 @@
 ﻿namespace Volunteers.Entities
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// PhoneNumber
     /// </summary>
@@ -13,8 +11,13 @@
         public string Phone { get; set; }
 
         /// <summary>
+        /// Id организации
+        /// </summary>
+        public long OrganizationId { get; set; }
+
+        /// <summary>
         /// связь с таблицей огранизаций
         /// </summary>
-        public List<Organization> Organizations { get; set; } = new List<Organization>();
+        public Organization Organization { get; set; }
     }
 }

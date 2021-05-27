@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using Volunteers.Entities;
 
     /// <summary>
     /// /OrganizationDto.
@@ -11,25 +12,21 @@
         /// <summary>
         /// Название фонда.
         /// </summary>
-        [Required]
         public string Name { get; set; }
 
         /// <summary>
         /// ФИО Руководителя фонда.
         /// </summary>
-        [Required]
         public string ChiefFIO { get; set; }
 
         /// <summary>
         /// Логотип фонда.
         /// </summary>
-        [Required]
         public string Logo { get; set; }
 
         /// <summary>
         /// Почта фонда.
         /// </summary>
-        [Required]
         public string Mail { get; set; }
 
         /// <summary>
@@ -40,13 +37,16 @@
         /// <summary>
         /// Телефон фонда.
         /// </summary>
-        [Required]
-        public List<string> PhoneNumbers { get; set; }
+        public List<string> Phones { get; set; }
+
+        /// <summary>
+        /// Виды активностей.
+        /// </summary>
+        public List<long> Activities { get; set; }
 
         /// <summary>
         /// Адрес фонда.
         /// </summary>
-        [Required]
         public string Address { get; set; }
     }
 }

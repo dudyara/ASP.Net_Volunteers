@@ -1,6 +1,7 @@
 ﻿namespace Volunteers.Services.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -39,17 +40,25 @@
         }
 
         /// <summary>
-        /// Create
+        /// Create - получаем OrganizationDto в которых список айдишников activityTypes и список стрингов телефонов.
+        /// Это все должно преобразоваться в список самих activityTypes и телефонов. для телефнов сделал, работает, но через for мне не нравится.
         /// </summary>
         /// <param name="orgDto">org.</param>
         public async Task<ActionResult<Organization>> Create(OrganizationDto orgDto)
         {
-            if (string.IsNullOrEmpty(orgDto.Name))
-            {
-                return null;
-            }
-
             var org = Mapper.Map<Organization>(orgDto);
+
+            var phones = new List<PhoneNumber>();
+            List<ActivityType> activities = await Repository
+                .Get(o => o.ActivityType)
+                .Where(o => o.ActivityTypes.Any(x => orgDto.Activities.Contains(x.Id)))
+                .ToListAsync();
+
+            for (int i = 0; i < orgDto.Phones.Count; i++)
+                phones.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
+
+            org.PhoneNumbers = phones;
+            org.ActivityTypes = activities;
             await Repository.Add(org);
             await Repository.SaveChangesAsync();
             return org;

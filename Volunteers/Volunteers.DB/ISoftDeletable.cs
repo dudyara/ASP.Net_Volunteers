@@ -15,6 +15,6 @@
         /// <summary>
         /// DeleteTime
         /// </summary>
-        DateTime DeleteTime { get; set; }
+        DateTime Deleted { get; set; }
     }
 }

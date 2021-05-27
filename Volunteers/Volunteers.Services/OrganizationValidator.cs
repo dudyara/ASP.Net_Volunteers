@@ -20,11 +20,9 @@
                 .EmailAddress()
                     .WithMessage("Неверный формат адреса электронной почты.");
 
-            RuleFor(p => p.PhoneNumbers)
+            RuleForEach(p => p.PhoneNumbers)
                 .NotEmpty()
-                    .WithMessage("Необходимо ввести номер телефона.")
-                .Length(10)
-                    .WithMessage("Неверный формат номера телефона.");
+                    .WithMessage("Необходимо ввести номер телефона.");
         }
     }
 }

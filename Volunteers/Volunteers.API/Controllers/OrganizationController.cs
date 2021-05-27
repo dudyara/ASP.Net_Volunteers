@@ -23,9 +23,7 @@
             [FromServices] OrganizationService service)
         {
             var result = await service.Get();
-            if (result == null)
-                return NotFound();
-            return result;
+            return result ?? NotFound();
         }
 
         /// <summary>
@@ -39,13 +37,7 @@
             OrganizationDto org, [FromServices] OrganizationService service)
         {
             var result = await service.Create(org);
-
-            if (result == null)
-            {
-                BadRequest("Result is null");
-            }
-
-            return Ok(result);
+            return result ?? NotFound();
         }
 
         /// <summary>
@@ -58,9 +50,7 @@
             long id, [FromServices] OrganizationService service)
         {
             var result = await service.GetById(id);
-            if (result == null)
-                return NotFound();
-            return result;
+            return result ?? NotFound();
         }
     }
 }
