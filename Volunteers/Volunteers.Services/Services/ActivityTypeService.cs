@@ -1,4 +1,4 @@
-﻿namespace Volunteers.Services.Services
+namespace Volunteers.Services.Services
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -12,6 +12,7 @@
     /// <summary>
     /// Сервис для работы с видами деятельности компаний
     /// </summary>
+
     public class ActivityTypeService : BaseService<ActivityType>
     {
         /// <summary>
