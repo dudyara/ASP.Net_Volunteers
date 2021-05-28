@@ -47,7 +47,7 @@
         /// <summary>
         /// Местоположение заявки.
         /// </summary>
-        public string? Location { get; set; }
+        public string Location { get; set; }
 
         /// <summary>
         /// Дата и время заявки.
@@ -68,7 +68,7 @@
         /// <summary>
         /// Комментарий
         /// </summary>
-        public string? Comment { get; set; }
+        public string Comment { get; set; }
 
         /// <summary>
         /// Фонд, принявший заявку.

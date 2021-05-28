@@ -47,18 +47,9 @@
         public async Task<ActionResult<Organization>> Create(OrganizationDto orgDto)
         {
             var org = Mapper.Map<Organization>(orgDto);
-
-            var phones = new List<PhoneNumber>();
-            List<ActivityType> activities = await Repository
-                .Get(o => o.ActivityType)
-                .Where(o => o.ActivityTypes.Any(x => orgDto.Activities.Contains(x.Id)))
-                .ToListAsync();
-
+            
             for (int i = 0; i < orgDto.Phones.Count; i++)
-                phones.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
-
-            org.PhoneNumbers = phones;
-            org.ActivityTypes = activities;
+                org.PhoneNumbers.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
             await Repository.Add(org);
             await Repository.SaveChangesAsync();
             return org;
@@ -82,26 +73,10 @@
         /// <returns></returns>
         public async Task<ActionResult<List<OrganizationDto>>> GetByIds(List<long> ids)
         {
-            var organizations = await Repository.Get().Include(c => c.ActivityTypes).ToListAsync();
-            List<Organization> result = new List<Organization>();
-            int c = 0;
-            for (int i = 0; i < organizations.Count; i++)
-            {
-                for (int j = 0; j < organizations[i].ActivityTypes.Count; j++)
-                {
-                    for (int k = 0; k < ids.Count; k++)
-                    {
-                        if (organizations[i].ActivityTypes[j].Id == ids[k])
-                        {
-                            result.Add(organizations[i]);
-                            goto LoopEnd;
-                        }
-                    }
-                }
-
-            LoopEnd: c++;
-            }
-
+            var result = await Repository
+                .Get()
+                .Where(x => x.ActivityTypes.Any(at => ids.Contains(at.Id)))
+                .ToListAsync();
             var organizationDtos = Mapper.Map<List<OrganizationDto>>(result);
             return organizationDtos;
         }

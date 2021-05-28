@@ -34,5 +34,19 @@
         /// ActivityTypes - таблица типов помощи.
         /// </summary>
         public DbSet<ActivityType> ActivityTypes { get; set; }
+
+        /// <summary>
+        /// Инициализация начальных данных
+        /// </summary>
+        /// <param name="modelBuilder">modelBuilder</param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Role>().HasData(
+                new Role[]
+                {
+                     new Role { Name = "Admin" },
+                     new Role { Name = "Organization" }
+                });
+        }
     }
 }
