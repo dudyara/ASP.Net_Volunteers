@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.Services.Dto
+﻿namespace Volunteers.Services.Dto
 {
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;

@@ -47,7 +47,7 @@
         public async Task<ActionResult<Organization>> Create(OrganizationDto orgDto)
         {
             var org = Mapper.Map<Organization>(orgDto);
-            
+
             for (int i = 0; i < orgDto.Phones.Count; i++)
                 org.PhoneNumbers.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
             await Repository.Add(org);

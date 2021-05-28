@@ -41,11 +41,12 @@
         /// <param name="modelBuilder">modelBuilder</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Role>().HasData(
                 new Role[]
                 {
-                     new Role { Name = "Admin" },
-                     new Role { Name = "Organization" }
+                     new Role { Id = 1, Name = "Admin" },
+                     new Role { Id = 2, Name = "Organization" }
                 });
         }
     }

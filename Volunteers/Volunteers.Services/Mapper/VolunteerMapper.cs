@@ -22,10 +22,7 @@
                 cfg.CreateMap<Organization, OrganizationDto>();
                 cfg.CreateMap<OrganizationDto, Organization>();
                 cfg.CreateMap<ActivityType, ActivityTypeDto>();
-                cfg.CreateMap<Request, RequestDto>()
-                                    .ForMember(src => src.RequestPriority, opt => opt.MapFrom(c => new RequestPriorityDto {
-                                        Id = (long)(c.RequestPriority), Name = c.RequestPriority.ToString(),
-                                        Value = EnumsExtension.GetDescription(c.RequestPriority) }));
+                cfg.CreateMap<Request, RequestDto>();
                                    
                 /*cfg.CreateMap<RequestPriority, RequestPriorityDto>()
                                     .ForMember("English", opt => opt.MapFrom(c => c));*/
