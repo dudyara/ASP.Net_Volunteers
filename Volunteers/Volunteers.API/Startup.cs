@@ -11,6 +11,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
+    using Newtonsoft.Json;
     using Services;
     using Services.Mapper;
 
@@ -50,7 +51,12 @@
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))
                     .AsSelf()
                     .WithTransientLifetime());
-
+            services.AddMvc()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    });
             ConfigureDbConnection(services);
 
             services.AddSwaggerGen(c =>

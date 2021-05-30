@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.Services.Dto
+﻿namespace Volunteers.Services.Dto
 {
 
     /// <summary>
@@ -12,10 +11,12 @@ namespace Volunteers.Services.Dto
         /// Id
         /// </summary>
         public long Id { get; set; }
+
         /// <summary>
         /// Name
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// Value 
         /// </summary>

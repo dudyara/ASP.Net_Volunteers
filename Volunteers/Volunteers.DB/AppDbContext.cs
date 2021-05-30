@@ -42,12 +42,27 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Role>().HasData(
+            modelBuilder
+                .Entity<Role>().HasData(
                 new Role[]
                 {
                      new Role { Id = 1, Name = "Admin" },
                      new Role { Id = 2, Name = "Organization" }
-                });
+                })
+                ;
+            modelBuilder
+                .Entity<Organization>()
+                .HasMany(a => a.ActivityTypes)
+                .WithMany(o => o.Organizations)
+                .UsingEntity<ActivityTypeOrganization>(
+                    j => j
+                    .HasOne(pt => pt.ActivityType)
+                    .WithMany(t => t.ActivityTypeOrganizations)
+                    .HasForeignKey(pt => pt.ActivityTypeId),
+                    j => j
+                    .HasOne(pt => pt.Organization)
+                    .WithMany(p => p.ActivityTypeOrganizations)
+                    .HasForeignKey(pt => pt.OrganizationId));
         }
     }
 }

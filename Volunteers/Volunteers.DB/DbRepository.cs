@@ -10,7 +10,7 @@
 
     /// <inheritdoc />
     public class DbRepository<TEntity> : IDbRepository<TEntity>
-    where TEntity : class, IEntity
+    where TEntity : class, IEntity, ISoftDeletable
     {
         private readonly AppDbContext _context;
 
@@ -26,13 +26,13 @@
         /// <inheritdoc />
         public IQueryable<TEntity> Get()
         {
-            return _context.Set<TEntity>().AsQueryable();
+            return _context.Set<TEntity>().Where(x => x.IsDeleted == false).AsQueryable();
         }
 
         /// <inheritdoc />
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> selector)
         {
-            return _context.Set<TEntity>().Where(selector).AsQueryable();
+            return _context.Set<TEntity>().Where(selector).Where(x => x.IsDeleted == false).AsQueryable();
         }
 
         /// <inheritdoc />
@@ -58,6 +58,8 @@
         public async Task Delete(long id)
         {
             var activeEntity = await _context.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
+            activeEntity.IsDeleted = true;
+            activeEntity.Deleted = DateTime.Now;
             await Task.Run(() => _context.Update(activeEntity));
         }
 

@@ -31,7 +31,7 @@
         /// </summary>
         /// <param name="status">status</param>
         /// <param name="orgId">id</param>
-        public async Task<ActionResult<IEnumerable<RequestDto>>> GetPull(RequestStatus status, long orgId)
+        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId)
         {
             List<Request> requests = new List<Request>();
             switch (status)

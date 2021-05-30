@@ -1,7 +1,5 @@
 ﻿namespace Volunteers.Services.Dto
 {
-    using Volunteers.Entities;
-    using Volunteers.Entities.Enums;
     /// <summary>
     /// RequestTotalDto
     /// </summary>
@@ -9,8 +7,7 @@
     {
         /// <summary>
         /// Id
-        /// </summary>
-        
+        /// </summary>       
         public long Id { get; set; }
 
         /// <summary>

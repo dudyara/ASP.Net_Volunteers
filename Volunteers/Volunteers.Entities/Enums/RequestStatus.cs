@@ -1,6 +1,7 @@
 ﻿namespace Volunteers.Entities.Enums
 {
     using System.ComponentModel;
+
     /// <summary>
     /// Статус заявки.
     /// </summary>

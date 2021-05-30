@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
@@ -9,9 +10,11 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210530163000_AddATO")]
+    partial class AddATO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,12 +130,6 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("TypeName")
                         .HasColumnType("text");
 
@@ -164,27 +161,26 @@ namespace Volunteers.DB.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ChiefFIO")
+                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Logo")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Mail")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -229,9 +225,6 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -242,9 +235,6 @@ namespace Volunteers.DB.Migrations
 
                     b.Property<DateTime?>("FinishDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Location")
                         .HasColumnType("text");
@@ -300,13 +290,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "f5ec5c33-2cdb-4490-9fb2-a3ff8f6656b8",
+                            ConcurrencyStamp = "7711cab7-1e19-4de7-92b2-8e4bfa2ff691",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "3f2184b9-6c89-47dd-80b4-4ee2097083a9",
+                            ConcurrencyStamp = "9e6a83df-344e-4994-a9ca-628e84e8efcc",
                             Name = "Organization"
                         });
                 });

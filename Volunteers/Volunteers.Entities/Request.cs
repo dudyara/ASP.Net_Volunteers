@@ -7,7 +7,7 @@
     /// <summary>
     /// Requests - заявка.
     /// </summary>
-    public class Request : BaseEntity
+    public class Request : BaseEntity, ISoftDeletable
     {
         /// <summary>
         /// ФИО Клиента.
@@ -74,5 +74,11 @@
         /// Фонд, принявший заявку.
         /// </summary>
         public virtual Organization Organization { get; set; }
+
+        /// <inheritdoc/>
+        public bool? IsDeleted { get; set; } = false;
+
+        /// <inheritdoc/>
+        public DateTime? Deleted { get; set; }
     }
 }

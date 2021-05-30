@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using FluentValidation.Results;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -40,19 +41,24 @@
         }
 
         /// <summary>
-        /// Create - получаем OrganizationDto в которых список айдишников activityTypes и список стрингов телефонов.
-        /// Это все должно преобразоваться в список самих activityTypes и телефонов. для телефнов сделал, работает, но через for мне не нравится.
+        /// Create
         /// </summary>
         /// <param name="orgDto">org.</param>
-        public async Task<ActionResult<Organization>> Create(OrganizationDto orgDto)
+        public async Task<ActionResult<ValidationResult>> Create(OrganizationDto orgDto)
         {
+            var validator = new OrganizationValidator();
             var org = Mapper.Map<Organization>(orgDto);
-
+            var validateResult = validator.Validate(org);
+            if (validateResult.IsValid == false)
+                return validateResult;
             for (int i = 0; i < orgDto.Phones.Count; i++)
                 org.PhoneNumbers.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
+            for (int i = 0; i < orgDto.Activities.Count; i++)
+                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.Activities[i] });
             await Repository.Add(org);
             await Repository.SaveChangesAsync();
-            return org;
+            validateResult = validator.Validate(org);
+            return validateResult;
         }
 
         /// <summary>

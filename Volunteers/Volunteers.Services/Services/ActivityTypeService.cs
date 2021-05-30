@@ -12,7 +12,6 @@
     /// <summary>
     /// Сервис для работы с видами деятельности компаний
     /// </summary>
-
     public class ActivityTypeService : BaseService<ActivityType>
     {
         /// <summary>

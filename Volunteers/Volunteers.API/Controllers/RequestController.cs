@@ -27,7 +27,7 @@
             [FromQuery] long id,
             [FromServices] RequestService service)
         {
-            var result = await service.GetPull(status, id);
+            var result = await service.Get(status, id);
             return result ?? NotFound();
         }
 

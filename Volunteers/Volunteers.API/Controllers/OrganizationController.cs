@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FluentValidation.Results;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
@@ -33,7 +34,7 @@
         /// <param name="service">service.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Organization>> Create(
+        public async Task<ActionResult<ValidationResult>> Create(
             OrganizationDto org, [FromServices] OrganizationService service)
         {
             var result = await service.Create(org);

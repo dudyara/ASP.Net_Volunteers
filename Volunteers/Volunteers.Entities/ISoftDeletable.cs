@@ -1,4 +1,4 @@
-﻿namespace Volunteers.DB
+﻿namespace Volunteers.Entities
 {
     using System;
 
@@ -10,11 +10,11 @@
         /// <summary>
         /// IsDeleted
         /// </summary>
-        bool IsDeleted { get; set; }
+        bool? IsDeleted { get; set; }
 
         /// <summary>
         /// DeleteTime
         /// </summary>
-        DateTime Deleted { get; set; }
+        DateTime? Deleted { get; set; }
     }
 }
