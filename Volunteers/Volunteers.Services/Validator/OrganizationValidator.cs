@@ -1,13 +1,12 @@
 ﻿namespace Volunteers.Services
 {
     using FluentValidation;
-    using Volunteers.Entities;
     using Volunteers.Services.Dto;
 
     /// <summary>
     /// Класс валидации организаций
     /// </summary>
-    public class OrganizationValidator : AbstractValidator<Organization>
+    public class OrganizationValidator : AbstractValidator<OrganizationDto>
     {
         /// <summary>
         /// ctor
@@ -20,7 +19,7 @@
                 .EmailAddress()
                     .WithMessage("Неверный формат адреса электронной почты.");
 
-            RuleForEach(p => p.PhoneNumbers)
+            RuleForEach(p => p.Phones)
                 .NotEmpty()
                     .WithMessage("Необходимо ввести номер телефона.");
         }

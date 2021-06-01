@@ -23,7 +23,7 @@
         public async Task<ActionResult<List<ActivityTypeDto>>> Get(
             [FromServices] ActivityTypeService service)
         {
-            var result = await service.GetActivityTypes();
+            var result = await service.Get();
             if (result == null)
                 return NotFound();
             return result;

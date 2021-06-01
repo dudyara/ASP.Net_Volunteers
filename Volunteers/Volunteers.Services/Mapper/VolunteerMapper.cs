@@ -17,15 +17,11 @@
         {
             var config = new MapperConfiguration(cfg =>
             {
-                // cfg.CreateMap<Request, RequestDto>();
                 cfg.CreateMap<CreateRequestDto, Request>();
                 cfg.CreateMap<Organization, OrganizationDto>();
                 cfg.CreateMap<OrganizationDto, Organization>();
                 cfg.CreateMap<ActivityType, ActivityTypeDto>();
                 cfg.CreateMap<Request, RequestDto>();
-                                   
-                /*cfg.CreateMap<RequestPriority, RequestPriorityDto>()
-                                    .ForMember("English", opt => opt.MapFrom(c => c));*/
             });
             Mapper = config.CreateMapper();
         }

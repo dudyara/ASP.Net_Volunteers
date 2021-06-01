@@ -16,7 +16,7 @@
     public class OrganizationController : Controller
     {
         /// <summary>
-        /// GetOrganizations.
+        /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
         [HttpGet]
@@ -28,13 +28,13 @@
         }
 
         /// <summary>
-        /// PostOrganization.
+        /// Добавить новую организацию.
         /// </summary>
         /// <param name="org">organization.</param>
         /// <param name="service">service.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<ValidationResult>> Create(
+        public async Task<ActionResult<Organization>> Create(
             OrganizationDto org, [FromServices] OrganizationService service)
         {
             var result = await service.Create(org);
@@ -61,7 +61,7 @@
         /// <param name="ids">ids</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<OrganizationDto>>> GetOrganizations(
+        public async Task<ActionResult<List<OrganizationDto>>> GetByIds(
             [FromServices] OrganizationService service,
             [FromQuery] List<long> ids)
         {

@@ -12,13 +12,11 @@
         /// <summary>
         /// ФИО Клиента.
         /// </summary>
-        [Required]
         public string FIO { get; set; }
 
         /// <summary>
         /// Возраст клиента.
         /// </summary>
-        [Required]
         public int Age { get; set; }
 
         /// <summary>

@@ -3,6 +3,7 @@
     using System;
     using DB;
     using Entities;
+    using FluentValidation;
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,7 @@
     using Newtonsoft.Json;
     using Services;
     using Services.Mapper;
+    using Volunteers.Services.Dto;
 
     /// <summary>
     /// Startup
@@ -70,6 +72,7 @@
             });
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
+            services.AddTransient<IValidator, OrganizationValidator>();
             services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
             services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();

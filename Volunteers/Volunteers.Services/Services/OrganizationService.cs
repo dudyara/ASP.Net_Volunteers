@@ -1,8 +1,10 @@
 ﻿namespace Volunteers.Services.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using FluentValidation;
     using FluentValidation.Results;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -22,10 +24,12 @@
         /// </summary>
         /// <param name="mapper">mapper.</param>
         /// <param name="repository">repository.</param>
+        /// <param name="validator">validator</param>
         public OrganizationService(
             IVolunteerMapper mapper,
-            IDbRepository<Organization> repository)
-            : base(mapper, repository)
+            IDbRepository<Organization> repository,
+            IValidator validator)
+            : base(mapper, repository, validator)
         {
         }
 
@@ -44,21 +48,21 @@
         /// Create
         /// </summary>
         /// <param name="orgDto">org.</param>
-        public async Task<ActionResult<ValidationResult>> Create(OrganizationDto orgDto)
+        public async Task<ActionResult<Organization>> Create(OrganizationDto orgDto)
         {
-            var validator = new OrganizationValidator();
-            var org = Mapper.Map<Organization>(orgDto);
-            var validateResult = validator.Validate(org);
+            var context = new ValidationContext<OrganizationDto>(orgDto);
+            var validateResult = Validator.Validate(context);
             if (validateResult.IsValid == false)
-                return validateResult;
+                throw new Exception("Неверный формат данных");
+
+            var org = Mapper.Map<Organization>(orgDto);
             for (int i = 0; i < orgDto.Phones.Count; i++)
                 org.PhoneNumbers.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
             for (int i = 0; i < orgDto.Activities.Count; i++)
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.Activities[i] });
             await Repository.Add(org);
             await Repository.SaveChangesAsync();
-            validateResult = validator.Validate(org);
-            return validateResult;
+            return org;
         }
 
         /// <summary>

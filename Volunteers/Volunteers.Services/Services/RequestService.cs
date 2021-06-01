@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -21,8 +22,9 @@
         /// </summary>
         /// <param name="mapper">Маппер.</param>
         /// <param name="repository">repository</param>
-        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository)
-            : base(mapper, repository)
+        /// <param name="validator">validator</param>
+        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository, IValidator validator)
+            : base(mapper, repository, validator)
         {
         }
 
