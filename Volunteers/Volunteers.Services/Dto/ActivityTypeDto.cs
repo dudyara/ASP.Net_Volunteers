@@ -6,8 +6,13 @@
     public class ActivityTypeDto
     {
         /// <summary>
+        /// Id
+        /// </summary>
+        public long Id { get; set; }
+
+        /// <summary>
         /// Название вида активности
         /// </summary>
-        public string TypeName { get; set; }
+        public string Label { get; set; }
     }
 }

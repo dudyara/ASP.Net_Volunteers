@@ -32,6 +32,20 @@
         }
 
         /// <summary>
+        /// Получить количество заявок разных организаций
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <param name="service">Сервис.</param>
+        [HttpGet]
+        public async Task<int[]> GetCount(
+            [FromQuery] long id,
+            [FromServices] RequestService service)
+        {
+            var result = await service.GetCount(id);
+            return result;
+        }
+
+        /// <summary>
         /// Изменить статус заявки.
         /// </summary>
         /// <param name="requestId">requestId.</param>

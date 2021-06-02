@@ -15,11 +15,6 @@
         public string FIO { get; set; }
 
         /// <summary>
-        /// Возраст клиента.
-        /// </summary>
-        public int Age { get; set; }
-
-        /// <summary>
         /// Статус заявки.
         /// </summary>
         public RequestStatus RequestStatus { get; set; }
@@ -31,21 +26,10 @@
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// Адрес клиента.
-        /// </summary>
-        [Required]
-        public string Address { get; set; }
-
-        /// <summary>
         /// Описание заявки.
         /// </summary>
         [Required]
         public string Description { get; set; }
-
-        /// <summary>
-        /// Местоположение заявки.
-        /// </summary>
-        public string Location { get; set; }
 
         /// <summary>
         /// Дата и время заявки.

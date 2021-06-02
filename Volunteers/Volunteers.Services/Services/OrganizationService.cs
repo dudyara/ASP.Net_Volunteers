@@ -39,7 +39,10 @@
         /// <returns>.</returns>
         public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get()
         {
-            var orgs = await Repository.GetAll().ToListAsync();
+            var orgs = await Repository
+                .GetAll()
+                .Include(d => d.ActivityTypes)
+                .ToListAsync();
             var orgDto = Mapper.Map<List<OrganizationDto>>(orgs);
             return orgDto;
         }
@@ -58,8 +61,8 @@
             var org = Mapper.Map<Organization>(orgDto);
             for (int i = 0; i < orgDto.Phones.Count; i++)
                 org.PhoneNumbers.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
-            for (int i = 0; i < orgDto.Activities.Count; i++)
-                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.Activities[i] });
+            for (int i = 0; i < orgDto.KeyWords.Count; i++)
+                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.KeyWords[i].Id });
             await Repository.Add(org);
             await Repository.SaveChangesAsync();
             return org;

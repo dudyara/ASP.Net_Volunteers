@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
@@ -36,19 +37,79 @@
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId)
         {
             List<Request> requests = new List<Request>();
-            switch (status)
+            if ((status == 0) && (orgId == 0))
             {
-                case RequestStatus.Waiting:
-                    requests = await Repository.Get(x => x.RequestStatus == RequestStatus.Waiting).ToListAsync();
-                    break;
-                default:
-                    requests = await Repository.Get(x => (x.Organization.Id == orgId) &&
-                        (x.RequestStatus == status)).ToListAsync();
-                    break;
+                requests = await Repository.Get().Include(u => u.Organization).ToListAsync();
+            }
+            else
+            if (status == 0)
+            {
+                requests = await Repository
+                    .Get()
+                    .Where(r => r.OrganizationId == orgId)
+                    .Include(u => u.Organization)
+                    .ToListAsync();
+            }
+            else
+            if (orgId == 0)
+            {
+                requests = await Repository
+                    .Get()
+                    .Where(r => r.RequestStatus == status)
+                    .Include(u => u.Organization)
+                    .ToListAsync();
+            }
+            else
+            {
+                requests = await Repository
+                    .Get()
+                    .Where(r => r.OrganizationId == orgId)
+                    .Where(r => r.RequestStatus == status)
+                    .Include(u => u.Organization)
+                    .ToListAsync();
             }
 
             var requestsDto = Mapper.Map<List<RequestDto>>(requests);
             return requestsDto;
+        }
+
+        /// <summary>
+        /// GetCount
+        /// </summary>
+        /// <param name="orgId">orgId.</param>
+
+        public async Task<int[]> GetCount(long orgId)
+        {
+            int[] result = new int[3];
+            result[0] = await Repository
+                .GetAll()
+                .Where(c => c.RequestStatus == RequestStatus.Waiting)
+                .CountAsync();
+            if (orgId == 0)
+            {
+                result[1] = await Repository
+                    .GetAll()
+                    .Where(c => c.RequestStatus == RequestStatus.Execution)
+                    .CountAsync();
+                result[2] = await Repository
+                    .GetAll()
+                    .Where(c => c.RequestStatus == RequestStatus.Done)
+                    .CountAsync();
+            }
+            else
+            {
+                result[1] = await Repository
+                    .GetAll()
+                    .Where(c => c.OrganizationId == orgId)
+                    .Where(c => c.RequestStatus == RequestStatus.Execution)
+                    .CountAsync();
+                result[2] = await Repository
+                    .GetAll()
+                    .Where(c => c.RequestStatus == RequestStatus.Done)
+                    .CountAsync();
+            }
+
+            return result;
         }
 
         /// <summary>
