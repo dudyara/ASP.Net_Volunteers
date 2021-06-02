@@ -42,15 +42,15 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Request>().Property(u => u.FIO).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Request>().Property(u => u.Address).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Request>().Property(u => u.Description).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Request>().Property(u => u.Comment).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Organization>().Property(u => u.Name).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Organization>().Property(u => u.Description).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Organization>().Property(u => u.ChiefFIO).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Organization>().Property(u => u.Mail).HasColumnType("varchar(100)");
-            modelBuilder.Entity<Organization>().Property(u => u.Address).HasColumnType("varchar(100)");
+            modelBuilder.Entity<Request>().Property(u => u.FIO).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Request>().Property(u => u.Address).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Request>().Property(u => u.Description).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Request>().Property(u => u.Comment).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Organization>().Property(u => u.Name).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Organization>().Property(u => u.Description).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Organization>().Property(u => u.ChiefFIO).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Organization>().Property(u => u.Mail).HasColumnType("varchar(500)");
+            modelBuilder.Entity<Organization>().Property(u => u.Address).HasColumnType("varchar(500)");
 
             modelBuilder
                 .Entity<Role>().HasData(

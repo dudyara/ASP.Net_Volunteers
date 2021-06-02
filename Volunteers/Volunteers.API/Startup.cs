@@ -126,8 +126,9 @@
             var dbUser = Environment.GetEnvironmentVariable(EnvironmentVariable.DbUser);
             var dbPass = Environment.GetEnvironmentVariable(EnvironmentVariable.DbPass);
             var dbPort = Environment.GetEnvironmentVariable(EnvironmentVariable.DbPort);
+            var dbName = Environment.GetEnvironmentVariable(EnvironmentVariable.DbName);
 
-            return $"Host={dbHost};Port={dbPort};Database=VolunteerDb;Username={dbUser};Password={dbPass}";
+            return $"Host={dbHost};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}";
         }
 
         /// <summary>
@@ -154,6 +155,11 @@
             /// DbPort
             /// </summary>
             public const string DbPort = "dbport";
+
+            /// <summary>
+            /// DbName
+            /// </summary>
+            public const string DbName = "dbname";
 
             /// <summary>
             /// UseSsl
