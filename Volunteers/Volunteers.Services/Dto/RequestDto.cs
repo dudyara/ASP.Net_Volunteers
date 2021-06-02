@@ -43,5 +43,10 @@
         /// Комментарий фонда.
         /// </summary>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// Комментарий фонда.
+        /// </summary>
+        public string Organization { get; set; }
     }
 }

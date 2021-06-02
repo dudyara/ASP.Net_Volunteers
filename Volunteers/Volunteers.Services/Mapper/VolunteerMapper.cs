@@ -21,7 +21,7 @@
                 cfg.CreateMap<Organization, OrganizationDto>();
                 cfg.CreateMap<OrganizationDto, Organization>();
                 cfg.CreateMap<ActivityType, ActivityTypeDto>();
-                cfg.CreateMap<Request, RequestDto>();
+                cfg.CreateMap<Request, RequestDto>().ForMember("Organization", opt => opt.MapFrom(c => c.Organization.Name));
             });
             Mapper = config.CreateMapper();
         }
