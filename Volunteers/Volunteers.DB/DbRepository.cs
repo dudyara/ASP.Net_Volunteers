@@ -26,19 +26,28 @@
         /// <inheritdoc />
         public IQueryable<TEntity> Get()
         {
-            return _context.Set<TEntity>().AsQueryable();
+            if (_context.Set<TEntity>() is ISoftDeletable)
+                return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
+            else
+                return _context.Set<TEntity>().AsQueryable();
         }
 
         /// <inheritdoc />
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> selector)
         {
-            return _context.Set<TEntity>().Where(selector).AsQueryable();
+            if (_context.Set<TEntity>().Where(selector) is ISoftDeletable)
+                return _context.Set<TEntity>().Where(selector).Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
+            else
+                return _context.Set<TEntity>().Where(selector).AsQueryable();
         }
 
         /// <inheritdoc />
         public IQueryable<TEntity> GetAll()
         {
-            return _context.Set<TEntity>().AsQueryable();
+            if (_context.Set<TEntity>() is ISoftDeletable)
+                return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
+            else
+                return _context.Set<TEntity>().AsQueryable();
         }
 
         /// <inheritdoc />
@@ -58,6 +67,12 @@
         public async Task Delete(long id)
         {
             var activeEntity = await _context.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
+            if (activeEntity is ISoftDeletable deletable)
+            {
+                deletable.IsDeleted = true;
+                deletable.Deleted = DateTime.Now;
+            }
+
             await Task.Run(() => _context.Update(activeEntity));
         }
 

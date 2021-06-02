@@ -2,10 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FluentValidation.Results;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
-    using Volunteers.Services.Services;
+    using Volunteers.Services.Services; 
 
     /// <summary>
     /// OrganizationController
@@ -15,7 +16,7 @@
     public class OrganizationController : Controller
     {
         /// <summary>
-        /// GetOrganizations.
+        /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
         [HttpGet]
@@ -23,13 +24,11 @@
             [FromServices] OrganizationService service)
         {
             var result = await service.Get();
-            if (result == null)
-                return NotFound();
-            return result;
+            return result ?? NotFound();
         }
 
         /// <summary>
-        /// PostOrganization.
+        /// Добавить новую организацию.
         /// </summary>
         /// <param name="org">organization.</param>
         /// <param name="service">service.</param>
@@ -39,13 +38,7 @@
             OrganizationDto org, [FromServices] OrganizationService service)
         {
             var result = await service.Create(org);
-
-            if (result == null)
-            {
-                BadRequest("Result is null");
-            }
-
-            return Ok(result);
+            return result ?? NotFound();
         }
 
         /// <summary>
@@ -58,6 +51,21 @@
             long id, [FromServices] OrganizationService service)
         {
             var result = await service.GetById(id);
+            return result ?? NotFound();
+        }
+
+        /// <summary>
+        /// Получение организаций по id активностей
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <param name="ids">ids</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult<List<OrganizationDto>>> GetByIds(
+            [FromServices] OrganizationService service,
+            [FromQuery] List<long> ids)
+        {
+            var result = await service.GetByIds(ids);
             if (result == null)
                 return NotFound();
             return result;

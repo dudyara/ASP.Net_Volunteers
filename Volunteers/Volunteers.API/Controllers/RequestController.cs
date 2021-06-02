@@ -22,12 +22,12 @@
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<RequestDto>>> GetPull(
+        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(
             [FromQuery] RequestStatus status,
             [FromQuery] long id,
             [FromServices] RequestService service)
         {
-            var result = await service.GetPull(status, id);
+            var result = await service.Get(status, id);
             return result ?? NotFound();
         }
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
@@ -9,9 +10,11 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210601044752_AddVarchar")]
+    partial class AddVarchar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,16 +167,16 @@ namespace Volunteers.DB.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Address")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("ChiefFIO")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("boolean");
@@ -182,10 +185,10 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Mail")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
@@ -221,23 +224,23 @@ namespace Volunteers.DB.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("Age")
                         .HasColumnType("integer");
 
                     b.Property<string>("Comment")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("FIO")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime?>("FinishDate")
                         .HasColumnType("timestamp without time zone");
@@ -299,13 +302,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2216adec-8ec1-46b3-b095-eb9d98c2c756",
+                            ConcurrencyStamp = "b87ba22b-a1b6-4dfd-b6dd-344cc22596df",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "ce49ef32-2392-4fd5-aeb9-33354d8c752e",
+                            ConcurrencyStamp = "e55e57dc-b5c4-4150-94e6-e13983c95a1c",
                             Name = "Organization"
                         });
                 });

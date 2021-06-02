@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.Services
 {
+    using FluentValidation;
     using Mapper;
     using Volunteers.DB;
     using Volunteers.Entities;
@@ -16,10 +17,12 @@
         /// </summary>
         /// <param name="mapper">Mapper</param>
         /// <param name="repository">Repository</param>
-        protected BaseService(IVolunteerMapper mapper, IDbRepository<TEntity> repository)
+        /// <param name="validator">validator</param>
+        protected BaseService(IVolunteerMapper mapper, IDbRepository<TEntity> repository, IValidator validator)
         {
             Mapper = mapper;
             Repository = repository;
+            Validator = validator;
         }
 
         /// <summary>
@@ -31,5 +34,10 @@
         /// Repository.
         /// </summary>
         protected IDbRepository<TEntity> Repository { get; }
+
+        /// <summary>
+        /// Validator.
+        /// </summary>
+        protected IValidator Validator { get; }
     }
 }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -21,8 +22,9 @@
         /// </summary>
         /// <param name="mapper">Маппер.</param>
         /// <param name="repository">repository</param>
-        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository)
-            : base(mapper, repository)
+        /// <param name="validator">validator</param>
+        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository, IValidator validator)
+            : base(mapper, repository, validator)
         {
         }
 
@@ -31,7 +33,7 @@
         /// </summary>
         /// <param name="status">status</param>
         /// <param name="orgId">id</param>
-        public async Task<ActionResult<IEnumerable<RequestDto>>> GetPull(RequestStatus status, long orgId)
+        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId)
         {
             List<Request> requests = new List<Request>();
             switch (status)

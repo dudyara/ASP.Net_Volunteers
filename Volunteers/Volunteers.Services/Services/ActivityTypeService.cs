@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -19,10 +20,12 @@
         /// </summary>
         /// <param name="mapper">mapper</param>
         /// <param name="repository">repository</param>
+        /// <param name="validator">validator</param>
         public ActivityTypeService(
              IVolunteerMapper mapper,
-             IDbRepository<ActivityType> repository)
-             : base(mapper, repository)
+             IDbRepository<ActivityType> repository,
+             IValidator validator)
+             : base(mapper, repository, validator)
         {
         }
 
@@ -30,7 +33,7 @@
         /// Виды активности
         /// </summary>
         /// <returns></returns>    
-        public async Task<ActionResult<List<ActivityTypeDto>>> GetActivityTypes()
+        public async Task<ActionResult<List<ActivityTypeDto>>> Get()
         {
             var activityTypes = await Repository.GetAll().ToListAsync();
             var activityTypeDtos = Mapper.Map<List<ActivityTypeDto>>(activityTypes);

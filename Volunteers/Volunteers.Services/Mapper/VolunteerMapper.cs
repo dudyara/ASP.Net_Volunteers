@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Volunteers.Entities;
+    using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
 
     /// <summary>
@@ -16,11 +17,11 @@
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Request, RequestDto>();
                 cfg.CreateMap<CreateRequestDto, Request>();
                 cfg.CreateMap<Organization, OrganizationDto>();
                 cfg.CreateMap<OrganizationDto, Organization>();
                 cfg.CreateMap<ActivityType, ActivityTypeDto>();
+                cfg.CreateMap<Request, RequestDto>();
             });
             Mapper = config.CreateMapper();
         }

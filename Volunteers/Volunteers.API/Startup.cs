@@ -3,6 +3,8 @@
     using System;
     using DB;
     using Entities;
+    using FluentValidation;
+    using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -10,8 +12,10 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
+    using Newtonsoft.Json;
     using Services;
     using Services.Mapper;
+    using Volunteers.Services.Dto;
 
     /// <summary>
     /// Startup
@@ -38,13 +42,23 @@
         /// <param name="services">services</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+              .AddFluentValidation(s =>
+               {
+                   s.RegisterValidatorsFromAssemblyContaining<Startup>();
+                   s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+               });
             services.Scan(scan =>
                 scan.FromAssemblyOf<BaseService<IEntity>>()
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))
                     .AsSelf()
                     .WithTransientLifetime());
-
+            services.AddMvc()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    });
             ConfigureDbConnection(services);
 
             services.AddSwaggerGen(c =>
@@ -58,6 +72,7 @@
             });
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
+            services.AddTransient<IValidator, OrganizationValidator>();
             services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
             services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();

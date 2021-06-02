@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
@@ -9,9 +10,11 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210530192235_SoftDeletable")]
+    partial class SoftDeletable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,10 +130,10 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("Deleted")
+                    b.Property<DateTime>("Deleted")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("TypeName")
@@ -164,28 +167,28 @@ namespace Volunteers.DB.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Address")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ChiefFIO")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
-                    b.Property<DateTime?>("Deleted")
+                    b.Property<DateTime>("Deleted")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Logo")
                         .HasColumnType("text");
 
                     b.Property<string>("Mail")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -221,28 +224,29 @@ namespace Volunteers.DB.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Age")
                         .HasColumnType("integer");
 
                     b.Property<string>("Comment")
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
-                    b.Property<DateTime?>("Deleted")
+                    b.Property<DateTime>("Deleted")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("FIO")
-                        .HasColumnType("varchar(500)");
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("FinishDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool?>("IsDeleted")
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Location")
@@ -299,13 +303,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "2216adec-8ec1-46b3-b095-eb9d98c2c756",
+                            ConcurrencyStamp = "f7960a9d-5588-4e6d-8207-21e1309cbf66",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "ce49ef32-2392-4fd5-aeb9-33354d8c752e",
+                            ConcurrencyStamp = "6e4dfff8-9ac3-44aa-a3c0-17ccba1b9aca",
                             Name = "Organization"
                         });
                 });
