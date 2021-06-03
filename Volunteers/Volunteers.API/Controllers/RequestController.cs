@@ -82,6 +82,21 @@
         }
 
         /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <param name="service">service</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ActionResult<Request>> Delete(
+            [FromQuery] long id,
+            [FromServices] RequestService service)
+        {
+            var result = await service.Delete(id);
+            return result ?? NotFound();
+        }
+
+        /// <summary>
         /// CreateRequest.
         /// </summary>
         /// <param name="request">request.</param>

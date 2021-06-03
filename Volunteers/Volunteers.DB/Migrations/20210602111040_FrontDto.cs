@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace Volunteers.DB.Migrations
+﻿namespace Volunteers.DB.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
+    /// <inheritdoc/>
     public partial class FrontDto : Migration
     {
+        /// <inheritdoc/>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
@@ -33,6 +35,7 @@ namespace Volunteers.DB.Migrations
                 value: "622f2905-188a-4fc5-b381-7f92549d2ac1");
         }
 
+        /// <inheritdoc/>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
@@ -40,7 +43,7 @@ namespace Volunteers.DB.Migrations
                 table: "Requests",
                 type: "varchar(500)",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
 
             migrationBuilder.AddColumn<int>(
                 name: "Age",

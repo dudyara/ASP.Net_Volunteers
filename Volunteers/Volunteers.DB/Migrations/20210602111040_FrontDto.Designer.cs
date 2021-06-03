@@ -13,6 +13,7 @@ namespace Volunteers.DB.Migrations
     [Migration("20210602111040_FrontDto")]
     partial class FrontDto
     {
+        /// <inheritdoc/>
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

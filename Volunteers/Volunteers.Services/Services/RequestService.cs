@@ -159,6 +159,17 @@
         }
 
         /// <summary>
+        /// Удалить заявку.
+        /// </summary>
+        /// <param name="id">id.</param>
+        public async Task<ActionResult<Request>> Delete(long id)
+        {
+            var request = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
+            await Repository.Delete(request);
+            return request;
+        }
+
+        /// <summary>
         /// PostRequests
         /// </summary>
         /// <param name="requestDto">request.</param>

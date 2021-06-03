@@ -49,6 +49,13 @@
         Task Delete(long id);
 
         /// <summary>
+        /// Удаление по сущности
+        /// </summary>
+        /// <param name="activeEntity">activeEntity</param>
+        /// <returns></returns>
+        Task Delete(TEntity activeEntity);
+
+        /// <summary>
         /// Remove
         /// </summary>
         /// <param name="entity">entity</param>

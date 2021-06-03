@@ -54,6 +54,7 @@
         public async Task<long> Add(TEntity newEntity)
         {
             var entity = await _context.Set<TEntity>().AddAsync(newEntity);
+            await _context.SaveChangesAsync();
             return entity.Entity.Id;
         }
 
@@ -61,6 +62,7 @@
         public async Task AddRange(IEnumerable<TEntity> newEntities)
         {
             await _context.Set<TEntity>().AddRangeAsync(newEntities);
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc />
@@ -73,31 +75,47 @@
                 deletable.Deleted = DateTime.Now;
             }
 
-            await Task.Run(() => _context.Update(activeEntity));
+            await _context.SaveChangesAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task Delete(TEntity activeEntity)
+        {
+            if (activeEntity is ISoftDeletable deletable)
+            {
+                deletable.IsDeleted = true;
+                deletable.Deleted = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc />
         public async Task Remove(TEntity entity)
         {
             await Task.Run(() => _context.Set<TEntity>().Remove(entity));
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc />
         public async Task RemoveRange(IEnumerable<TEntity> entities)
         {
             await Task.Run(() => _context.Set<TEntity>().RemoveRange(entities));
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc />
         public async Task Update(TEntity entity)
         {
             await Task.Run(() => _context.Set<TEntity>().Update(entity));
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc />
         public async Task UpdateRange(IEnumerable<TEntity> entities)
         {
             await Task.Run(() => _context.Set<TEntity>().UpdateRange(entities));
+            await _context.SaveChangesAsync();
         }
 
         /// <inheritdoc />
