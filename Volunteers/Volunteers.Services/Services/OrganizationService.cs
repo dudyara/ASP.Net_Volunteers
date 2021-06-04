@@ -40,7 +40,7 @@
         public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get()
         {
             var orgs = await Repository
-                .GetAll()
+                .Get()
                 .Include(d => d.ActivityTypes)
                 .ToListAsync();
             var orgDto = Mapper.Map<List<OrganizationDto>>(orgs);
@@ -64,19 +64,7 @@
             for (int i = 0; i < orgDto.KeyWords.Count; i++)
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.KeyWords[i].Id });
             await Repository.Add(org);
-            await Repository.SaveChangesAsync();
             return org;
-        }
-
-        /// <summary>
-        /// GetOneOrganization
-        /// </summary>
-        /// <param name="id">id.</param>
-        public async Task<ActionResult<OrganizationDto>> GetById(long id)
-        {
-            var org = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
-            var orgDto = Mapper.Map<OrganizationDto>(org);
-            return orgDto;
         }
 
         /// <summary>
@@ -92,6 +80,48 @@
                 .ToListAsync();
             var organizationDtos = Mapper.Map<List<OrganizationDto>>(result);
             return organizationDtos;
+        }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        public async Task<ActionResult<Organization>> Delete(long id)
+        {
+            var org = await Repository
+                .Get()
+                .FirstOrDefaultAsync(x => x.Id == id);
+            await Repository.Delete(org);
+            return org;
+        }
+
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="orgDto">orgDto</param>
+        /// <returns></returns>
+        public async Task<ActionResult<Organization>> Update(OrganizationDto orgDto)
+        {
+            var context = new ValidationContext<OrganizationDto>(orgDto);
+            var validateResult = Validator.Validate(context);
+            if (validateResult.IsValid == false)
+                throw new Exception("Неверный формат данных");
+
+            var org = Mapper.Map<Organization>(orgDto);
+            for (int i = 0; i < orgDto.Phones.Count; i++)
+                org.PhoneNumbers.Add(new PhoneNumber() { Id = orgDto.Id, Phone = orgDto.Phones[i] });
+            for (int i = 0; i < orgDto.KeyWords.Count; i++)
+            {
+                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization()
+                {
+                    OrganizationId = orgDto.Id,
+                    ActivityTypeId = orgDto.KeyWords[i].Id
+                });
+            }
+
+            await Repository.Update(org);
+            return org;
         }
     }
 }

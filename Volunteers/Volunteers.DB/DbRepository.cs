@@ -26,28 +26,13 @@
         /// <inheritdoc />
         public IQueryable<TEntity> Get()
         {
-            if (_context.Set<TEntity>() is ISoftDeletable)
-                return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
-            else
-                return _context.Set<TEntity>().AsQueryable();
+             return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
         }
 
         /// <inheritdoc />
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> selector)
         {
-            if (_context.Set<TEntity>().Where(selector) is ISoftDeletable)
-                return _context.Set<TEntity>().Where(selector).Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
-            else
-                return _context.Set<TEntity>().Where(selector).AsQueryable();
-        }
-
-        /// <inheritdoc />
-        public IQueryable<TEntity> GetAll()
-        {
-            if (_context.Set<TEntity>() is ISoftDeletable)
-                return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
-            else
-                return _context.Set<TEntity>().AsQueryable();
+            return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).Where(selector).AsQueryable();
         }
 
         /// <inheritdoc />

@@ -26,11 +26,6 @@
         IQueryable<TEntity> Get();
 
         /// <summary>
-        /// GetAll
-        /// </summary>
-        IQueryable<TEntity> GetAll();
-
-        /// <summary>
         /// Add
         /// </summary>
         /// <param name="newEntity">newEntity</param>

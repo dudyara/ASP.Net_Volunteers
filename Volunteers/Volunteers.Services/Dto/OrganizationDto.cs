@@ -1,8 +1,6 @@
 ﻿namespace Volunteers.Services.Dto
 {
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using Volunteers.Entities;
 
     /// <summary>
     /// /OrganizationDto.

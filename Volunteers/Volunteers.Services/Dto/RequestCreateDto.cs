@@ -5,7 +5,7 @@
     /// <summary>
     /// Dto для post.
     /// </summary>
-    public class CreateRequestDto
+    public class RequestCreateDto
     {
         /// <summary>
         /// ФИО Клиента.

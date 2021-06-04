@@ -82,29 +82,29 @@
         {
             int[] result = new int[3];
             result[0] = await Repository
-                .GetAll()
+                .Get()
                 .Where(c => c.RequestStatus == RequestStatus.Waiting)
                 .CountAsync();
             if (orgId == 0)
             {
                 result[1] = await Repository
-                    .GetAll()
+                    .Get()
                     .Where(c => c.RequestStatus == RequestStatus.Execution)
                     .CountAsync();
                 result[2] = await Repository
-                    .GetAll()
+                    .Get()
                     .Where(c => c.RequestStatus == RequestStatus.Done)
                     .CountAsync();
             }
             else
             {
                 result[1] = await Repository
-                    .GetAll()
+                    .Get()
                     .Where(c => c.OrganizationId == orgId)
                     .Where(c => c.RequestStatus == RequestStatus.Execution)
                     .CountAsync();
                 result[2] = await Repository
-                    .GetAll()
+                    .Get()
                     .Where(c => c.RequestStatus == RequestStatus.Done)
                     .CountAsync();
             }
@@ -115,13 +115,11 @@
         /// <summary>
         /// Изменить статус заявки
         /// </summary>
-        /// <param name="requestId">requestId</param>
-        /// <param name="status">status</param>
-        /// <param name="organizationId">organizationId</param>
-        public async Task<ActionResult<Request>> ChangeStatus(long requestId, RequestStatus status, long organizationId)
+        /// <param name="reqDto">reqDto</param>
+        public async Task<ActionResult<Request>> ChangeStatus(RequestChangeStatusDto reqDto)
         {
-            var request = await Repository.Get(x => (x.Id == requestId)).FirstOrDefaultAsync();
-            switch (status)
+            var request = await Repository.Get(x => (x.Id == reqDto.RequestId)).FirstOrDefaultAsync();
+            switch (reqDto.RequestStatus)
             {
                 case RequestStatus.Waiting:
                     request.OrganizationId = null;
@@ -129,7 +127,7 @@
                     break;
                 case RequestStatus.Execution:
                     if (request.RequestStatus == RequestStatus.Waiting)
-                        request.OrganizationId = organizationId;
+                        request.OrganizationId = reqDto.OrganizationId;
                     request.RequestStatus = RequestStatus.Execution;
                     request.FinishDate = null;
                     break;
@@ -147,12 +145,11 @@
         /// <summary>
         /// Написать комментарий
         /// </summary>
-        /// <param name="requestId">requestId</param>
-        /// <param name="comment">comment</param>
-        public async Task<ActionResult<Request>> CreateComment(long requestId, string comment)
+        /// <param name="commentDto">commentDto</param>
+        public async Task<ActionResult<Request>> CreateComment(RequestCreateComment commentDto)
         {
-            var request = await Repository.Get(x => (x.Id == requestId)).FirstOrDefaultAsync();
-            request.Comment = comment;
+            var request = await Repository.Get(x => (x.Id == commentDto.RequestId)).FirstOrDefaultAsync();
+            request.Comment = commentDto.Comment;
             await Repository.Update(request);
             await Repository.SaveChangesAsync();
             return request;
@@ -173,7 +170,7 @@
         /// PostRequests
         /// </summary>
         /// <param name="requestDto">request.</param>
-        public async Task<ActionResult<Request>> Create(CreateRequestDto requestDto)
+        public async Task<ActionResult<Request>> Create(RequestCreateDto requestDto)
         {
             if (string.IsNullOrEmpty(requestDto.FIO))
             {
