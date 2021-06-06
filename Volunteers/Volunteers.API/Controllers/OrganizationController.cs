@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using FluentValidation.Results;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
@@ -20,7 +19,6 @@
         /// </summary>
         /// <param name="org">organization.</param>
         /// <param name="service">service.</param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Organization>> Create(
             OrganizationDto org, [FromServices] OrganizationService service)
@@ -46,7 +44,6 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="ids">ids</param>
-        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<OrganizationDto>>> GetByIds(
             [FromServices] OrganizationService service,
@@ -61,7 +58,6 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
-        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<Organization>> Update(
             [FromServices] OrganizationService service,
@@ -76,7 +72,6 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
-        /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult<Organization>> Delete(
             [FromServices] OrganizationService service,

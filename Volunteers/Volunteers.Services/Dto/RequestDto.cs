@@ -1,9 +1,5 @@
 ﻿namespace Volunteers.Services.Dto
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using Volunteers.Entities.Enums;
-
     /// <summary>
     /// RequestDto
     /// </summary>

@@ -19,7 +19,6 @@
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<ActivityType>> Create(
             [FromBody] ActivityTypeCreateDto actDto,
@@ -33,7 +32,6 @@
         /// Получение типов активностей компаний
         /// </summary>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<ActivityTypeDto>>> Get(
             [FromServices] ActivityTypeService service)
@@ -47,7 +45,6 @@
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [HttpPut]
         public async Task<ActionResult<ActivityType>> Update(
             [FromBody] ActivityTypeDto actDto,
@@ -62,7 +59,6 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult<ActivityType>> Delete(
             [FromQuery] long id,
