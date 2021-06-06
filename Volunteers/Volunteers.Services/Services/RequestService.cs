@@ -77,7 +77,6 @@
         /// GetCount
         /// </summary>
         /// <param name="orgId">orgId.</param>
-
         public async Task<int[]> GetCount(long orgId)
         {
             int[] result = new int[3];
