@@ -23,4 +23,4 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS runtime
 WORKDIR /app
 COPY --from=build /app ./
 ENV ASPNETCORE_URLS=http://*:8080
-ENTRYPOINT ["dotnet", "Volunteers.dll"]
+ENTRYPOINT ["dotnet", "Volunteers.API.dll"]
