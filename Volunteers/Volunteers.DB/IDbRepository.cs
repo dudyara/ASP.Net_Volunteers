@@ -26,11 +26,6 @@
         IQueryable<TEntity> Get();
 
         /// <summary>
-        /// GetAll
-        /// </summary>
-        IQueryable<TEntity> GetAll();
-
-        /// <summary>
         /// Add
         /// </summary>
         /// <param name="newEntity">newEntity</param>
@@ -47,6 +42,13 @@
         /// </summary>
         /// <param name="id">entity</param>
         Task Delete(long id);
+
+        /// <summary>
+        /// Удаление по сущности
+        /// </summary>
+        /// <param name="activeEntity">activeEntity</param>
+        /// <returns></returns>
+        Task Delete(TEntity activeEntity);
 
         /// <summary>
         /// Remove

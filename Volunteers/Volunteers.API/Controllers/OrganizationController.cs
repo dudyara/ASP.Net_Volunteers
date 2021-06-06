@@ -16,18 +16,6 @@
     public class OrganizationController : Controller
     {
         /// <summary>
-        /// Получить список организаций.
-        /// </summary>
-        /// <param name="service">Сервис.</param>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get(
-            [FromServices] OrganizationService service)
-        {
-            var result = await service.Get();
-            return result ?? NotFound();
-        }
-
-        /// <summary>
         /// Добавить новую организацию.
         /// </summary>
         /// <param name="org">organization.</param>
@@ -42,15 +30,14 @@
         }
 
         /// <summary>
-        /// GetOrganization/id.
+        /// Получить список организаций.
         /// </summary>
-        /// <param name="id">id.</param>
         /// <param name="service">Сервис.</param>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<OrganizationDto>> GetById(
-            long id, [FromServices] OrganizationService service)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get(
+            [FromServices] OrganizationService service)
         {
-            var result = await service.GetById(id);
+            var result = await service.Get();
             return result ?? NotFound();
         }
 
@@ -66,9 +53,37 @@
             [FromQuery] List<long> ids)
         {
             var result = await service.GetByIds(ids);
-            if (result == null)
-                return NotFound();
-            return result;
+            return result ?? NotFound();
+        }
+
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <param name="orgDto">orgDto</param>
+        /// <returns></returns>
+        [HttpPut]
+        public async Task<ActionResult<Organization>> Update(
+            [FromServices] OrganizationService service,
+            [FromBody] OrganizationDto orgDto)
+        {
+            var result = await service.Update(orgDto);
+            return result ?? NotFound();
+        }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<ActionResult<Organization>> Delete(
+            [FromServices] OrganizationService service,
+            [FromQuery] long id)
+        {
+            var result = await service.Delete(id);
+            return result ?? NotFound();
         }
     }
 }

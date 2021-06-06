@@ -43,7 +43,6 @@
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Request>().Property(u => u.FIO).HasColumnType("varchar(500)");
-            modelBuilder.Entity<Request>().Property(u => u.Address).HasColumnType("varchar(500)");
             modelBuilder.Entity<Request>().Property(u => u.Description).HasColumnType("varchar(500)");
             modelBuilder.Entity<Request>().Property(u => u.Comment).HasColumnType("varchar(500)");
             modelBuilder.Entity<Organization>().Property(u => u.Name).HasColumnType("varchar(500)");

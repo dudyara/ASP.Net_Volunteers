@@ -30,12 +30,48 @@
         }
 
         /// <summary>
-        /// Виды активности
+        /// Create
         /// </summary>
-        /// <returns></returns>    
+        /// <param name="actDto">actDto</param>
+        /// <returns></returns>
+        public async Task<ActionResult<ActivityType>> Create(ActivityTypeCreateDto actDto)
+        {
+            var activityType = Mapper.Map<ActivityType>(actDto);
+            await Repository.Add(activityType);
+            return activityType;
+        }
+
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="actDto">actDto</param>
+        /// <returns></returns>
+        public async Task<ActionResult<ActivityType>> Update(ActivityTypeDto actDto)
+        {
+            var activityType = Mapper.Map<ActivityType>(actDto);
+            await Repository.Update(activityType);
+            return activityType;
+        }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        public async Task<ActionResult<ActivityType>> Delete(long id)
+        {
+            var activityType = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
+            await Repository.Delete(activityType);
+            return activityType;
+        }
+
+            /// <summary>
+            /// Виды активности
+            /// </summary>
+            /// <returns></returns>    
         public async Task<ActionResult<List<ActivityTypeDto>>> Get()
         {
-            var activityTypes = await Repository.GetAll().ToListAsync();
+            var activityTypes = await Repository.Get().ToListAsync();
             var activityTypeDtos = Mapper.Map<List<ActivityTypeDto>>(activityTypes);
             return activityTypeDtos;
         }

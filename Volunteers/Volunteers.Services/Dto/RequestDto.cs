@@ -17,22 +17,22 @@
         /// <summary>
         /// Дата и время заявки.
         /// </summary>
-        public string StartDate { get; set; }
+        public string CreationDate { get; set; }
 
         /// <summary>
         /// Дата и время заявки.
         /// </summary>
-        public string FinishDate { get; set; }
+        public string CompletionDate { get; set; }
 
         /// <summary>
         /// ФИО Клиента.
         /// </summary>
-        public string FIO { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Телефон клиента.
         /// </summary>
-        public string PhoneNumber { get; set; }
+        public string Phone { get; set; }
 
         /// <summary>
         /// Описание заявки.
@@ -43,5 +43,10 @@
         /// Комментарий фонда.
         /// </summary>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// Название фонда.
+        /// </summary>
+        public string Owner { get; set; }
     }
 }
