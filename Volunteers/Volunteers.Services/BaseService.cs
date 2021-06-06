@@ -4,6 +4,7 @@
     using Mapper;
     using Volunteers.DB;
     using Volunteers.Entities;
+    using Volunteers.Services.Dto;
 
     /// <summary>
     /// Base service
@@ -39,5 +40,32 @@
         /// Validator.
         /// </summary>
         protected IValidator Validator { get; }
+
+        /* /// <summary>
+        /// GetById
+        /// </summary>
+        /// <returns></returns>
+        public TDto GetById() { }
+
+        /// <summary>
+        /// Add
+        /// </summary>
+        /// <returns></returns>
+        public TDto Add() 
+        {
+            var result = Repository.Add();
+        }
+
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <returns></returns>
+        public TDto Update() { }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <returns></returns>
+        public TDto Delete() { }*/
     }
 }

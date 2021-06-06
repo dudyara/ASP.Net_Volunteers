@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using FluentValidation;
-    using FluentValidation.Results;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -37,14 +37,13 @@
         /// Get
         /// </summary>
         /// <returns>.</returns>
-        public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get()
+        public async Task<ActionResult<IEnumerable<List<OrganizationDto>>>> Get()
         {
             var orgs = await Repository
                 .Get()
-                .Include(d => d.ActivityTypes)
+                .ProjectTo<List<OrganizationDto>>(Mapper.ConfigurationProvider)
                 .ToListAsync();
-            var orgDto = Mapper.Map<List<OrganizationDto>>(orgs);
-            return orgDto;
+            return orgs;
         }
 
         /// <summary>

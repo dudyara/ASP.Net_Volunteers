@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -36,40 +37,39 @@
         /// <param name="orgId">id</param>
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId)
         {
-            List<Request> requests = new List<Request>();
+            var requestsDto = new List<RequestDto>();
             if ((status == 0) && (orgId == 0))
             {
-                requests = await Repository.Get().Include(u => u.Organization).ToListAsync();
+                requestsDto = await Repository.Get().ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
             }
             else
             if (status == 0)
             {
-                requests = await Repository
+                requestsDto = await Repository
                     .Get()
                     .Where(r => r.OrganizationId == orgId)
-                    .Include(u => u.Organization)
+                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
             }
             else
             if (orgId == 0)
             {
-                requests = await Repository
+                requestsDto = await Repository
                     .Get()
                     .Where(r => r.RequestStatus == status)
-                    .Include(u => u.Organization)
+                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
             }
             else
             {
-                requests = await Repository
+                requestsDto = await Repository
                     .Get()
                     .Where(r => r.OrganizationId == orgId)
                     .Where(r => r.RequestStatus == status)
-                    .Include(u => u.Organization)
+                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
             }
 
-            var requestsDto = Mapper.Map<List<RequestDto>>(requests);
             return requestsDto;
         }
 
@@ -77,7 +77,6 @@
         /// GetCount
         /// </summary>
         /// <param name="orgId">orgId.</param>
-
         public async Task<int[]> GetCount(long orgId)
         {
             int[] result = new int[3];

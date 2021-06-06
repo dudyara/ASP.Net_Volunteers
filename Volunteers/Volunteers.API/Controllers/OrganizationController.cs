@@ -34,7 +34,7 @@
         /// </summary>
         /// <param name="service">Сервис.</param>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get(
+        public async Task<ActionResult<IEnumerable<List<OrganizationDto>>>> Get(
             [FromServices] OrganizationService service)
         {
             var result = await service.Get();
