@@ -19,6 +19,8 @@
             {
                 cfg.CreateMap<RequestCreateDto, Request>();
                 cfg.CreateMap<Organization, OrganizationDto>();
+                cfg.CreateMap<Request, RequestDto>()
+                    .ForMember(src => src.Owner, opt => opt.MapFrom(c => c.Organization.Name));
                 cfg.CreateMap<OrganizationDto, Organization>()
                     .ForMember(d => d.PhoneNumbers, (options) => options.Ignore())
                     .ForMember(d => d.ActivityTypes, (options) => options.Ignore());
