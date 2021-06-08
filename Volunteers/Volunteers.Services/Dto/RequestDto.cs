@@ -3,22 +3,17 @@
     /// <summary>
     /// RequestDto
     /// </summary>
-    public class RequestDto
+    public class RequestDto : BaseDto
     {
         /// <summary>
-        /// Id заявки.
-        /// </summary>       
-        public long Id { get; set; }
+        /// Дата и время заявки.
+        /// </summary>
+        public string Created { get; set; }
 
         /// <summary>
         /// Дата и время заявки.
         /// </summary>
-        public string CreationDate { get; set; }
-
-        /// <summary>
-        /// Дата и время заявки.
-        /// </summary>
-        public string CompletionDate { get; set; }
+        public string Completed { get; set; }
 
         /// <summary>
         /// ФИО Клиента.
@@ -28,7 +23,7 @@
         /// <summary>
         /// Телефон клиента.
         /// </summary>
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
 
         /// <summary>
         /// Описание заявки.

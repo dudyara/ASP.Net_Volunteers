@@ -20,8 +20,8 @@
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
         [HttpPost]
-        public async Task<ActionResult<ActivityType>> Create(
-            [FromBody] ActivityTypeCreateDto actDto,
+        public async Task<ActionResult<ActivityTypeDto>> Create(
+            [FromBody] ActivityTypeDto actDto,
             [FromServices] ActivityTypeService service)
         {
             var result = await service.Create(actDto);
@@ -46,7 +46,7 @@
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
         [HttpPut]
-        public async Task<ActionResult<ActivityType>> Update(
+        public async Task<ActionResult<ActivityTypeDto>> Update(
             [FromBody] ActivityTypeDto actDto,
             [FromServices] ActivityTypeService service)
         {

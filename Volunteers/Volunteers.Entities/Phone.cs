@@ -3,12 +3,12 @@
     /// <summary>
     /// PhoneNumber
     /// </summary>
-    public class PhoneNumber : BaseEntity
+    public class Phone : BaseEntity
     {
         /// <summary>
         /// Phone
         /// </summary>
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
 
         /// <summary>
         /// Id организации

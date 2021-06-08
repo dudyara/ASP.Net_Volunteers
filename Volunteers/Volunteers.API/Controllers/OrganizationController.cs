@@ -20,7 +20,7 @@
         /// <param name="org">organization.</param>
         /// <param name="service">service.</param>
         [HttpPost]
-        public async Task<ActionResult<Organization>> Create(
+        public async Task<ActionResult<OrganizationDto>> Create(
             OrganizationDto org, [FromServices] OrganizationService service)
         {
             var result = await service.Create(org);
@@ -32,7 +32,7 @@
         /// </summary>
         /// <param name="service">Сервис.</param>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<List<OrganizationDto>>>> Get(
+        public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
         {
             var result = await service.Get();
@@ -59,7 +59,7 @@
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
         [HttpPut]
-        public async Task<ActionResult<Organization>> Update(
+        public async Task<ActionResult<OrganizationDto>> Update(
             [FromServices] OrganizationService service,
             [FromBody] OrganizationDto orgDto)
         {

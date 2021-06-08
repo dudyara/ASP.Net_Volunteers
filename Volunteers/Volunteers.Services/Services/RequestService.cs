@@ -17,7 +17,7 @@
     /// <summary>
     /// RequestService
     /// </summary>
-    public class RequestService : BaseService<Request>
+    public class RequestService : BaseService<Request, RequestDto>
     {
         /// <summary>
         /// Метод заявок.
@@ -128,16 +128,15 @@
                     if (request.RequestStatus == RequestStatus.Waiting)
                         request.OrganizationId = reqDto.OrganizationId;
                     request.RequestStatus = RequestStatus.Execution;
-                    request.FinishDate = null;
+                    request.Complited = null;
                     break;
                 case RequestStatus.Done:
                     request.RequestStatus = RequestStatus.Done;
-                    request.FinishDate = DateTime.Now;
+                    request.Complited = DateTime.Now;
                     break;
             }
 
             await Repository.Update(request);
-            await Repository.SaveChangesAsync();
             return request;
         }
 
@@ -150,7 +149,6 @@
             var request = await Repository.Get(x => (x.Id == commentDto.RequestId)).FirstOrDefaultAsync();
             request.Comment = commentDto.Comment;
             await Repository.Update(request);
-            await Repository.SaveChangesAsync();
             return request;
         }
 
@@ -161,7 +159,7 @@
         public async Task<ActionResult<Request>> Delete(long id)
         {
             var request = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
-            await Repository.Delete(request);
+            await DeleteAsync(id);
             return request;
         }
 
@@ -171,16 +169,10 @@
         /// <param name="requestDto">request.</param>
         public async Task<ActionResult<Request>> Create(RequestCreateDto requestDto)
         {
-            if (string.IsNullOrEmpty(requestDto.FIO))
-            {
-                return null;
-            }
-
             var request = Mapper.Map<Request>(requestDto);
-            request.StartDate = DateTime.Now;
+            request.Created = DateTime.Now;
             request.RequestStatus = RequestStatus.Waiting;
             await Repository.Add(request);
-            await Repository.SaveChangesAsync();
             return request;
         }
     }

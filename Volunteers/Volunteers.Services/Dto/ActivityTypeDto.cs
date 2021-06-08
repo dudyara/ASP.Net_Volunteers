@@ -3,16 +3,11 @@
     /// <summary>
     /// ActivityTypeDto
     /// </summary>
-    public class ActivityTypeDto
+    public class ActivityTypeDto : BaseDto
     {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public long Id { get; set; }
-
         /// <summary>
         /// Название вида активности
         /// </summary>
-        public string Label { get; set; }
+        public string TypeName { get; set; }
     }
 }

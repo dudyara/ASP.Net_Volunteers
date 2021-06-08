@@ -16,9 +16,8 @@
     /// <summary>
     /// OrganizationService.
     /// </summary>
-    public class OrganizationService : BaseService<Organization>
+    public class OrganizationService : BaseService<Organization, OrganizationDto>
     {
-
         /// <summary>
         /// OrganizationService.
         /// </summary>
@@ -37,20 +36,22 @@
         /// Get
         /// </summary>
         /// <returns>.</returns>
-        public async Task<ActionResult<IEnumerable<List<OrganizationDto>>>> Get()
+        public async Task<ActionResult<List<OrganizationDto>>> Get()
         {
             var orgs = await Repository
                 .Get()
-                .ProjectTo<List<OrganizationDto>>(Mapper.ConfigurationProvider)
+                .Include(d => d.ActivityTypes)
+                .Include(c => c.PhoneNumbers)
                 .ToListAsync();
-            return orgs;
+            var orgDto = Mapper.Map<List<OrganizationDto>>(orgs);
+            return orgDto;
         }
 
         /// <summary>
         /// Create
         /// </summary>
         /// <param name="orgDto">org.</param>
-        public async Task<ActionResult<Organization>> Create(OrganizationDto orgDto)
+        public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto)
         {
             var context = new ValidationContext<OrganizationDto>(orgDto);
             var validateResult = Validator.Validate(context);
@@ -58,12 +59,12 @@
                 throw new Exception("Неверный формат данных");
 
             var org = Mapper.Map<Organization>(orgDto);
-            for (int i = 0; i < orgDto.Phones.Count; i++)
-                org.PhoneNumbers.Add(new PhoneNumber() { Phone = orgDto.Phones[i] });
-            for (int i = 0; i < orgDto.KeyWords.Count; i++)
-                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.KeyWords[i].Id });
+            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
+                org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
+            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
+                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             await Repository.Add(org);
-            return org;
+            return orgDto;
         }
 
         /// <summary>
@@ -91,7 +92,7 @@
             var org = await Repository
                 .Get()
                 .FirstOrDefaultAsync(x => x.Id == id);
-            await Repository.Delete(org);
+            await DeleteAsync(id);
             return org;
         }
 
@@ -100,7 +101,7 @@
         /// </summary>
         /// <param name="orgDto">orgDto</param>
         /// <returns></returns>
-        public async Task<ActionResult<Organization>> Update(OrganizationDto orgDto)
+        public async Task<ActionResult<OrganizationDto>> Update(OrganizationDto orgDto)
         {
             var context = new ValidationContext<OrganizationDto>(orgDto);
             var validateResult = Validator.Validate(context);
@@ -108,19 +109,19 @@
                 throw new Exception("Неверный формат данных");
 
             var org = Mapper.Map<Organization>(orgDto);
-            for (int i = 0; i < orgDto.Phones.Count; i++)
-                org.PhoneNumbers.Add(new PhoneNumber() { Id = orgDto.Id, Phone = orgDto.Phones[i] });
-            for (int i = 0; i < orgDto.KeyWords.Count; i++)
+            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
+                org.PhoneNumbers.Add(new Phone() { Id = orgDto.Id, PhoneNumber = orgDto.PhoneNumbers[i] });
+            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
             {
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization()
                 {
                     OrganizationId = orgDto.Id,
-                    ActivityTypeId = orgDto.KeyWords[i].Id
+                    ActivityTypeId = orgDto.ActivityTypes[i].Id
                 });
             }
 
             await Repository.Update(org);
-            return org;
+            return orgDto;
         }
     }
 }
