@@ -18,19 +18,14 @@
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<RequestCreateDto, Request>();
-                cfg.CreateMap<Organization, OrganizationDto>()
-                    .ForMember(d => d.PhoneNumbers, opt => opt.MapFrom(c => c.PhoneNumbers));
+                cfg.CreateMap<Organization, OrganizationDto>();
                 cfg.CreateMap<OrganizationDto, Organization>()
                     .ForMember(d => d.PhoneNumbers, (options) => options.Ignore())
                     .ForMember(d => d.ActivityTypes, (options) => options.Ignore());
                 cfg.CreateMap<ActivityType, ActivityTypeDto>();
-                cfg.CreateMap<PhoneDto, Phone>();
-                cfg.CreateMap<Phone, PhoneDto>();
                 cfg.CreateMap<ActivityTypeDto, ActivityType>();
                 cfg.CreateMap<Request, RequestDto>()
                     .ForMember(src => src.Owner, opt => opt.MapFrom(c => c.Organization.Name));
-                cfg.CreateMap<OrganizationDto, Phone>()
-                    .ForMember(src => src.PhoneNumber, opt => opt.MapFrom(c => c.PhoneNumbers));
             });
             Mapper = config.CreateMapper();
         }
