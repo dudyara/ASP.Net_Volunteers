@@ -26,6 +26,11 @@
         public DbSet<Organization> Organizations { get; set; }
 
         /// <summary>
+        /// RegistrationToken - таблица для токенов для регистрации
+        /// </summary>
+        public DbSet<RegistrationToken> RegistrationToken { get; set; }
+
+        /// <summary>
         /// Requests - таблица запросов.
         /// </summary>
         public DbSet<Request> Requests { get; set; }

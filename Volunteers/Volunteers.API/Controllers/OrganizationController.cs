@@ -14,7 +14,7 @@
     [ApiController]
     public class OrganizationController : Controller
     {
-        /// <summary>
+       /* /// <summary>
         /// Добавить новую организацию.
         /// </summary>
         /// <param name="org">organization.</param>
@@ -25,7 +25,7 @@
         {
             var result = await service.Create(org);
             return result ?? NotFound();
-        }
+        }*/
 
         /// <summary>
         /// Получить список организаций.
