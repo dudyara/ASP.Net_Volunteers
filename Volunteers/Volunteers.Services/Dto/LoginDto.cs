@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volunteers.Services.Dto
+﻿namespace Volunteers.Services.Dto
 {
-    class LoginDto
+    /// <summary>
+    /// LoginDto
+    /// </summary>
+    public class LoginDto
     {
+        /// <summary>
+        /// Name
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Password
+        /// </summary>
+        public string Password { get; set; }
     }
 }

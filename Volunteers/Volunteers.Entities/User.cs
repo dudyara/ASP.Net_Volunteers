@@ -5,7 +5,11 @@
     /// <summary>
     /// User
     /// </summary>
-    public class User : IdentityUser<long>
+    public class User : IdentityUser<long>, IEntity
     {
+        /// <summary>
+        /// Organization
+        /// </summary>
+        public Organization Organization { get; set; }
     }
 }
