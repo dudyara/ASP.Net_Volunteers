@@ -13,7 +13,7 @@
     /// <summary>
     /// Сервис для работы с видами деятельности компаний
     /// </summary>
-    public class ActivityTypeService : BaseService<ActivityType>
+    public class ActivityTypeService : BaseService<ActivityType, ActivityTypeDto>
     {
         /// <summary>
         /// Конструктор ActivityType
@@ -33,47 +33,37 @@
         /// Create
         /// </summary>
         /// <param name="actDto">actDto</param>
-        /// <returns></returns>
-        public async Task<ActionResult<ActivityType>> Create(ActivityTypeCreateDto actDto)
+        public async Task<ActionResult<ActivityTypeDto>> Create(ActivityTypeDto actDto)
         {
-            var activityType = Mapper.Map<ActivityType>(actDto);
-            await Repository.Add(activityType);
-            return activityType;
+            return await AddAsync(actDto);
         }
 
         /// <summary>
         /// Update
         /// </summary>
         /// <param name="actDto">actDto</param>
-        /// <returns></returns>
-        public async Task<ActionResult<ActivityType>> Update(ActivityTypeDto actDto)
+        public async Task<ActionResult<ActivityTypeDto>> Update(ActivityTypeDto actDto)
         {
-            var activityType = Mapper.Map<ActivityType>(actDto);
-            await Repository.Update(activityType);
-            return activityType;
+            return await UpdateAsync(actDto);
         }
 
         /// <summary>
         /// Delete
         /// </summary>
         /// <param name="id">id</param>
-        /// <returns></returns>
         public async Task<ActionResult<ActivityType>> Delete(long id)
         {
             var activityType = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
-            await Repository.Delete(activityType);
+            await DeleteAsync(id);
             return activityType;
         }
 
             /// <summary>
             /// Виды активности
             /// </summary>
-            /// <returns></returns>    
         public async Task<ActionResult<List<ActivityTypeDto>>> Get()
         {
-            var activityTypes = await Repository.Get().ToListAsync();
-            var activityTypeDtos = Mapper.Map<List<ActivityTypeDto>>(activityTypes);
-            return activityTypeDtos;
+            return await GetAsync();
         }
     }
 }

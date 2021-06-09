@@ -12,7 +12,7 @@
         /// <summary>
         /// ФИО Клиента.
         /// </summary>
-        public string FIO { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Статус заявки.
@@ -35,12 +35,12 @@
         /// Дата и время заявки.
         /// </summary>
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Дата и время завершение заявки.
         /// </summary>
-        public DateTime? FinishDate { get; set; }
+        public DateTime? Complited { get; set; }
 
         /// <summary>
         /// ID Фонда.

@@ -2,7 +2,7 @@
 {
 
     /// <summary>
-    /// RequestStatusDto 
+    /// RequestStatusDto.
     /// </summary>
     public class RequestStatusDto
     {

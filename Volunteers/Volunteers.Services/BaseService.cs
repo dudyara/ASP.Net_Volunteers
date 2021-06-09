@@ -1,16 +1,24 @@
 ﻿namespace Volunteers.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using FluentValidation;
-    using Mapper;
+    using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
     using Volunteers.Entities;
+    using Volunteers.Services.Dto;
+    using Volunteers.Services.Mapper;
 
     /// <summary>
     /// Base service
     /// </summary>
     /// <typeparam name="TEntity">Entity</typeparam>
-    public abstract class BaseService<TEntity>
-    where TEntity : class, IEntity
+    /// <typeparam name="TDto">TDto</typeparam>
+    public abstract class BaseService<TEntity, TDto>
+       where TEntity : BaseEntity
+       where TDto : BaseDto
     {
         /// <summary>
         /// ctor.
@@ -39,5 +47,83 @@
         /// Validator.
         /// </summary>
         protected IValidator Validator { get; }
+
+        /// <summary>
+        /// Асинхронно обновляет объект
+        /// </summary>
+        /// <param name="dto">Dto.</param>
+        public virtual async Task<TDto> UpdateAsync(TDto dto)
+        {
+            _ = dto ?? throw new ArgumentException(nameof(dto));
+            var entity =
+                await Repository.Get(x => x.Id == dto.Id).FirstOrDefaultAsync();
+            Mapper.Map(dto, entity);
+            await Repository.Update(entity);
+            return await GetById(entity.Id);
+        }
+
+        /// <summary>
+        /// Добавляет новый объект.
+        /// </summary>
+        /// <param name="dto">Dto.</param>
+        public virtual async Task<TDto> AddAsync(TDto dto)
+        {
+            _ = dto ?? throw new ArgumentException("Должен быть задан добавляемый объект");
+            var entity = Mapper.Map<TEntity>(dto);
+            await Repository.Add(entity);
+            var map = await GetById(entity.Id);
+            return map;
+        }
+
+        /// <summary>
+        /// Добавляет новые объекты.
+        /// </summary>
+        /// <param name="dtos">Dtos.</param>
+        public virtual async Task<List<TDto>> AddAsync(IList<TDto> dtos)
+        {
+            _ = dtos ?? throw new ArgumentException("Необходимо задать список добавляемых объектов");
+            var result = new List<TDto>();
+            foreach (var dto in dtos)
+            {
+                result.Add(await AddAsync(dto));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Удаление объекта.
+        /// </summary>
+        /// <param name="id">ID объекта.</param>
+        public virtual async Task DeleteAsync(long id)
+        {
+            var entity = await Repository.Get(x => x.Id == id).FirstOrDefaultAsync();
+            await Repository.Delete(entity);
+        }
+
+        /// <summary>
+        /// Возвращает объект по ID.
+        /// </summary>
+        /// <param name="id">ID объекта.</param>
+        protected virtual async Task<TDto> GetById(long id)
+        {
+            var result = await Repository
+                .Get(x => x.Id == id)
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+            return result;
+        }
+
+        /// <summary>
+        /// Возвращает список объектов
+        /// </summary>
+        protected virtual async Task<List<TDto>> GetAsync()
+        {
+            var result = await Repository
+                .Get()
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
+                .ToListAsync();
+            return result;
+        }
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace Volunteers.Services.Dto
 {
     /// <summary>
-    /// ActivityTypeCreateDto
+    /// PhoneDto
     /// </summary>
-    public class ActivityTypeCreateDto
+    public class PhoneDto : BaseDto
     {
         /// <summary>
-        /// Label
+        /// Phone
         /// </summary>
-        public string Label { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

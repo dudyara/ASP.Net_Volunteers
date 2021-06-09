@@ -1,17 +1,13 @@
 ﻿namespace Volunteers.Services.Dto
 {
     using System.Collections.Generic;
+    using Volunteers.Entities;
 
     /// <summary>
     /// /OrganizationDto.
     /// </summary>
-    public class OrganizationDto
+    public class OrganizationDto : BaseDto
     {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public long Id { get; set; }
-
         /// <summary>
         /// Название фонда.
         /// </summary>
@@ -35,7 +31,7 @@
         /// <summary>
         /// Виды активностей.
         /// </summary>
-        public List<ActivityTypeDto> KeyWords { get; set; }
+        public List<ActivityTypeDto> ActivityTypes { get; set; }
 
         /// <summary>
         /// Почта фонда.
@@ -45,11 +41,21 @@
         /// <summary>
         /// Телефон фонда.
         /// </summary>
-        public List<string> Phones { get; set; }
+        public List<string> PhoneNumbers { get; set; }
+
+        /// <summary>
+        /// Часы работы
+        /// </summary>
+        public string WorkingHours { get; set; }
 
         /// <summary>
         /// Адрес фонда.
         /// </summary>
         public string Address { get; set; }
+
+        /// <summary>
+        /// Координаты
+        /// </summary>
+        public long[] Location { get; set; }
     }
 }

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@
     /// <summary>
     /// RequestService
     /// </summary>
-    public class RequestService : BaseService<Request>
+    public class RequestService : BaseService<Request, RequestDto>
     {
         /// <summary>
         /// Метод заявок.
@@ -36,40 +37,39 @@
         /// <param name="orgId">id</param>
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId)
         {
-            List<Request> requests = new List<Request>();
+            var requestsDto = new List<RequestDto>();
             if ((status == 0) && (orgId == 0))
             {
-                requests = await Repository.Get().Include(u => u.Organization).ToListAsync();
+                requestsDto = await Repository.Get().ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
             }
             else
             if (status == 0)
             {
-                requests = await Repository
+                requestsDto = await Repository
                     .Get()
                     .Where(r => r.OrganizationId == orgId)
-                    .Include(u => u.Organization)
+                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
             }
             else
             if (orgId == 0)
             {
-                requests = await Repository
+                requestsDto = await Repository
                     .Get()
                     .Where(r => r.RequestStatus == status)
-                    .Include(u => u.Organization)
+                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
             }
             else
             {
-                requests = await Repository
+                requestsDto = await Repository
                     .Get()
                     .Where(r => r.OrganizationId == orgId)
                     .Where(r => r.RequestStatus == status)
-                    .Include(u => u.Organization)
+                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
             }
 
-            var requestsDto = Mapper.Map<List<RequestDto>>(requests);
             return requestsDto;
         }
 
@@ -128,16 +128,15 @@
                     if (request.RequestStatus == RequestStatus.Waiting)
                         request.OrganizationId = reqDto.OrganizationId;
                     request.RequestStatus = RequestStatus.Execution;
-                    request.FinishDate = null;
+                    request.Complited = null;
                     break;
                 case RequestStatus.Done:
                     request.RequestStatus = RequestStatus.Done;
-                    request.FinishDate = DateTime.Now;
+                    request.Complited = DateTime.Now;
                     break;
             }
 
             await Repository.Update(request);
-            await Repository.SaveChangesAsync();
             return request;
         }
 
@@ -150,7 +149,6 @@
             var request = await Repository.Get(x => (x.Id == commentDto.RequestId)).FirstOrDefaultAsync();
             request.Comment = commentDto.Comment;
             await Repository.Update(request);
-            await Repository.SaveChangesAsync();
             return request;
         }
 
@@ -161,7 +159,7 @@
         public async Task<ActionResult<Request>> Delete(long id)
         {
             var request = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
-            await Repository.Delete(request);
+            await DeleteAsync(id);
             return request;
         }
 
@@ -171,16 +169,10 @@
         /// <param name="requestDto">request.</param>
         public async Task<ActionResult<Request>> Create(RequestCreateDto requestDto)
         {
-            if (string.IsNullOrEmpty(requestDto.FIO))
-            {
-                return null;
-            }
-
             var request = Mapper.Map<Request>(requestDto);
-            request.StartDate = DateTime.Now;
+            request.Created = DateTime.Now;
             request.RequestStatus = RequestStatus.Waiting;
             await Repository.Add(request);
-            await Repository.SaveChangesAsync();
             return request;
         }
     }

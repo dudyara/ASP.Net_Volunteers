@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using FluentValidation.Results;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
@@ -20,9 +19,8 @@
         /// </summary>
         /// <param name="org">organization.</param>
         /// <param name="service">service.</param>
-        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Organization>> Create(
+        public async Task<ActionResult<OrganizationDto>> Create(
             OrganizationDto org, [FromServices] OrganizationService service)
         {
             var result = await service.Create(org);
@@ -34,7 +32,7 @@
         /// </summary>
         /// <param name="service">Сервис.</param>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrganizationDto>>> Get(
+        public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
         {
             var result = await service.Get();
@@ -46,7 +44,6 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="ids">ids</param>
-        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<List<OrganizationDto>>> GetByIds(
             [FromServices] OrganizationService service,
@@ -61,9 +58,8 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
-        /// <returns></returns>
         [HttpPut]
-        public async Task<ActionResult<Organization>> Update(
+        public async Task<ActionResult<OrganizationDto>> Update(
             [FromServices] OrganizationService service,
             [FromBody] OrganizationDto orgDto)
         {
@@ -76,7 +72,6 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
-        /// <returns></returns>
         [HttpDelete]
         public async Task<ActionResult<Organization>> Delete(
             [FromServices] OrganizationService service,

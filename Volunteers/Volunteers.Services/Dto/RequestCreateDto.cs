@@ -11,7 +11,7 @@
         /// ФИО Клиента.
         /// </summary>
         [Required]
-        public string FIO { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Телефон клиента.

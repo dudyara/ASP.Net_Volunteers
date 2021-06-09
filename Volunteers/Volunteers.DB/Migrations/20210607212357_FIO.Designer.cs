@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
@@ -9,9 +10,11 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210607212357_FIO")]
+    partial class FIO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,15 +190,12 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(500)");
 
-                    b.Property<string>("WorkingHours")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.ToTable("Organizations");
                 });
 
-            modelBuilder.Entity("Volunteers.Entities.Phone", b =>
+            modelBuilder.Entity("Volunteers.Entities.PhoneNumber", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -205,14 +205,14 @@ namespace Volunteers.DB.Migrations
                     b.Property<long>("OrganizationId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Phone");
+                    b.ToTable("PhoneNumber");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.Request", b =>
@@ -292,13 +292,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "057fbd42-bb85-400d-ae3f-470a5c9aa1e0",
+                            ConcurrencyStamp = "994501ef-3485-4ba8-a396-b37293c26645",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "f2c6f44a-1c70-45aa-a327-df4ea2a819d1",
+                            ConcurrencyStamp = "04193422-eaed-4251-8f12-27a63c2230dd",
                             Name = "Organization"
                         });
                 });
@@ -439,7 +439,7 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Volunteers.Entities.Phone", b =>
+            modelBuilder.Entity("Volunteers.Entities.PhoneNumber", b =>
                 {
                     b.HasOne("Volunteers.Entities.Organization", "Organization")
                         .WithMany("PhoneNumbers")

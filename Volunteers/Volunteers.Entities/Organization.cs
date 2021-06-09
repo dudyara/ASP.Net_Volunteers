@@ -17,7 +17,7 @@
         /// <summary>
         /// ФИО Руководителя фонда.
         /// </summary>
-        public string ChiefFIO { get; set; }
+        public string Manager { get; set; }
 
         /// <summary>
         /// Логотип фонда.
@@ -40,6 +40,11 @@
         public string Address { get; set; }
 
         /// <summary>
+        /// Часы работы
+        /// </summary>
+        public string WorkingHours { get; set; }
+
+        /// <summary>
         /// Список заявок фонда.
         /// </summary>
         public List<Request> Requests { get; set; } = new List<Request>();
@@ -57,7 +62,7 @@
         /// <summary>
         /// Список телефонов организации
         /// </summary>
-        public List<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
+        public List<Phone> PhoneNumbers { get; set; } = new List<Phone>();
 
         /// <inheritdoc/>
         public bool? IsDeleted { get; set; } = false;

@@ -49,7 +49,7 @@
                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                });
             services.Scan(scan =>
-                scan.FromAssemblyOf<BaseService<IEntity>>()
+                scan.FromAssemblyOf<BaseService<BaseEntity, BaseDto>>()
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))
                     .AsSelf()
                     .WithTransientLifetime());

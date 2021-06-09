@@ -1,7 +1,5 @@
 ﻿namespace Volunteers.Entities
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// ActivityTypeOrganization - промежуточная сущность
     /// </summary>
