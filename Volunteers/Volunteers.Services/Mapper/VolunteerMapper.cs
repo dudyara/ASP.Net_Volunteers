@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.Services.Mapper
 {
+    using System.Linq;
     using AutoMapper;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
@@ -18,12 +19,13 @@
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<RequestCreateDto, Request>();
-                cfg.CreateMap<Organization, OrganizationDto>();
                 cfg.CreateMap<Request, RequestDto>()
                     .ForMember(src => src.Owner, opt => opt.MapFrom(c => c.Organization.Name));
                 cfg.CreateMap<OrganizationDto, Organization>()
                     .ForMember(d => d.PhoneNumbers, (options) => options.Ignore())
                     .ForMember(d => d.ActivityTypes, (options) => options.Ignore());
+                cfg.CreateMap<Organization, OrganizationDto>()
+                    .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(x => x.PhoneNumbers.Select(pn => pn.PhoneNumber)));
                 cfg.CreateMap<ActivityType, ActivityTypeDto>();
                 cfg.CreateMap<ActivityTypeDto, ActivityType>();
                 cfg.CreateMap<Request, RequestDto>()
