@@ -74,10 +74,11 @@
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
 
-            // services.AddScoped<IDtoValidator, DtoValidator>();           
+            services.AddScoped<IDtoValidator, DtoValidator>();     
             services.AddTransient<IValidator<OrganizationDto>, OrganizationValidator>();
             services.AddTransient<IValidator<RequestCreateDto>, RequestValidator>();
             services.AddTransient<IValidator<ActivityTypeDto>, ActivityTypeValidator>();
+
             services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
             services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();

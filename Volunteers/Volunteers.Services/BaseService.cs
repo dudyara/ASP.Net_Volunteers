@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
-    using FluentValidation;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
     using Volunteers.Entities;
@@ -26,7 +25,7 @@
         /// <param name="mapper">Mapper</param>
         /// <param name="repository">Repository</param>
         /// <param name="validator">validator</param>
-        protected BaseService(IVolunteerMapper mapper, IDbRepository<TEntity> repository, IValidator<TDto> validator)
+        protected BaseService(IVolunteerMapper mapper, IDbRepository<TEntity> repository, IDtoValidator validator)
         {
             Mapper = mapper;
             Repository = repository;
@@ -36,7 +35,7 @@
         /// <summary>
         /// Validator
         /// </summary>
-        protected IValidator<TDto> Validator { get; }
+        protected IDtoValidator Validator { get; }
 
         /// <summary>
         /// Mapper.

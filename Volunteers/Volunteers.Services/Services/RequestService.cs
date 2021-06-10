@@ -25,7 +25,7 @@
         /// <param name="mapper">Маппер.</param>
         /// <param name="repository">repository</param>
         /// <param name="validator">validator</param>
-        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository, IValidator<RequestCreateDto> validator)
+        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository, IDtoValidator validator)
             : base(mapper, repository, validator)
         {
         }

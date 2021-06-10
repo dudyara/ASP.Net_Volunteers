@@ -25,7 +25,7 @@
         public ActivityTypeService(
              IVolunteerMapper mapper,
              IDbRepository<ActivityType> repository,
-             IValidator<ActivityTypeDto> validator)
+             IDtoValidator validator)
              : base(mapper, repository, validator)
         {
         }

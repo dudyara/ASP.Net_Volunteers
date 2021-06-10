@@ -26,7 +26,7 @@
         public OrganizationService(
             IVolunteerMapper mapper,
             IDbRepository<Organization> repository,
-            IValidator<OrganizationDto> validator)
+            IDtoValidator validator)
             : base(mapper, repository, validator)
         {
         }
