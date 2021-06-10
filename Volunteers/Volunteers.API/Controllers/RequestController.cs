@@ -1,4 +1,6 @@
-﻿namespace Volunteers.API.Controllers
+﻿using System;
+
+namespace Volunteers.API.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -27,8 +29,15 @@
             [FromBody] RequestCreateDto request,
             [FromServices] RequestService service)
         {
-            var result = await service.Create(request);
-            return result ?? NotFound();
+            try
+            {
+                var result = await service.Create(request);
+                return result ?? NotFound();
+            }
+            catch (Exception e)
+            {
+                return BadRequest($"{e.Message}{Environment.NewLine} {e.StackTrace}");
+            }
         }
 
         /// <summary>
