@@ -58,7 +58,7 @@
         public virtual Organization Organization { get; set; }
 
         /// <inheritdoc/>
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
 
         /// <inheritdoc/>
         public DateTime? Deleted { get; set; }
