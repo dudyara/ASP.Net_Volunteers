@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Volunteers.API.Controllers
+﻿namespace Volunteers.API.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
