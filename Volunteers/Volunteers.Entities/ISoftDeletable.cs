@@ -10,7 +10,7 @@
         /// <summary>
         /// IsDeleted
         /// </summary>
-        bool? IsDeleted { get; set; }
+        bool IsDeleted { get; set; }
 
         /// <summary>
         /// DeleteTime
