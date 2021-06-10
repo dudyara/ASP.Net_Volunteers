@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
@@ -9,9 +10,11 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210609223634_Location")]
+    partial class Location
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,7 +231,7 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("varchar(500)");
 
-                    b.Property<DateTime?>("Completed")
+                    b.Property<DateTime?>("Complited")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("Created")
@@ -295,13 +298,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "1ad92294-a109-46e0-a912-665d235919ab",
+                            ConcurrencyStamp = "2a93e7b6-ad6b-4174-96b7-ae0d2eddbf3f",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "29deee0b-c6bf-45ca-b0d9-63fe005e55f6",
+                            ConcurrencyStamp = "500b73dc-9da3-41fe-a85f-2f1ca5c3568f",
                             Name = "Organization"
                         });
                 });
