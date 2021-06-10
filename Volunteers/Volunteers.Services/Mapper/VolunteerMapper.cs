@@ -25,6 +25,7 @@
                     .ForMember(d => d.PhoneNumbers, (options) => options.Ignore())
                     .ForMember(d => d.ActivityTypes, (options) => options.Ignore());
                 cfg.CreateMap<Organization, OrganizationDto>()
+                    .ForMember(x => x.ActivityTypes, opt => opt.MapFrom(x => x.ActivityTypes.Where(at => !at.IsDeleted)))
                     .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(x => x.PhoneNumbers.Select(pn => pn.PhoneNumber)));
                 cfg.CreateMap<ActivityType, ActivityTypeDto>();
                 cfg.CreateMap<ActivityTypeDto, ActivityType>();
