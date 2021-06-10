@@ -40,7 +40,7 @@
         /// <summary>
         /// Дата и время завершение заявки.
         /// </summary>
-        public DateTime? Complited { get; set; }
+        public DateTime? Completed { get; set; }
 
         /// <summary>
         /// ID Фонда.

@@ -26,12 +26,17 @@
         /// <param name="mapper">Mapper</param>
         /// <param name="repository">Repository</param>
         /// <param name="validator">validator</param>
-        protected BaseService(IVolunteerMapper mapper, IDbRepository<TEntity> repository, IValidator validator)
+        protected BaseService(IVolunteerMapper mapper, IDbRepository<TEntity> repository, IValidator<TDto> validator)
         {
             Mapper = mapper;
             Repository = repository;
             Validator = validator;
         }
+
+        /// <summary>
+        /// Validator
+        /// </summary>
+        protected IValidator<TDto> Validator { get; }
 
         /// <summary>
         /// Mapper.
@@ -44,17 +49,13 @@
         protected IDbRepository<TEntity> Repository { get; }
 
         /// <summary>
-        /// Validator.
-        /// </summary>
-        protected IValidator Validator { get; }
-
-        /// <summary>
         /// Асинхронно обновляет объект
         /// </summary>
         /// <param name="dto">Dto.</param>
         public virtual async Task<TDto> UpdateAsync(TDto dto)
         {
             _ = dto ?? throw new ArgumentException(nameof(dto));
+            await Validator.ValidateAndThrowAsync(dto);
             var entity =
                 await Repository.Get(x => x.Id == dto.Id).FirstOrDefaultAsync();
             Mapper.Map(dto, entity);
@@ -69,6 +70,7 @@
         public virtual async Task<TDto> AddAsync(TDto dto)
         {
             _ = dto ?? throw new ArgumentException("Должен быть задан добавляемый объект");
+            await Validator.ValidateAndThrowAsync(dto);
             var entity = Mapper.Map<TEntity>(dto);
             await Repository.Add(entity);
             var map = await GetById(entity.Id);

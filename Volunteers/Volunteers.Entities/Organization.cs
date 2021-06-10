@@ -40,6 +40,11 @@
         public string Address { get; set; }
 
         /// <summary>
+        /// Координаты
+        /// </summary>
+        public double[] Location { get; set; }
+
+        /// <summary>
         /// Часы работы
         /// </summary>
         public string WorkingHours { get; set; }

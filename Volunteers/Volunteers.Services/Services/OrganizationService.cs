@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,7 @@
         public OrganizationService(
             IVolunteerMapper mapper,
             IDbRepository<Organization> repository,
-            IValidator validator)
+            IValidator<OrganizationDto> validator)
             : base(mapper, repository, validator)
         {
         }
@@ -53,11 +52,6 @@
         /// <param name="orgDto">org.</param>
         public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto)
         {
-            var context = new ValidationContext<OrganizationDto>(orgDto);
-            var validateResult = Validator.Validate(context);
-            if (validateResult.IsValid == false)
-                throw new Exception("Неверный формат данных");
-
             var org = Mapper.Map<Organization>(orgDto);
             for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
                 org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
@@ -77,6 +71,7 @@
             var result = await Repository
                 .Get()
                 .Where(x => x.ActivityTypes.Any(at => ids.Contains(at.Id)))
+                .Include(x => x.PhoneNumbers)
                 .ToListAsync();
             var organizationDtos = Mapper.Map<List<OrganizationDto>>(result);
             return organizationDtos;
@@ -103,11 +98,6 @@
         /// <returns></returns>
         public async Task<ActionResult<OrganizationDto>> Update(OrganizationDto orgDto)
         {
-            var context = new ValidationContext<OrganizationDto>(orgDto);
-            var validateResult = Validator.Validate(context);
-            if (validateResult.IsValid == false)
-                throw new Exception("Неверный формат данных");
-
             var org = Mapper.Map<Organization>(orgDto);
             for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
                 org.PhoneNumbers.Add(new Phone() { Id = orgDto.Id, PhoneNumber = orgDto.PhoneNumbers[i] });
