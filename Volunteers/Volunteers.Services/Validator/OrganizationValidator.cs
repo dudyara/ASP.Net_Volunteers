@@ -20,6 +20,9 @@
             RuleFor(p => p.Manager)
                 .NotEmpty()
                 .Length(1, 100);
+            RuleFor(p => p.Description)
+                .NotEmpty()
+                .Length(1, 500);
             RuleForEach(p => p.ActivityTypes)
                 .NotEmpty();
             RuleFor(p => p.Mail)
