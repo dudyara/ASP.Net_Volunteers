@@ -15,12 +15,8 @@
         public RequestValidator()
         {
             RuleFor(p => p.Name)
-                .Must(p => p.All(char.IsLetter))
                 .NotEmpty()
                 .Length(1, 100);
-            RuleFor(p => p.Description)
-                .NotEmpty()
-                .Length(1, 500);
             RuleFor(p => p.PhoneNumber)
                 .NotEmpty()
                 .Length(10)
