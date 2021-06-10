@@ -15,17 +15,12 @@
         public OrganizationValidator()
         {
             RuleFor(p => p.Name)
-                .Must(p => p.All(char.IsLetter))
                 .NotEmpty()
                 .Length(1, 200);
-            RuleFor(p => p.Logo)
-                .NotEmpty();
             RuleFor(p => p.Manager)
-                .Must(p => p.All(char.IsLetter))
                 .NotEmpty()
                 .Length(1, 100);
             RuleFor(p => p.Description)
-                .Must(p => p.All(char.IsLetter))
                 .NotEmpty()
                 .Length(1, 500);
             RuleForEach(p => p.ActivityTypes)

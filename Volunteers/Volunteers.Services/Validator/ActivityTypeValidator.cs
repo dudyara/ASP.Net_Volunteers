@@ -15,7 +15,6 @@
         public ActivityTypeValidator()
         {
             RuleFor(p => p.TypeName)
-                .Must(p => p.All(char.IsLetter))
                 .NotEmpty()
                 .Length(1, 50);
         }
