@@ -63,7 +63,7 @@
             [FromServices] OrganizationService service,
             [FromBody] OrganizationDto orgDto)
         {
-            var result = await service.Update(orgDto);
+            var result = await service.Update(orgDto);  
             return result ?? NotFound();
         }
 

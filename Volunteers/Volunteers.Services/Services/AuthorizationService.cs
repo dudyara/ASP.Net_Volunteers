@@ -58,12 +58,20 @@ namespace Volunteers.Services.Services
         /// <param name="organizationService">organizationService</param>
         /// <param name="idUser">idUser</param>
         /// <returns></returns>
-        public async Task<IdentityResult> AddUser(long idUser, OrganizationCreateDto organizationDto, string token, OrganizationService organizationService)
+        public async Task<long> AddUser(OrganizationCreateDto organizationDto, string token, OrganizationService organizationService)
         {
             /*  if (TokenRepository.Get(x => x.Token == token).First() != null)
               {*/
-            var user = new User { Id = idUser, Email = organizationDto.Mail, UserName = organizationDto.Name };
-            return await _userManager.CreateAsync(user, organizationDto.Password);
+            var user = new User { Email = organizationDto.Mail, UserName = organizationDto.Name }; 
+            var result = await _userManager.CreateAsync(user, organizationDto.Password);
+
+            if (result.Succeeded)
+            {
+                return user.Id;
+            }
+
+            return 0;
+
             /*            }
 
                         return IdentityResult.Failed();*/

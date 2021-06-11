@@ -40,22 +40,23 @@
         /// <param name="token">token</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<IdentityResult>> Register(
+        public async Task<ActionResult<string>> Register(
             OrganizationCreateDto orgDto,
             [FromServices] AuthorizationService authorizationService,
             [FromServices] OrganizationService organizationService,
             [FromQuery] string token)
         {
             // Пока задается вручную
-            var idUser = 2154;
-            var result = await authorizationService.AddUser(idUser, orgDto, token, organizationService);
-            if (result.Succeeded)
+            // var idUser = 2154;
+            var result = await authorizationService.AddUser(orgDto, token, organizationService);
+            if (result != 0)
             {
                 // Надо разобраться с id
-                organizationService.Create(orgDto, idUser);
+                organizationService.Create(orgDto, result);
+                return "OK";
             }
 
-            return result;
+            return "Bad Request";
         }
 
         /// <summary>
