@@ -36,23 +36,23 @@
         /// </summary>
         /// <param name="authorizationService">authorizationService</param>
         /// <param name="organizationService">organizationService</param>
-        /// <param name="orgDto">organizationDto</param>
+        /// <param name="dto">dto</param>
         /// <param name="token">token</param>
         /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<string>> Register(
-            OrganizationCreateDto orgDto,
+            RegistrationDto dto,
             [FromServices] AuthorizationService authorizationService,
             [FromServices] OrganizationService organizationService,
             [FromQuery] string token)
         {
             // Пока задается вручную
             // var idUser = 2154;
-            var result = await authorizationService.AddUser(orgDto, token, organizationService);
+            var result = await authorizationService.AddUser(dto, token, organizationService);
             if (result != 0)
             {
                 // Надо разобраться с id
-                organizationService.Create(orgDto, result);
+                /*organizationService.Create(orgDto, result);*/
                 return "OK";
             }
 
@@ -77,12 +77,13 @@
         /// <param name="loginDto">loginDto</param>
         /// <param name="jWTAuthenticationManager">jWTAuthenticationManager</param>
         /// <param name="authenticationManager">authneticationManager</param>
+        /// <param name="authenticationService">authenticationService</param>
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Authenticate([FromBody] LoginDto loginDto, [FromServices] JWTAuthenticationManager authenticationManager)
+        public async Task<IActionResult> AuthenticateAsync([FromBody] LoginDto loginDto, [FromServices] AuthorizationService authenticationService)
         {
-            var token = authenticationManager.AuthenticateAsync(loginDto.Email, loginDto.Password);
+            var token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password);
 
             if (token == null)
                 return Unauthorized();

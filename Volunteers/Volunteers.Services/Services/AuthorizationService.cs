@@ -3,10 +3,13 @@ namespace Volunteers.Services.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.IdentityModel.Tokens;
     using Volunteers.DB;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
@@ -16,6 +19,7 @@ namespace Volunteers.Services.Services
     public class AuthorizationService : BaseManagerService<RegistrationToken>
     {
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         /// <summary>
         /// AuthenticationService
         /// </summary>
@@ -32,6 +36,7 @@ namespace Volunteers.Services.Services
            : base(repository, signInManager, userManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         /// <summary>
@@ -53,17 +58,16 @@ namespace Volunteers.Services.Services
         /// <summary>
         /// AddUser
         /// </summary>
-        /// <param name="organizationDto">organizationDto</param>
+        /// <param name="dto">dto</param>
         /// <param name="token">token</param>
         /// <param name="organizationService">organizationService</param>
-        /// <param name="idUser">idUser</param>
         /// <returns></returns>
-        public async Task<long> AddUser(OrganizationCreateDto organizationDto, string token, OrganizationService organizationService)
+        public async Task<long> AddUser(RegistrationDto dto, string token, OrganizationService organizationService)
         {
             /*  if (TokenRepository.Get(x => x.Token == token).First() != null)
               {*/
-            var user = new User { Email = organizationDto.Mail, UserName = organizationDto.Name }; 
-            var result = await _userManager.CreateAsync(user, organizationDto.Password);
+            var user = new User { Email = dto.Email, UserName = dto.Email }; 
+            var result = await _userManager.CreateAsync(user, dto.Password);
 
             if (result.Succeeded)
             {
@@ -75,6 +79,40 @@ namespace Volunteers.Services.Services
             /*            }
 
                         return IdentityResult.Failed();*/
+        }
+
+        /// <summary>
+        /// AuthentucateAsync
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <param name="password">password</param>
+        /// <returns></returns>
+        public async Task<string> AuthenticateAsync(string email, string password)
+        {
+            var result = await _signInManager.PasswordSignInAsync(email, password, false, false);
+            var tokenKey = "This is my test private key";
+            if (result.Succeeded)
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(tokenKey);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                    new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.Role, "Organization")
+                   }),
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    SigningCredentials = new SigningCredentials(
+                        new SymmetricSecurityKey(key),
+                        SecurityAlgorithms.HmacSha512Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var result1 = tokenHandler.WriteToken(token);
+                return result1;
+            }
+
+            return "Bad Request";
         }
     }
 }

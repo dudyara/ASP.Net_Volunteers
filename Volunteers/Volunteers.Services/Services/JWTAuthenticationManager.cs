@@ -15,7 +15,7 @@ namespace Volunteers.Services.Services
     /// <summary>
     /// JWTAuthenticationManager
     /// </summary>
-    public class JWTAuthenticationManager : /*IJWTAuthenticationManager*/ BaseManagerService<User>
+    public class JWTAuthenticationManager
     {
         private readonly string tokenKey;
         private readonly SignInManager<User> _signInManager;
@@ -30,7 +30,6 @@ namespace Volunteers.Services.Services
             IDbRepository<User> repository,
             SignInManager<User> signInManager,
             UserManager<User> userManager)
-            : base(repository, signInManager, userManager)
         {
             /* this.tokenKey = "This is my test private key";
              *//*Repository = repository;*//*
