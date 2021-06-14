@@ -138,6 +138,7 @@
         /// </summary>
         /// <param name="app">app</param>
         /// <param name="env">env</param>
+        /// <param name="loggerFactory">loggerFactory</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();

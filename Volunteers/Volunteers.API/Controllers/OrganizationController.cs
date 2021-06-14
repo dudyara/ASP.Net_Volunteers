@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services; 
@@ -14,6 +15,17 @@
     [ApiController]
     public class OrganizationController : Controller
     {
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// OrganizationController
+        /// </summary>
+        /// <param name="logger">logger</param>
+        public OrganizationController(ILogger<OrganizationController> logger)
+        {
+            _logger = logger;
+        }
+
        /* /// <summary>
         /// Добавить новую организацию.
         /// </summary>
