@@ -103,6 +103,18 @@
         }
 
         /// <summary>
+        /// Возвращает список объектов
+        /// </summary>
+        public virtual async Task<List<TDto>> GetAsync()
+        {
+            var result = await Repository
+                .Get()
+                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
+                .ToListAsync();
+            return result;
+        }
+
+        /// <summary>
         /// Возвращает объект по ID.
         /// </summary>
         /// <param name="id">ID объекта.</param>
@@ -112,18 +124,6 @@
                 .Get(x => x.Id == id)
                 .ProjectTo<TDto>(Mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
-            return result;
-        }
-
-        /// <summary>
-        /// Возвращает список объектов
-        /// </summary>
-        protected virtual async Task<List<TDto>> GetAsync()
-        {
-            var result = await Repository
-                .Get()
-                .ProjectTo<TDto>(Mapper.ConfigurationProvider)
-                .ToListAsync();
             return result;
         }
     }

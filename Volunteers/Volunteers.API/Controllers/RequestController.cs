@@ -13,7 +13,7 @@
     /// <summary>
     /// RequestController - контроллер для работы с заявками.
     /// </summary>
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class RequestController : Controller
     {
@@ -60,7 +60,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
-        [HttpGet]
+        [HttpGet("count")]
         public async Task<int[]> GetCount(
             [FromQuery] long id,
             [FromServices] RequestService service)
@@ -90,7 +90,7 @@
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPut("comment")]
         public async Task<ActionResult<Request>> CreateComment(
             [FromBody] RequestCreateComment commentDto,
             [FromServices] RequestService service)
@@ -105,9 +105,9 @@
         /// <param name="id">id</param>
         /// <param name="service">service</param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Request>> Delete(
-            [FromQuery] long id,
+            [FromRoute] long id,
             [FromServices] RequestService service)
         {
             var result = await service.Delete(id);

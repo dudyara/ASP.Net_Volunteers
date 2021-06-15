@@ -11,7 +11,7 @@
     /// <summary>
     /// ActivityType Controller контроллер
     /// </summary>
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ActivityTypeController : Controller
     {
@@ -25,8 +25,8 @@
             [FromBody] ActivityTypeDto actDto,
             [FromServices] ActivityTypeService service)
         {
-            var result = await service.Create(actDto);
-            return result ?? NotFound();
+            var result = await service.AddAsync(actDto);
+            return result;
         }
 
         /// <summary>
@@ -37,8 +37,8 @@
         public async Task<ActionResult<List<ActivityTypeDto>>> Get(
             [FromServices] ActivityTypeService service)
         {
-            var result = await service.Get();
-            return result ?? NotFound();
+            var result = await service.GetAsync();
+            return result;
         }
 
         /// <summary>
@@ -51,8 +51,8 @@
             [FromBody] ActivityTypeDto actDto,
             [FromServices] ActivityTypeService service)
         {
-            var result = await service.Update(actDto);
-            return result ?? NotFound();
+            var result = await service.UpdateAsync(actDto);
+            return result;
         }
 
         /// <summary>
@@ -60,9 +60,9 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<ActivityType>> Delete(
-            [FromQuery] long id,
+            [FromRoute] long id,
             [FromServices] ActivityTypeService service)
         {
             var result = await service.Delete(id);
