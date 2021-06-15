@@ -104,6 +104,7 @@
                     .CountAsync();
                 result[2] = await Repository
                     .Get()
+                    .Where(c => c.OrganizationId == orgId)
                     .Where(c => c.RequestStatus == RequestStatus.Done)
                     .CountAsync();
             }
