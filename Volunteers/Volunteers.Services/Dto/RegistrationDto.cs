@@ -14,5 +14,11 @@
         /// Password
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// OrganizationId
+        /// </summary>
+
+        public long OrganizationId { get; set; }
     }
 }

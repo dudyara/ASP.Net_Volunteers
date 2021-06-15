@@ -71,11 +71,6 @@
         public DateTime? Deleted { get; set; }
 
         /// <summary>
-        /// UserId
-        /// </summary>
-        public long UserId { get; set; }
-
-        /// <summary>
         /// User 
         /// </summary>
         public User User { get; set; }

@@ -43,16 +43,21 @@ namespace Volunteers.Services.Services
         /// GetToken
         /// </summary>
         /// <param name="service">service</param>
+        /// <param name="id">id</param>
         /// <returns></returns>
-        public string GetToken()
+        public string GenerateLink(long id)
         {
+            // Создаем токен регистрации
             RegistrationToken registrationToken = new RegistrationToken();
             var token = Guid.NewGuid();
             registrationToken.Token = token.ToString();
             registrationToken.ExpireTime = DateTime.Now.AddHours(24);
             Repository.Add(registrationToken);
+
+            // создаем ссылку, где указываем токен и id организации
+            var link = "https://rubius.com/" + token + "&id=" + id.ToString();
             Repository.SaveChangesAsync();
-            return token.ToString();
+            return link;
         }
 
         /// <summary>
@@ -62,11 +67,10 @@ namespace Volunteers.Services.Services
         /// <param name="token">token</param>
         /// <param name="organizationService">organizationService</param>
         /// <returns></returns>
-        public async Task<long> AddUser(RegistrationDto dto, string token, OrganizationService organizationService)
+        public async Task<long> AddUser(RegistrationDto dto, OrganizationService organizationService)
         {
-            /*  if (TokenRepository.Get(x => x.Token == token).First() != null)
-              {*/
-            var user = new User { Email = dto.Email, UserName = dto.Email }; 
+            
+            var user = new User { Email = dto.Email, UserName = dto.Email, OrganizationId = dto.OrganizationId }; 
             var result = await _userManager.CreateAsync(user, dto.Password);
 
             if (result.Succeeded)
@@ -75,10 +79,6 @@ namespace Volunteers.Services.Services
             }
 
             return 0;
-
-            /*            }
-
-                        return IdentityResult.Failed();*/
         }
 
         /// <summary>

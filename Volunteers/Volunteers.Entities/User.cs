@@ -11,5 +11,11 @@
         /// Organization
         /// </summary>
         public Organization Organization { get; set; }
+
+        /// <summary>
+        /// OrganizationId
+        /// </summary>
+
+        public long OrganizationId { get; set; }
     }
 }

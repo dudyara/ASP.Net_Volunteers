@@ -40,19 +40,14 @@
         /// <param name="token">token</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<string>> Register(
+        public async Task<ActionResult<string>> RegisteUser(
             RegistrationDto dto,
             [FromServices] AuthorizationService authorizationService,
-            [FromServices] OrganizationService organizationService,
-            [FromQuery] string token)
+            [FromServices] OrganizationService organizationService)
         {
-            // Пока задается вручную
-            // var idUser = 2154;
-            var result = await authorizationService.AddUser(dto, token, organizationService);
+            var result = await authorizationService.AddUser(dto, organizationService);
             if (result != 0)
             {
-                // Надо разобраться с id
-                /*organizationService.Create(orgDto, result);*/
                 return "OK";
             }
 
@@ -60,15 +55,34 @@
         }
 
         /// <summary>
+        /// RegistraterOrganization
+        /// </summary>
+        /// <param name="organizationDto">organizationDto</param>
+        /// <param name="organizationService">organizationService</param>
+        /// <returns></returns>
+
+        [HttpPost]
+
+        public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
+            OrganizationDto organizationDto,
+            [FromServices] OrganizationService organizationService)
+        {
+            var dto = await organizationService.Create(organizationDto);
+
+            return dto;
+        } 
+
+        /// <summary>
         /// GetToken
         /// </summary>
         /// <param name="service">service</param>
+        /// <param name="id">id</param>
         /// <returns></returns>
         [HttpGet]
 
-        public ActionResult<string> GetToken([FromServices] AuthorizationService service)
+        public ActionResult<string> GetToken([FromServices] AuthorizationService service, long id)
         {
-            return service.GetToken();
+            return service.GenerateLink(id);
         }
 
         /// <summary>
