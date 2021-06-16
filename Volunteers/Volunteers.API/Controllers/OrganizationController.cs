@@ -6,12 +6,12 @@
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
-    using Volunteers.Services.Services; 
+    using Volunteers.Services.Services;
 
     /// <summary>
     /// OrganizationController
     /// </summary>
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class OrganizationController : Controller
     {
@@ -45,7 +45,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="ids">ids</param>
-        [HttpGet]
+        [HttpGet("ids")]
         public async Task<ActionResult<List<OrganizationDto>>> GetByIds(
             [FromServices] OrganizationService service,
             [FromQuery] List<long> ids)
@@ -73,9 +73,9 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Organization>> Delete(
-            [FromServices] OrganizationService service,
+            [FromRoute] OrganizationService service,
             [FromQuery] long id)
         {
             var result = await service.Delete(id);
