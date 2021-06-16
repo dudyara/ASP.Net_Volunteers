@@ -192,10 +192,16 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(500)");
 
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("WorkingHours")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Organizations");
                 });
@@ -227,8 +233,14 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<DateTime>("ExpireTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Token")
                         .HasColumnType("text");
@@ -317,13 +329,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "6c433093-442d-435a-a4da-ad8f8601bbc4",
+                            ConcurrencyStamp = "d93b36ee-e4e5-4dce-b80b-7b47e169ea54",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "5ae661ca-a499-4c2f-9fc8-4bde55c8414f",
+                            ConcurrencyStamp = "58d8aa0f-77e0-4e9e-b6de-13d044f6db75",
                             Name = "Organization"
                         });
                 });
@@ -363,9 +375,6 @@ namespace Volunteers.DB.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<long>("OrganizationId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
@@ -393,9 +402,6 @@ namespace Volunteers.DB.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("OrganizationId")
-                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -470,6 +476,15 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
+            modelBuilder.Entity("Volunteers.Entities.Organization", b =>
+                {
+                    b.HasOne("Volunteers.Entities.User", "User")
+                        .WithOne("Organization")
+                        .HasForeignKey("Volunteers.Entities.Organization", "UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Volunteers.Entities.Phone", b =>
                 {
                     b.HasOne("Volunteers.Entities.Organization", "Organization")
@@ -490,17 +505,6 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Volunteers.Entities.User", b =>
-                {
-                    b.HasOne("Volunteers.Entities.Organization", "Organization")
-                        .WithOne("User")
-                        .HasForeignKey("Volunteers.Entities.User", "OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Organization");
-                });
-
             modelBuilder.Entity("Volunteers.Entities.ActivityType", b =>
                 {
                     b.Navigation("ActivityTypeOrganizations");
@@ -513,8 +517,11 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("PhoneNumbers");
 
                     b.Navigation("Requests");
+                });
 
-                    b.Navigation("User");
+            modelBuilder.Entity("Volunteers.Entities.User", b =>
+                {
+                    b.Navigation("Organization");
                 });
 #pragma warning restore 612, 618
         }

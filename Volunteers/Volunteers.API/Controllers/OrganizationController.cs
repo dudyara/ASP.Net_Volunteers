@@ -27,24 +27,25 @@
             _logger = logger;
         }
 
-       /* /// <summary>
-        /// Добавить новую организацию.
-        /// </summary>
-        /// <param name="org">organization.</param>
-        /// <param name="service">service.</param>
-        [HttpPost]
-        public async Task<ActionResult<OrganizationDto>> Create(
-            OrganizationDto org, [FromServices] OrganizationService service)
-        {
-            var result = await service.Create(org);
-            return result ?? NotFound();
-        }*/
+        /* /// <summary>
+         /// Добавить новую организацию.
+         /// </summary>
+         /// <param name="org">organization.</param>
+         /// <param name="service">service.</param>
+         [HttpPost]
+         public async Task<ActionResult<OrganizationDto>> Create(
+             OrganizationDto org, [FromServices] OrganizationService service)
+         {
+             var result = await service.Create(org);
+             return result ?? NotFound();
+         }*/
 
         /// <summary>
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
         [HttpGet]
+        [Authorize(Roles = "Organization")]
         public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
         {

@@ -63,6 +63,23 @@
         }
 
         /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="orgDto">org.</param>
+        /// <param name="id">id</param>
+        public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto, long id)
+        {
+            var org = Mapper.Map<Organization>(orgDto);
+            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
+                org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
+            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
+                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
+            org.UserId = id;
+            await Repository.Add(org);
+            return orgDto;
+        }
+
+        /// <summary>
         /// Выдача организаций по типы их активности
         /// </summary>
         /// <param name="ids">id активность</param>
