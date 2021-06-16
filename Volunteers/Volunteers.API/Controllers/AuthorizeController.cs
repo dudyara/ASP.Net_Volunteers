@@ -1,14 +1,9 @@
 ﻿namespace Volunteers.API.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-    using Volunteers.Entities;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
 
@@ -34,13 +29,12 @@
         /// <summary>
         /// Test add new user
         /// </summary>
+        /// <param name="dto">dto</param>
         /// <param name="authorizationService">authorizationService</param>
         /// <param name="organizationService">organizationService</param>
-        /// <param name="dto">dto</param>
-        /// <param name="token">token</param>
-        /// <returns></returns>
+        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
-        public async Task<ActionResult<string>> RegisteUser(
+        public async Task<ActionResult<string>> RegisterUser(
             RegistrationDto dto,
             [FromServices] AuthorizationService authorizationService,
             [FromServices] OrganizationService organizationService)
@@ -48,21 +42,18 @@
             var result = await authorizationService.AddUser(dto, organizationService);
             if (result != 0)
             {
-                return "OK";
+                return Ok();
             }
 
-            return "Bad Request";
+            return BadRequest();
         }
 
         /// <summary>
-        /// RegistraterOrganization
+        /// RegisterOrganization
         /// </summary>
-        /// <param name="organizationDto">organizationDto</param>
-        /// <param name="organizationService">organizationService</param>
-        /// <returns></returns>
-
+        /// <param name="organizationDto">Dto</param>
+        /// <param name="organizationService">Service</param>
         [HttpPost]
-
         public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
             OrganizationDto organizationDto,
             [FromServices] OrganizationService organizationService)
@@ -70,16 +61,14 @@
             var dto = await organizationService.Create(organizationDto);
 
             return dto;
-        } 
+        }
 
         /// <summary>
         /// GetToken
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
-        /// <returns></returns>
         [HttpGet]
-
         public ActionResult<string> GetToken([FromServices] AuthorizationService service, long id)
         {
             return service.GenerateLink(id);
@@ -89,10 +78,7 @@
         /// Authenticate
         /// </summary>
         /// <param name="loginDto">loginDto</param>
-        /// <param name="jWTAuthenticationManager">jWTAuthenticationManager</param>
-        /// <param name="authenticationManager">authneticationManager</param>
         /// <param name="authenticationService">authenticationService</param>
-        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AuthenticateAsync([FromBody] LoginDto loginDto, [FromServices] AuthorizationService authenticationService)

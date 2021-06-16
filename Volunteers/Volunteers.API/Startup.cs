@@ -48,11 +48,11 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-              .AddFluentValidation(s =>
-               {
-                   s.RegisterValidatorsFromAssemblyContaining<Startup>();
-                   s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-               });
+                .AddFluentValidation(s =>
+                {
+                    s.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                });
             services.Scan(scan =>
                 scan.FromAssemblyOf<BaseService<BaseEntity, BaseDto>>()
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))
@@ -60,10 +60,7 @@
                     .WithTransientLifetime());
             services.AddMvc()
                 .AddNewtonsoftJson(
-                    options =>
-                    {
-                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    });
+                    options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; });
             ConfigureDbConnection(services);
 
             services.AddSwaggerGen(c =>
@@ -89,18 +86,18 @@
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
-          new OpenApiSecurityScheme
-          {
-            Reference = new OpenApiReference
-              {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
-              },
-              Name = "Bearer",
-              In = ParameterLocation.Header,
-            },
-            new List<string>()
-          }
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
                 });
             });
 
@@ -108,26 +105,26 @@
             var key = Encoding.ASCII.GetBytes(tokenKey);
 
             services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
 
-            services.AddScoped<IDtoValidator, DtoValidator>();     
+            services.AddScoped<IDtoValidator, DtoValidator>();
             services.AddTransient<IValidator<OrganizationDto>, OrganizationValidator>();
             services.AddTransient<IValidator<RequestCreateDto>, RequestValidator>();
             services.AddTransient<IValidator<ActivityTypeDto>, ActivityTypeValidator>();
@@ -144,15 +141,11 @@
         /// </summary>
         /// <param name="app">app</param>
         /// <param name="env">env</param>
-        /// <param name="loggerFactory">loggerFactory</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volunteers API");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volunteers API"); });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -165,10 +158,7 @@
             app.UseAuthorization();
             app.UseAuthentication();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         private void ConfigureDbConnection(IServiceCollection services)
