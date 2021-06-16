@@ -56,6 +56,6 @@
         /// <summary>
         /// Координаты
         /// </summary>
-        public long[] Location { get; set; }
+        public double[] Location { get; set; }
     }
 }

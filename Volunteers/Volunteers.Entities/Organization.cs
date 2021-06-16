@@ -40,6 +40,11 @@
         public string Address { get; set; }
 
         /// <summary>
+        /// Координаты
+        /// </summary>
+        public double[] Location { get; set; }
+
+        /// <summary>
         /// Часы работы
         /// </summary>
         public string WorkingHours { get; set; }
@@ -65,7 +70,7 @@
         public List<Phone> PhoneNumbers { get; set; } = new List<Phone>();
 
         /// <inheritdoc/>
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
 
         /// <inheritdoc/>
         public DateTime? Deleted { get; set; }

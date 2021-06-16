@@ -25,7 +25,7 @@
         /// <param name="mapper">Маппер.</param>
         /// <param name="repository">repository</param>
         /// <param name="validator">validator</param>
-        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository, IValidator validator)
+        public RequestService(IVolunteerMapper mapper, IDbRepository<Request> repository, IDtoValidator validator)
             : base(mapper, repository, validator)
         {
         }
@@ -104,6 +104,7 @@
                     .CountAsync();
                 result[2] = await Repository
                     .Get()
+                    .Where(c => c.OrganizationId == orgId)
                     .Where(c => c.RequestStatus == RequestStatus.Done)
                     .CountAsync();
             }
@@ -128,11 +129,11 @@
                     if (request.RequestStatus == RequestStatus.Waiting)
                         request.OrganizationId = reqDto.OrganizationId;
                     request.RequestStatus = RequestStatus.Execution;
-                    request.Complited = null;
+                    request.Completed = null;
                     break;
                 case RequestStatus.Done:
                     request.RequestStatus = RequestStatus.Done;
-                    request.Complited = DateTime.Now;
+                    request.Completed = DateTime.Now;
                     break;
             }
 
@@ -164,7 +165,7 @@
         }
 
         /// <summary>
-        /// PostRequests
+        /// Create.
         /// </summary>
         /// <param name="requestDto">request.</param>
         public async Task<ActionResult<Request>> Create(RequestCreateDto requestDto)

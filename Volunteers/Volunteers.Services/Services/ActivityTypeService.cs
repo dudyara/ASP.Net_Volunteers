@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.Services.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using FluentValidation;
@@ -24,7 +25,7 @@
         public ActivityTypeService(
              IVolunteerMapper mapper,
              IDbRepository<ActivityType> repository,
-             IValidator validator)
+             IDtoValidator validator)
              : base(mapper, repository, validator)
         {
         }

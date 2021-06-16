@@ -24,7 +24,7 @@
         public List<ActivityTypeOrganization> ActivityTypeOrganizations { get; set; } = new List<ActivityTypeOrganization>();
         
         /// <inheritdoc/>
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
 
         /// <inheritdoc/>
         public DateTime? Deleted { get; set; }

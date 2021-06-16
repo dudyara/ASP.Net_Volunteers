@@ -56,6 +56,18 @@
             modelBuilder.Entity<Organization>().Property(u => u.Mail).HasColumnType("varchar(500)");
             modelBuilder.Entity<Organization>().Property(u => u.Address).HasColumnType("varchar(500)");
 
+            modelBuilder.Entity<Organization>()
+                .Property(b => b.IsDeleted)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Request>()
+                .Property(b => b.IsDeleted)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Organization>()
+                .Property(b => b.IsDeleted)
+                .HasDefaultValue(false);
+
             modelBuilder
                 .Entity<Role>().HasData(
                 new Role[]

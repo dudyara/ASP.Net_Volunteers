@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
@@ -9,9 +10,11 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210610124841_SoftDeletable2")]
+    partial class SoftDeletable2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,24 +223,6 @@ namespace Volunteers.DB.Migrations
                     b.ToTable("Phone");
                 });
 
-            modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("ExpireTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RegistrationToken");
-                });
-
             modelBuilder.Entity("Volunteers.Entities.Request", b =>
                 {
                     b.Property<long>("Id")
@@ -317,13 +302,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "6c433093-442d-435a-a4da-ad8f8601bbc4",
+                            ConcurrencyStamp = "def69b1e-a99d-4731-ab74-710f59eac42c",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "5ae661ca-a499-4c2f-9fc8-4bde55c8414f",
+                            ConcurrencyStamp = "c1fcc4e7-0cbf-4c7e-a5a1-fce14c167b00",
                             Name = "Organization"
                         });
                 });
@@ -363,9 +348,6 @@ namespace Volunteers.DB.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<long>("OrganizationId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
@@ -393,9 +375,6 @@ namespace Volunteers.DB.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("OrganizationId")
-                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -490,17 +469,6 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Volunteers.Entities.User", b =>
-                {
-                    b.HasOne("Volunteers.Entities.Organization", "Organization")
-                        .WithOne("User")
-                        .HasForeignKey("Volunteers.Entities.User", "OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Organization");
-                });
-
             modelBuilder.Entity("Volunteers.Entities.ActivityType", b =>
                 {
                     b.Navigation("ActivityTypeOrganizations");
@@ -513,8 +481,6 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("PhoneNumbers");
 
                     b.Navigation("Requests");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

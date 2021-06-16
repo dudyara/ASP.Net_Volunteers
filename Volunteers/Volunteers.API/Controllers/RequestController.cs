@@ -1,7 +1,9 @@
 ﻿namespace Volunteers.API.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
@@ -26,8 +28,15 @@
             [FromBody] RequestCreateDto request,
             [FromServices] RequestService service)
         {
-            var result = await service.Create(request);
-            return result ?? NotFound();
+            try
+            {
+                var result = await service.Create(request);
+                return result ?? NotFound();
+            }
+            catch (Exception e)
+            {
+                return BadRequest($"{e.Message}{Environment.NewLine} {e.StackTrace}");
+            }
         }
 
         /// <summary>

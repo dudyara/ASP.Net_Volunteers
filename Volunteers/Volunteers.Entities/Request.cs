@@ -40,7 +40,7 @@
         /// <summary>
         /// Дата и время завершение заявки.
         /// </summary>
-        public DateTime? Complited { get; set; }
+        public DateTime? Completed { get; set; }
 
         /// <summary>
         /// ID Фонда.
@@ -58,7 +58,7 @@
         public virtual Organization Organization { get; set; }
 
         /// <inheritdoc/>
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
 
         /// <inheritdoc/>
         public DateTime? Deleted { get; set; }

@@ -20,6 +20,7 @@
     using Services;
     using Services.Mapper;
     using Volunteers.Services.Dto;
+    using Volunteers.Services.Validator;
 
     /// <summary>
     /// Startup
@@ -125,7 +126,12 @@
             });
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
-            services.AddTransient<IValidator, OrganizationValidator>();
+
+            services.AddScoped<IDtoValidator, DtoValidator>();     
+            services.AddTransient<IValidator<OrganizationDto>, OrganizationValidator>();
+            services.AddTransient<IValidator<RequestCreateDto>, RequestValidator>();
+            services.AddTransient<IValidator<ActivityTypeDto>, ActivityTypeValidator>();
+
             services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
             services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();
