@@ -109,6 +109,8 @@
             app.UseAuthorization();
             app.UseAuthentication();
 
+            app.UseMiddleware<ErrorCodesMiddleware>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
