@@ -44,9 +44,9 @@
         {
              if (authorizationService.CheckRegistrationToken(token))
              {
-                if (id == 0)
+                if (id != 0)
                 {
-                    return Ok(await authorizationService.AddUser(dto));
+                    return Ok(await authorizationService.AddUser(dto, id));
                 }
 
                /* else

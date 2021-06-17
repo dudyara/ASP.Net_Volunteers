@@ -137,6 +137,7 @@
                 if (organization != null)
                 {
                     organization.UserId = id;
+                    await _appDbContext.SaveChangesAsync();
                     return user.Id;
                 }
             }
