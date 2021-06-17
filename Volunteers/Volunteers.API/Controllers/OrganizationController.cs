@@ -73,9 +73,9 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<ActionResult<Organization>> Delete(
-            [FromRoute] OrganizationService service,
+            [FromServices] OrganizationService service,
             [FromQuery] long id)
         {
             var result = await service.Delete(id);
