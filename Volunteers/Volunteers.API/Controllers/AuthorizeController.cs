@@ -51,7 +51,7 @@
 
                 var result = await authorizationService.AddUserAsync(dto);
 
-                if (result != 0)
+                if (result == dto)
                 {
                     return Ok(result);
                 }

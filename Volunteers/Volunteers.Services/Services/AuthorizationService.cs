@@ -77,7 +77,7 @@
             return link;
         }
 
-        /// <summary>
+      /*  /// <summary>
         /// AddUser
         /// </summary>
         /// <param name="dto">dto</param>
@@ -93,29 +93,37 @@
 
             throw new Exception(string.Join(" ", result.Errors.Select(x => x.Description)));
         }
+*/
 
         /// <summary>
         /// AddUser
         /// </summary>
         /// <param name="dto">dto organization</param>
         /// <param name="organizationId">id organization</param>
-        public async Task<long> AddUserAsync(RegistrationDto dto, long? organizationId = null)
+        public async Task<RegistrationDto> AddUserAsync(RegistrationDto dto, long? organizationId = null)
         {
             var user = new User { Email = dto.Email, UserName = dto.Email };
             var result = await _userManager.CreateAsync(user, dto.Password);
 
             if (result.Succeeded)
             {
-                var organization = await _organizationRepo.Get(x => x.Id == organizationId).FirstOrDefaultAsync();
-                if (organization != null)
+                if (organizationId.HasValue)
                 {
-                    organization.UserId = user.Id;
-                    await _organizationRepo.SaveChangesAsync();
-                    return user.Id;
+                    var organization = await _organizationRepo.Get(x => x.Id == organizationId).FirstOrDefaultAsync();
+                    if (organization != null)
+                    {
+                        organization.UserId = user.Id;
+                        await _organizationRepo.SaveChangesAsync();
+                        return dto;
+                    }
+
+                    throw new Exception("Неверная ссылка");
                 }
+
+                return dto;
             }
 
-            return 0;
+            throw new Exception(string.Join(" ", result.Errors.Select(x => x.Description)));
         }
 
         /// <summary>
