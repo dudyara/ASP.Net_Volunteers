@@ -31,9 +31,9 @@
         /// Test add new user
         /// </summary>
         /// <param name="dto">dto</param>
-        /// <param name="authorizationService">authorizationService</param>
         /// <param name="token">token</param>
         /// <param name="id">id</param>
+        /// <param name="authorizationService">authorizationService</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
         public async Task<ActionResult<string>> RegisterUser(
@@ -42,27 +42,24 @@
             [FromQuery] long id,
             [FromServices] AuthorizationService authorizationService)
         {
-             if (authorizationService.CheckRegistrationToken(token))
-             {
+            if (await authorizationService.CheckRegistrationToken(token))
+            {
                 if (id != 0)
                 {
                     return Ok(await authorizationService.AddUser(dto, id));
                 }
 
-               /* else
-                {
-                    var result = await authorizationService.AddUser(dto, id);
+                var result = await authorizationService.AddUser(dto);
 
-                    if (result != 0)
-                    {
-                        return Ok(result);
-                    }
+                if (result != 0)
+                {
+                    return Ok(result);
                 }
 
-                return BadRequest(); */
-             }
+                return BadRequest();
+            }
 
-             return BadRequest();
+            return BadRequest();
         }
 
         /// <summary>
@@ -114,7 +111,9 @@
         /// <param name="authenticationService">authenticationService</param>
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> AuthenticateAsync([FromBody] LoginDto loginDto, [FromServices] AuthorizationService authenticationService)
+        public async Task<IActionResult> AuthenticateAsync(
+            [FromBody] LoginDto loginDto,
+            [FromServices] AuthorizationService authenticationService)
         {
             var token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password);
 

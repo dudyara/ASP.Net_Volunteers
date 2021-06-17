@@ -25,12 +25,13 @@
         /// <summary>
         /// GenerateToken
         /// </summary>
-        /// <param name="token">token</param>
-        public static RegistrationToken GenerateToken(RegistrationToken token)
+        public static RegistrationToken GenerateToken()
         {
-            token.Token = Guid.NewGuid().ToString();
-            token.ExpireTime = DateTime.Now.AddHours(24);
-            return token;
+            return new RegistrationToken
+            {
+                Token = Guid.NewGuid().ToString(),
+                ExpireTime = DateTime.Now.AddHours(24)
+            };
         }
     }
 }

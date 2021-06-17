@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
     using Volunteers.DB;
     using Volunteers.Entities;
@@ -23,7 +24,7 @@
         public const string BaseLink = "https://rubius.ru";
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly AppDbContext _appDbContext;
+        private readonly IDbRepository<Organization> _organizationRepo;
 
         /// <summary>
         /// AuthenticationService
@@ -31,61 +32,44 @@
         /// <param name="signInManager">signInManager</param>
         /// <param name="userManager">userManager</param>
         /// <param name="repository">repository</param>
-        /// <param name="appDbContext">appDbContext</param>
+        /// <param name="organizationRepo">organizationRepo</param>
         public AuthorizationService(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             IDbRepository<RegistrationToken> repository,
-            AppDbContext appDbContext)
+            IDbRepository<Organization> organizationRepo)
             : base(repository, signInManager, userManager)
         {
             _userManager = userManager;
+            _organizationRepo = organizationRepo;
             _signInManager = signInManager;
-            _appDbContext = appDbContext;
         }
 
         /// <summary>
         /// CheckRegistrationToken
         /// </summary>
         /// <param name="token">token</param>
-        /// <returns></returns>
-        public bool CheckRegistrationToken(string token)
-        {
-            if (Repository.Get(s => s.Token == token).FirstOrDefault() != null)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// GenerateLink
-        /// </summary>
-        /// <returns></returns>
-        public string GenerateLink()
-        {
-            RegistrationToken registrationToken = RegistrationToken.GenerateToken(new RegistrationToken());
-            Repository.Add(registrationToken);
-
-            var link = BaseLink + "?token=" + registrationToken.Token;
-            Repository.SaveChangesAsync();
-            return link;
-        }
+        public async Task<bool> CheckRegistrationToken(string token) => (await Repository.Get(s => s.Token == token).FirstOrDefaultAsync()) != null;
 
         /// <summary>
         /// GetToken
         /// </summary>
         /// <param name="organizationId">id организации</param>
-        public string GenerateLink(long organizationId)
+        public async Task<string> GenerateLink(long? organizationId = null)
         {
             // Создаем токен регистрации
-            RegistrationToken registrationToken = RegistrationToken.GenerateToken(new RegistrationToken());
-            Repository.Add(registrationToken);
+            var registrationToken = RegistrationToken.GenerateToken();
+            await Repository.Add(registrationToken);
+            await Repository.SaveChangesAsync();
 
             // создаем ссылку, где указываем токен и id организации
-            var link = BaseLink + "Authorize/RegisterUser" + "?token=" + registrationToken.Token + "&id=" + organizationId;
-            Repository.SaveChangesAsync();
+            var link = $"{BaseLink}Authorize/RegisterUser?token={registrationToken.Token}";
+
+            if (organizationId.HasValue)
+            {
+                link += $"&id={organizationId}";
+            }
+
             return link;
         }
 
@@ -93,7 +77,7 @@
         /// AddUser
         /// </summary>
         /// <param name="dto">dto</param>
-        public async Task<long> AddUser(RegistrationDto dto)
+        public async Task<long> AddUserAsync(RegistrationDto dto)
         {
             var user = new User { Email = dto.Email, UserName = dto.Email };
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -103,28 +87,26 @@
                 return user.Id;
             }
 
-            return 0;
+            throw new Exception(string.Join(" ", result.Errors.Select(x => x.Description)));
         }
 
         /// <summary>
         /// AddUser
         /// </summary>
         /// <param name="dto">dto organization</param>
-        /// <param name="id">id orgnization</param>
-        /// <param name="dbRepository">dbRepository</param>
-        /// <returns></returns>
-        public async Task<long> AddUser(RegistrationDto dto, long id)
+        /// <param name="organizationId">id organization</param>
+        public async Task<long> AddUser(RegistrationDto dto, long? organizationId = null)
         {
             var user = new User { Email = dto.Email, UserName = dto.Email };
             var result = await _userManager.CreateAsync(user, dto.Password);
 
             if (result.Succeeded)
             {
-                var organization = _appDbContext.Organizations.Where(x => x.Id == id).FirstOrDefault();
+                var organization = await _organizationRepo.Get(x => x.Id == organizationId).FirstOrDefaultAsync();
                 if (organization != null)
                 {
-                    organization.UserId = id;
-                    await _appDbContext.SaveChangesAsync();
+                    organization.UserId = organizationId;
+                    await _organizationRepo.SaveChangesAsync();
                     return user.Id;
                 }
             }
