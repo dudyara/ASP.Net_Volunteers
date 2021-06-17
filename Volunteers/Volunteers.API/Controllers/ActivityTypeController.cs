@@ -33,11 +33,13 @@
         /// Получение типов активностей компаний
         /// </summary>
         /// <param name="service">service</param>
+        /// <param name="filter">filter</param>
         [HttpGet]
         public async Task<ActionResult<List<ActivityTypeDto>>> Get(
-            [FromServices] ActivityTypeService service)
+            [FromServices] ActivityTypeService service,
+            [FromQuery] string filter)
         {
-            var result = await service.GetAsync();
+            var result = await service.Get(filter);
             return result;
         }
 
