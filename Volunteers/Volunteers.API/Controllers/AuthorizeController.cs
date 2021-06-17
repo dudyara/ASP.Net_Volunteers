@@ -90,7 +90,7 @@
         /// <param name="service">service</param>
         /// <param name="id">id</param>
         [HttpGet]
-        public async Task<ActionResult<string>> GetTokenAsync([FromServices] AuthorizationService service, long id = 0)
+        public async Task<ActionResult<string>> GetToken([FromServices] AuthorizationService service, long id = 0)
         {
             if (id != 0)
             {

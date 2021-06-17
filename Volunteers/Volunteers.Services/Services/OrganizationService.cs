@@ -58,7 +58,7 @@
                 org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
             for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
-            await Repository.Add(org);
+            await Repository.AddAsync(org);
             return orgDto;
         }
 
@@ -75,7 +75,7 @@
             for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             org.UserId = id;
-            await Repository.Add(org);
+            await Repository.AddAsync(org);
             return orgDto;
         }
 
@@ -128,7 +128,7 @@
                 });
             }
 
-            await Repository.Update(org);
+            await Repository.UpdateAsync(org);
             return orgDto;
         }
     }

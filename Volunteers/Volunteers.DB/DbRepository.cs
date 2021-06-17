@@ -36,7 +36,7 @@
         }
 
         /// <inheritdoc />
-        public async Task<long> Add(TEntity newEntity)
+        public async Task<long> AddAsync(TEntity newEntity)
         {
             var entity = await _context.Set<TEntity>().AddAsync(newEntity);
             await _context.SaveChangesAsync();

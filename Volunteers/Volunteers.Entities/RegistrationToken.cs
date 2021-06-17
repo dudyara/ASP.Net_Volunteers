@@ -16,6 +16,11 @@
         /// </summary>
         public DateTime ExpireTime { get; set; }
 
+        /// <summary>
+        /// Organization
+        /// </summary>
+        public Organization Organization { get; set; }
+
         /// <inheritdoc/>
         public bool IsDeleted { get; set; }
 

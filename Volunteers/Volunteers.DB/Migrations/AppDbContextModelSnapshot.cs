@@ -192,6 +192,9 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(500)");
 
+                    b.Property<long?>("RegistrationTokenId")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
@@ -199,6 +202,9 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RegistrationTokenId")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -329,13 +335,13 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "d93b36ee-e4e5-4dce-b80b-7b47e169ea54",
+                            ConcurrencyStamp = "a435ddf4-e22a-40f3-a687-4199d184a253",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "58d8aa0f-77e0-4e9e-b6de-13d044f6db75",
+                            ConcurrencyStamp = "6294e81c-23c7-4ad4-a38a-f14cfd800ebd",
                             Name = "Organization"
                         });
                 });
@@ -478,9 +484,15 @@ namespace Volunteers.DB.Migrations
 
             modelBuilder.Entity("Volunteers.Entities.Organization", b =>
                 {
+                    b.HasOne("Volunteers.Entities.RegistrationToken", "RegistrationToken")
+                        .WithOne("Organization")
+                        .HasForeignKey("Volunteers.Entities.Organization", "RegistrationTokenId");
+
                     b.HasOne("Volunteers.Entities.User", "User")
                         .WithOne("Organization")
                         .HasForeignKey("Volunteers.Entities.Organization", "UserId");
+
+                    b.Navigation("RegistrationToken");
 
                     b.Navigation("User");
                 });
@@ -517,6 +529,11 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("PhoneNumbers");
 
                     b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>
+                {
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.User", b =>

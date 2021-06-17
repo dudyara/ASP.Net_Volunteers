@@ -63,37 +63,31 @@
         {
             // Создаем токен регистрации
             var registrationToken = RegistrationToken.GenerateToken();
-            await Repository.Add(registrationToken);
+            await Repository.AddAsync(registrationToken);
             await Repository.SaveChangesAsync();
 
-            // создаем ссылку, где указываем токен и id организации
-            var link = $"{_configuration.GetValue<string>("BaseLink")}Authorize/RegisterUser?token={registrationToken.Token}";
+            // создаем ссылку, где указываем токен и id организации, если он есть
+            var link = $"{_configuration.GetValue<string>("BaseLink")}Authorize/RegisterUser?";
 
             if (organizationId.HasValue)
             {
-                link += $"&id={organizationId}";
+                var organization = await _organizationRepo.Get(x => x.Id == organizationId).FirstOrDefaultAsync();
+                if (organization.RegistrationTokenId != null)
+                {
+                    var token = await Repository.Get(x => x.Id == organization.RegistrationTokenId).Select(t => t.Token).FirstOrDefaultAsync();
+
+                    link += $"token={token}&id={organizationId}";
+                    return link;
+                }
+
+                link += $"token={registrationToken.Token}&id={organizationId}";
+                organization.RegistrationTokenId = registrationToken.Id;
+                await Repository.SaveChangesAsync();
+                return link;
             }
 
-            return link;
+            return link += $"token={registrationToken.Token}";
         }
-
-      /*  /// <summary>
-        /// AddUser
-        /// </summary>
-        /// <param name="dto">dto</param>
-        public async Task<long> AddUserAsync(RegistrationDto dto)
-        {
-            var user = new User { Email = dto.Email, UserName = dto.Email };
-            var result = await _userManager.CreateAsync(user, dto.Password);
-
-            if (result.Succeeded)
-            {
-                return user.Id;
-            }
-
-            throw new Exception(string.Join(" ", result.Errors.Select(x => x.Description)));
-        }
-*/
 
         /// <summary>
         /// AddUser
@@ -123,7 +117,7 @@
                 return dto;
             }
 
-            throw new Exception(string.Join(" ", result.Errors.Select(x => x.Description)));
+            throw new Exception("Неверный формат данных");
         }
 
         /// <summary>
