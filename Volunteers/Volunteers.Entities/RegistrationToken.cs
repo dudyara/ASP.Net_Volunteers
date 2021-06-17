@@ -28,7 +28,7 @@
         /// <param name="token">token</param>
         public static RegistrationToken GenerateToken(RegistrationToken token)
         {
-            token.Token = token.ToString();
+            token.Token = Guid.NewGuid().ToString();
             token.ExpireTime = DateTime.Now.AddHours(24);
             return token;
         }

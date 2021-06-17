@@ -44,11 +44,6 @@
             _appDbContext = appDbContext;
         }
 
- /*       /// <summary>
-        /// OrganizationRepository
-        /// </summary>
-        public DbRepository<Organization> OrganizationRepository { get; set; }*/
-
         /// <summary>
         /// CheckRegistrationToken
         /// </summary>
@@ -70,11 +65,7 @@
         /// <returns></returns>
         public string GenerateLink()
         {
-            // RegistrationToken registrationToken = RegistrationToken.GenerateToken(new RegistrationToken());
-            RegistrationToken registrationToken = new RegistrationToken();
-            var token = Guid.NewGuid();
-            registrationToken.Token = token.ToString();
-            registrationToken.ExpireTime = DateTime.Now.AddHours(24);
+            RegistrationToken registrationToken = RegistrationToken.GenerateToken(new RegistrationToken());
             Repository.Add(registrationToken);
 
             var link = BaseLink + "?token=" + registrationToken.Token;
@@ -89,11 +80,7 @@
         public string GenerateLink(long organizationId)
         {
             // Создаем токен регистрации
-            // RegistrationToken registrationToken = RegistrationToken.GenerateToken(new RegistrationToken());
-            RegistrationToken registrationToken = new RegistrationToken();
-            var token = Guid.NewGuid();
-            registrationToken.Token = token.ToString();
-            registrationToken.ExpireTime = DateTime.Now.AddHours(24);
+            RegistrationToken registrationToken = RegistrationToken.GenerateToken(new RegistrationToken());
             Repository.Add(registrationToken);
 
             // создаем ссылку, где указываем токен и id организации
