@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,30 @@
              IDtoValidator validator)
              : base(mapper, repository, validator)
         {
+        }
+
+        /// <summary>
+        /// Get
+        /// </summary>
+        /// <param name="filter">filter</param>
+        /// <returns></returns>
+        public async Task<List<ActivityTypeDto>> Get(string filter)
+        {
+            var result = new List<ActivityTypeDto>();
+            if (filter == "filter")
+            {
+                result = await Repository
+                    .Get()
+                    .Where(a => a.Organizations.Count > 0)
+                    .ProjectTo<ActivityTypeDto>(Mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
+            else
+            {
+                result = await GetAsync();
+            }
+
+            return result;
         }
 
         /// <summary>
