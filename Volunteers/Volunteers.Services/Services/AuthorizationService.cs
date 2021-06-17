@@ -23,6 +23,7 @@
         public const string BaseLink = "https://rubius.ru";
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly AppDbContext _appDbContext;
 
         /// <summary>
         /// AuthenticationService
@@ -30,15 +31,17 @@
         /// <param name="signInManager">signInManager</param>
         /// <param name="userManager">userManager</param>
         /// <param name="repository">repository</param>
-        /// <param name="organizationRepository">organizationRepostory</param>
+        /// <param name="appDbContext">appDbContext</param>
         public AuthorizationService(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
-            IDbRepository<RegistrationToken> repository)
+            IDbRepository<RegistrationToken> repository,
+            AppDbContext appDbContext)
             : base(repository, signInManager, userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _appDbContext = appDbContext;
         }
 
  /*       /// <summary>
@@ -116,7 +119,7 @@
             return 0;
         }
 
-      /*  /// <summary>
+        /// <summary>
         /// AddUser
         /// </summary>
         /// <param name="dto">dto organization</param>
@@ -130,17 +133,16 @@
 
             if (result.Succeeded)
             {
-                var organization = OrganizationRepository.Get(x => x.Id == id).FirstOrDefault();
+                var organization = _appDbContext.Organizations.Where(x => x.Id == id).FirstOrDefault();
                 if (organization != null)
                 {
                     organization.UserId = id;
-                    await OrganizationRepository.SaveChangesAsync();
                     return user.Id;
                 }
             }
 
             return 0;
-        }*/
+        }
 
         /// <summary>
         /// AuthenticateAsync

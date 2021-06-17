@@ -44,8 +44,8 @@
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
-        [HttpGet]
         [Authorize(Roles = "Organization")]
+        [HttpGet]
         public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
         {
