@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
     using Volunteers.DB;
     using Volunteers.Entities;
@@ -21,10 +22,10 @@
         /// <summary>
         /// BaseLink
         /// </summary>
-        public const string BaseLink = "https://rubius.ru";
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IDbRepository<Organization> _organizationRepo;
+        private readonly IConfiguration _configuration;
 
         /// <summary>
         /// AuthenticationService
@@ -33,16 +34,19 @@
         /// <param name="userManager">userManager</param>
         /// <param name="repository">repository</param>
         /// <param name="organizationRepo">organizationRepo</param>
+        /// <param name="configuration">configuration</param>
         public AuthorizationService(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             IDbRepository<RegistrationToken> repository,
-            IDbRepository<Organization> organizationRepo)
+            IDbRepository<Organization> organizationRepo,
+            IConfiguration configuration)
             : base(repository, signInManager, userManager)
         {
             _userManager = userManager;
             _organizationRepo = organizationRepo;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -63,7 +67,7 @@
             await Repository.SaveChangesAsync();
 
             // создаем ссылку, где указываем токен и id организации
-            var link = $"{BaseLink}Authorize/RegisterUser?token={registrationToken.Token}";
+            var link = $"{_configuration.GetValue<string>("BaseLink")}Authorize/RegisterUser?token={registrationToken.Token}";
 
             if (organizationId.HasValue)
             {
@@ -95,7 +99,7 @@
         /// </summary>
         /// <param name="dto">dto organization</param>
         /// <param name="organizationId">id organization</param>
-        public async Task<long> AddUser(RegistrationDto dto, long? organizationId = null)
+        public async Task<long> AddUserAsync(RegistrationDto dto, long? organizationId = null)
         {
             var user = new User { Email = dto.Email, UserName = dto.Email };
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -105,7 +109,7 @@
                 var organization = await _organizationRepo.Get(x => x.Id == organizationId).FirstOrDefaultAsync();
                 if (organization != null)
                 {
-                    organization.UserId = organizationId;
+                    organization.UserId = user.Id;
                     await _organizationRepo.SaveChangesAsync();
                     return user.Id;
                 }

@@ -46,10 +46,10 @@
             {
                 if (id != 0)
                 {
-                    return Ok(await authorizationService.AddUser(dto, id));
+                    return Ok(await authorizationService.AddUserAsync(dto, id));
                 }
 
-                var result = await authorizationService.AddUser(dto);
+                var result = await authorizationService.AddUserAsync(dto);
 
                 if (result != 0)
                 {
@@ -90,16 +90,16 @@
         /// <param name="service">service</param>
         /// <param name="id">id</param>
         [HttpGet]
-        public ActionResult<string> GetToken([FromServices] AuthorizationService service, long id = 0)
+        public async Task<ActionResult<string>> GetTokenAsync([FromServices] AuthorizationService service, long id = 0)
         {
             if (id != 0)
             {
-                var link = service.GenerateLink(id);
+                var link = await service.GenerateLink(id);
                 return link;
             }
             else
             {
-                var link = service.GenerateLink();
+                var link = await service.GenerateLink();
                 return link;
             }
         }

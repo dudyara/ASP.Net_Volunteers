@@ -134,6 +134,7 @@
             services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();
             services.AddTransient<IDbRepository<RegistrationToken>, DbRepository<RegistrationToken>>();
             services.AddTransient<IDbRepository<User>, DbRepository<User>>();
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         /// <summary>
