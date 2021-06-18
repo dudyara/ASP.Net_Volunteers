@@ -91,7 +91,7 @@
             [FromServices] AuthorizationService service,
             long? id)
         {
-            var link = await service.GenerateLink();
+            var link = await service.GenerateLink(id);
             return link;
         }
 
@@ -106,7 +106,7 @@
             [FromBody] LoginDto loginDto,
             [FromServices] AuthorizationService authenticationService)
         {
-            var token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password);
+            var token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password); 
 
             if (token == null)
                 return Unauthorized();

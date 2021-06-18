@@ -315,6 +315,12 @@ namespace Volunteers.DB.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -335,13 +341,15 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "a435ddf4-e22a-40f3-a687-4199d184a253",
+                            ConcurrencyStamp = "77417cc4-f6a5-4b28-aa27-0a6050ef6272",
+                            IsDeleted = false,
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "6294e81c-23c7-4ad4-a38a-f14cfd800ebd",
+                            ConcurrencyStamp = "e7a86d08-63a4-4afa-abd7-3411d741027d",
+                            IsDeleted = false,
                             Name = "Organization"
                         });
                 });
@@ -390,6 +398,9 @@ namespace Volunteers.DB.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -408,6 +419,9 @@ namespace Volunteers.DB.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("RoleId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -517,6 +531,17 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
+            modelBuilder.Entity("Volunteers.Entities.User", b =>
+                {
+                    b.HasOne("Volunteers.Entities.Role", "Role")
+                        .WithOne("User")
+                        .HasForeignKey("Volunteers.Entities.User", "RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Volunteers.Entities.ActivityType", b =>
                 {
                     b.Navigation("ActivityTypeOrganizations");
@@ -534,6 +559,11 @@ namespace Volunteers.DB.Migrations
             modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>
                 {
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.Role", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.User", b =>
