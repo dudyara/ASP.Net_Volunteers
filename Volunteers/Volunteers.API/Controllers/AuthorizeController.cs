@@ -4,7 +4,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using Volunteers.DB;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
 
@@ -32,31 +31,31 @@
         /// </summary>
         /// <param name="dto">dto</param>
         /// <param name="token">token</param>
-        /// <param name="id">id</param>
+        /// <param name="orgId">orgId</param>
         /// <param name="authorizationService">authorizationService</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost]
         public async Task<ActionResult<string>> RegisterUser(
             RegistrationDto dto,
             [FromQuery] string token,
-            [FromQuery] long id,
+            [FromQuery] long? orgId,
             [FromServices] AuthorizationService authorizationService)
         {
-            if (await authorizationService.CheckRegistrationToken(token))
+            if (!await authorizationService.CheckRegistrationToken(token))
             {
-                if (id != 0)
-                {
-                    return Ok(await authorizationService.AddUserAsync(dto, id));
-                }
-
-                var result = await authorizationService.AddUserAsync(dto);
-
-                if (result == dto)
-                {
-                    return Ok(result);
-                }
-
                 return BadRequest();
+            }
+            
+            if (orgId.HasValue)
+            {
+                return Ok(await authorizationService.AddUserAsync(dto, orgId));
+            }
+
+            var result = await authorizationService.AddUserAsync(dto);
+
+            if (result == dto)
+            {
+                return Ok(result);
             }
 
             return BadRequest();
@@ -67,30 +66,30 @@
         /// </summary>
         /// <param name="organizationDto">Dto</param>
         /// <param name="organizationService">Service</param>
-        /// <param name="userId">id</param>
+        /// <param name="userId">orgId</param>
         [HttpPost]
         public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
             OrganizationDto organizationDto,
             [FromServices] OrganizationService organizationService,
-            [FromQuery] long userId = 0)
+            [FromQuery] long? userId)
         {
-            if (userId != 0)
+            if (userId.HasValue)
             {
-                return await organizationService.Create(organizationDto, userId);
+                return await organizationService.Create(organizationDto, (long)userId);
             }
-            else
-            {
-                return await organizationService.Create(organizationDto);
-            }
+
+            return await organizationService.Create(organizationDto);
         }
 
         /// <summary>
         /// GetToken
         /// </summary>
         /// <param name="service">service</param>
-        /// <param name="id">id</param>
+        /// <param name="id">orgId</param>
         [HttpGet]
-        public async Task<ActionResult<string>> GetToken([FromServices] AuthorizationService service, long id = 0)
+        public async Task<ActionResult<string>> GetToken(
+            [FromServices] AuthorizationService service,
+            long? id)
         {
             if (id != 0)
             {

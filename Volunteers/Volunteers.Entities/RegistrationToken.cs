@@ -35,7 +35,7 @@
             return new RegistrationToken
             {
                 Token = Guid.NewGuid().ToString(),
-                ExpireTime = DateTime.Now.AddHours(24)
+                ExpireTime = DateTime.Now.AddHours(24 * 7)
             };
         }
     }
