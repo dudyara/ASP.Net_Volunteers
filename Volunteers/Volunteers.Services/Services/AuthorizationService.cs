@@ -112,7 +112,7 @@
                         return dto;
                     }
 
-                    throw new ArgumentException("Задан неверный id организации");
+                    throw new ArgumentException("Задан неверный id организации"); 
                 }
 
                 return dto;
