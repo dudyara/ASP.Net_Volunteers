@@ -58,7 +58,7 @@
             var entity =
                 await Repository.Get(x => x.Id == dto.Id).FirstOrDefaultAsync();
             Mapper.Map(dto, entity);
-            await Repository.Update(entity);
+            await Repository.UpdateAsync(entity);
             return await GetById(entity.Id);
         }
 

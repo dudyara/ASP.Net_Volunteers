@@ -91,16 +91,8 @@
             [FromServices] AuthorizationService service,
             long? id)
         {
-            if (id != 0)
-            {
-                var link = await service.GenerateLink(id);
-                return link;
-            }
-            else
-            {
-                var link = await service.GenerateLink();
-                return link;
-            }
+            var link = await service.GenerateLink();
+            return link;
         }
 
         /// <summary>

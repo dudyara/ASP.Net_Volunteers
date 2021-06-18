@@ -27,19 +27,6 @@
             _logger = logger;
         }
 
-        /* /// <summary>
-         /// Добавить новую организацию.
-         /// </summary>
-         /// <param name="org">organization.</param>
-         /// <param name="service">service.</param>
-         [HttpPost]
-         public async Task<ActionResult<OrganizationDto>> Create(
-             OrganizationDto org, [FromServices] OrganizationService service)
-         {
-             var result = await service.Create(org);
-             return result ?? NotFound();
-         }*/
-
         /// <summary>
         /// Получить список организаций.
         /// </summary>
