@@ -112,13 +112,13 @@
                         return dto;
                     }
 
-                    throw new Exception("Неверная ссылка");
+                    throw new ArgumentException("Задан неверный id организации");
                 }
 
                 return dto;
             }
 
-            throw new Exception("Неверный формат данных");
+            throw new ArgumentException("Неправильно задан email или пароль");
         }
 
         /// <summary>
