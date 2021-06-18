@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
@@ -146,11 +147,11 @@
                         SecurityAlgorithms.HmacSha512Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
-                var result1 = tokenHandler.WriteToken(token);
-                return result1;
+                var total_token = tokenHandler.WriteToken(token);
+                return total_token;
             }
 
-            return "Bad Request";
+            return null;
         }
     }
 }
