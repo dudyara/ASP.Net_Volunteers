@@ -63,19 +63,24 @@
             modelBuilder.Entity<Request>()
                 .Property(b => b.IsDeleted)
                 .HasDefaultValue(false);
-
+               
             modelBuilder.Entity<Organization>()
                 .Property(b => b.IsDeleted)
                 .HasDefaultValue(false);
 
             modelBuilder
-                .Entity<Role>().HasData(
+                .Entity<Role>()
+                .HasData(
                 new Role[]
                 {
                      new Role { Id = 1, Name = "Admin" },
                      new Role { Id = 2, Name = "Organization" }
                 })
                 ;
+
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.RoleId)
+                .IsUnique(false);
             modelBuilder
                 .Entity<Organization>()
                 .HasMany(a => a.ActivityTypes)
@@ -89,6 +94,8 @@
                     .HasOne(pt => pt.Organization)
                     .WithMany(p => p.ActivityTypeOrganizations)
                     .HasForeignKey(pt => pt.OrganizationId));
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

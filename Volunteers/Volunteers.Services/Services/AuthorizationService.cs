@@ -191,6 +191,7 @@
                 else
                 {
                     authenticateDto.Data = null;
+                    authenticateDto.UserId = user.Id;
                 }
 
                 return authenticateDto;

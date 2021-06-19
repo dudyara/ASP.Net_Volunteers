@@ -9,6 +9,11 @@
     public class OrganizationDto : BaseDto
     {
         /// <summary>
+        /// Id
+        /// </summary>
+        public long Id { get; set; }
+
+        /// <summary>
         /// Название фонда.
         /// </summary>
         public string Name { get; set; }
@@ -57,5 +62,10 @@
         /// Координаты
         /// </summary>
         public double[] Location { get; set; }
+
+        /// <summary>
+        /// UserId
+        /// </summary>
+        public long? UserId { get; set; } = null;
     }
 }

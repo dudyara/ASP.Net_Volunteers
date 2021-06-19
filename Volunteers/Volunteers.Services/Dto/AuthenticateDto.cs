@@ -21,5 +21,11 @@ namespace Volunteers.Services.Dto
         /// </summary>
 
         public OrganizationDto Data { get; set; }
+
+        /// <summary>
+        /// UserId Key
+        /// </summary>
+
+        public long UserId { get; set; }
     }
 }

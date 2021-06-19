@@ -341,14 +341,14 @@ namespace Volunteers.DB.Migrations
                         new
                         {
                             Id = 1L,
-                            ConcurrencyStamp = "77417cc4-f6a5-4b28-aa27-0a6050ef6272",
+                            ConcurrencyStamp = "73125a9a-8ff5-43e2-aea7-331f69cb5c74",
                             IsDeleted = false,
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2L,
-                            ConcurrencyStamp = "e7a86d08-63a4-4afa-abd7-3411d741027d",
+                            ConcurrencyStamp = "41ec7366-32cc-4147-8ac2-42df4e7b53c5",
                             IsDeleted = false,
                             Name = "Organization"
                         });
@@ -420,8 +420,7 @@ namespace Volunteers.DB.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers");
                 });

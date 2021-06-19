@@ -59,6 +59,7 @@
             for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             await Repository.AddAsync(org);
+            orgDto.Id = await Repository.Get(s => s.Mail == org.Mail).Select(x => x.Id).FirstOrDefaultAsync();
             return orgDto;
         }
 
@@ -66,7 +67,7 @@
         /// Create
         /// </summary>
         /// <param name="orgDto">org.</param>
-        /// <param name="id">id</param>
+        /// <param name="id">user id</param>
         public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto, long id)
         {
             var org = Mapper.Map<Organization>(orgDto);
@@ -76,6 +77,8 @@
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             org.UserId = id;
             await Repository.AddAsync(org);
+            orgDto.UserId = id;
+            orgDto.Id = await Repository.Get(s => s.Mail == orgDto.Mail).Select(x => x.Id).FirstOrDefaultAsync();
             return orgDto;
         }
 
