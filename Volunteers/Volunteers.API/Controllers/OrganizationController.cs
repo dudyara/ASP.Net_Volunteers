@@ -80,7 +80,7 @@
             [FromServices] OrganizationService service,
             [FromQuery] long id)
         {
-            var result = await service.Delete(id);
+            var result = await service.Delete(id); 
             return result ?? NotFound();
         }
     }

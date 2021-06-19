@@ -135,7 +135,6 @@
             services.AddTransient<IDbRepository<RegistrationToken>, DbRepository<RegistrationToken>>();
             services.AddTransient<IDbRepository<User>, DbRepository<User>>();
             services.AddTransient<IDbRepository<Role>, DbRepository<Role>>();
-            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         /// <summary>
