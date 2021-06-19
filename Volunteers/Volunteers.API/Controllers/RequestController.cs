@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
@@ -23,7 +24,7 @@
         /// <param name="service">service.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Request>> Create(
+        public async Task<ActionResult<Request>> Create( 
             [FromBody] RequestCreateDto request,
             [FromServices] RequestService service)
         {
@@ -44,6 +45,7 @@
         /// <param name="status">status</param>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
+        [Authorize(Roles = "Admin, Organization")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get(
             [FromQuery] RequestStatus status,
@@ -59,6 +61,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
+        [Authorize(Roles = "Admin, Organization")]
         [HttpGet]
         public async Task<int[]> GetCount(
             [FromQuery] long id,
@@ -74,6 +77,7 @@
         /// <param name="reqDto">reqDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
+        [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<Request>> ChangeStatus(
             [FromBody] RequestChangeStatusDto reqDto,
@@ -89,6 +93,7 @@
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
+        [Authorize(Roles = "Organization")] 
         [HttpPut]
         public async Task<ActionResult<Request>> CreateComment(
             [FromBody] RequestCreateComment commentDto,
@@ -103,7 +108,8 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
+        /// <returns></returns>     
+        [Authorize(Roles = "Admin")] 
         [HttpDelete]
         public async Task<ActionResult<Request>> Delete(
             [FromQuery] long id,

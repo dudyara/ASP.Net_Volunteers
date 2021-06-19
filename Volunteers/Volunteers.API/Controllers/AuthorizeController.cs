@@ -33,8 +33,8 @@
         /// <param name="token">token</param>
         /// <param name="orgId">orgId</param>
         /// <param name="authorizationService">authorizationService</param>
-        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-        [HttpPost]
+        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>  
+        [HttpPost] 
         public async Task<ActionResult<string>> RegisterUser(
             RegistrationDto dto,
             [FromQuery] string token,
@@ -67,6 +67,7 @@
         /// <param name="organizationDto">Dto</param>
         /// <param name="organizationService">Service</param>
         /// <param name="userId">orgId</param>
+        [Authorize(Roles = "Admin, Organization")] 
         [HttpPost]
         public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
             OrganizationDto organizationDto,
@@ -86,6 +87,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
+        [Authorize(Roles = "Admin")] 
         [HttpGet]
         public async Task<ActionResult<string>> GetToken(
             [FromServices] AuthorizationService service,

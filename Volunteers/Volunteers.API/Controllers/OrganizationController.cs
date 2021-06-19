@@ -31,7 +31,7 @@
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
@@ -58,7 +58,8 @@
         /// Update
         /// </summary>
         /// <param name="service">service</param>
-        /// <param name="orgDto">orgDto</param>
+        /// <param name="orgDto">orgDto</param> 
+        [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<OrganizationDto>> Update(
             [FromServices] OrganizationService service,
@@ -73,6 +74,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<Organization>> Delete(
             [FromServices] OrganizationService service,
