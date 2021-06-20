@@ -7,12 +7,12 @@
     using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
-    using Volunteers.Services.Services; 
+    using Volunteers.Services.Services;
 
     /// <summary>
     /// OrganizationController
     /// </summary>
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class OrganizationController : Controller
     {
@@ -45,7 +45,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="ids">ids</param>
-        [HttpGet]
+        [HttpGet("ids")]
         public async Task<ActionResult<List<OrganizationDto>>> GetByIds(
             [FromServices] OrganizationService service,
             [FromQuery] List<long> ids)

@@ -13,7 +13,7 @@
     /// <summary>
     /// RequestController - контроллер для работы с заявками.
     /// </summary>
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class RequestController : Controller
     {
@@ -62,7 +62,7 @@
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
         [Authorize(Roles = "Admin, Organization")]
-        [HttpGet]
+        [HttpGet("count")]
         public async Task<int[]> GetCount(
             [FromQuery] long id,
             [FromServices] RequestService service)
@@ -93,8 +93,9 @@
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
-        [Authorize(Roles = "Organization")] 
-        [HttpPut]
+
+        [Authorize(Roles = "Organization")]
+        [HttpPut("comment")]
         public async Task<ActionResult<Request>> CreateComment(
             [FromBody] RequestCreateComment commentDto,
             [FromServices] RequestService service)

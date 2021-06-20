@@ -31,24 +31,6 @@
         }
 
         /// <summary>
-        /// Create
-        /// </summary>
-        /// <param name="actDto">actDto</param>
-        public async Task<ActionResult<ActivityTypeDto>> Create(ActivityTypeDto actDto)
-        {
-            return await AddAsync(actDto);
-        }
-
-        /// <summary>
-        /// Update
-        /// </summary>
-        /// <param name="actDto">actDto</param>
-        public async Task<ActionResult<ActivityTypeDto>> Update(ActivityTypeDto actDto)
-        {
-            return await UpdateAsync(actDto);
-        }
-
-        /// <summary>
         /// Delete
         /// </summary>
         /// <param name="id">id</param>
@@ -57,14 +39,6 @@
             var activityType = await Repository.Get().FirstOrDefaultAsync(x => x.Id == id);
             await DeleteAsync(id);
             return activityType;
-        }
-
-            /// <summary>
-            /// Виды активности
-            /// </summary>
-        public async Task<ActionResult<List<ActivityTypeDto>>> Get()
-        {
-            return await GetAsync();
         }
     }
 }
