@@ -45,7 +45,7 @@
         /// <param name="status">status</param>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
-        [Authorize(Roles = "Admin, Organization")]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get(
             [FromQuery] RequestStatus status,
@@ -61,7 +61,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
-        [Authorize(Roles = "Admin, Organization")]
+        [Authorize]
         [HttpGet("count")]
         public async Task<int[]> GetCount(
             [FromQuery] long id,
@@ -109,8 +109,8 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        /// <returns></returns>     
-        [Authorize(Roles = "Admin")] 
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<Request>> Delete(
             [FromQuery] long id,

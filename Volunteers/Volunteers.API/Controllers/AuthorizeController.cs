@@ -67,7 +67,7 @@
         /// <param name="organizationDto">Dto</param>
         /// <param name="organizationService">Service</param>
         /// <param name="userId">orgId</param>
-        [Authorize(Roles = "Admin, Organization")]
+        [Authorize]
         [HttpPost("RegisterOrganization")]
         public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
             OrganizationDto organizationDto,
