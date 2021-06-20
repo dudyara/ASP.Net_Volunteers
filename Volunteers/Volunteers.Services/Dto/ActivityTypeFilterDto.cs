@@ -8,6 +8,6 @@
         /// <summary>
         /// Filter
         /// </summary>
-        public bool Filter { get; set; }
+        public bool Flag { get; set; }
     }
 }

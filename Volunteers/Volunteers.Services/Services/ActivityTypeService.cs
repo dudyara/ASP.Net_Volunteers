@@ -40,7 +40,7 @@
         public async Task<List<ActivityTypeDto>> Get(ActivityTypeFilterDto filter)
         {
             var result = new List<ActivityTypeDto>();
-            if (filter.Filter == true)
+            if (filter.Flag == true)
             {
                 result = await Repository
                     .Get()
