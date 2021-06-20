@@ -1,6 +1,5 @@
 ﻿namespace Volunteers.Services.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -50,7 +49,6 @@
         /// Create
         /// </summary>
         /// <param name="orgDto">org.</param>
-        /// <param name="id">id</param>
         public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto)
         {
             var org = Mapper.Map<Organization>(orgDto);

@@ -1,11 +1,9 @@
 ﻿namespace Volunteers.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
     using Microsoft.AspNetCore.Identity;
     using Volunteers.DB;
     using Volunteers.Entities;
+
     /// <summary>
     /// Base service
     /// </summary>
@@ -22,19 +20,27 @@
         /// <param name="repository">repository</param>
         /// <param name="signInManager">signInManager</param>
         /// <param name="userManager">userManager</param>
+        /// <param name="validator">validator</param>
         protected BaseManagerService(
             IDbRepository<TEntity> repository,
             SignInManager<User> signInManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IDtoValidator validator)
         {
             signInManager = _signInManager;
             userManager = _userManager;
             Repository = repository;
+            Validator = validator;
         }
 
         /// <summary>
         /// Repository.
         /// </summary>
         protected IDbRepository<TEntity> Repository { get; set; }
+
+        /// <summary>
+        /// Validator
+        /// </summary>
+        protected IDtoValidator Validator { get; }
     }
 }

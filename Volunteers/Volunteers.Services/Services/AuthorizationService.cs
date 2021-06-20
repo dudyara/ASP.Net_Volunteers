@@ -15,6 +15,7 @@
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
+    using Volunteers.Services.Validator;
 
     /// <summary>
     /// AuthenticationService
@@ -41,6 +42,7 @@
         /// <param name="configuration">configuration</param>
         /// <param name="roleRepo">roleRepo</param>
         /// <param name="mapper">mapper</param>
+        /// <param name="validator">validator</param>
         public AuthorizationService(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
@@ -48,8 +50,9 @@
             IDbRepository<Organization> organizationRepo,
             IDbRepository<Role> roleRepo,
             IConfiguration configuration,
-            IVolunteerMapper mapper)
-            : base(repository, signInManager, userManager)
+            IVolunteerMapper mapper,
+            IDtoValidator validator)
+            : base(repository, signInManager, userManager, validator)
         {
             _userManager = userManager;
             _organizationRepo = organizationRepo;
@@ -125,25 +128,20 @@
             user.RoleId = 2;
             var result = await _userManager.CreateAsync(user, dto.Password);
 
-            if (result.Succeeded)
+            if (organizationId.HasValue)
             {
-                if (organizationId.HasValue)
+                var organization = await _organizationRepo.Get(x => x.Id == organizationId).FirstOrDefaultAsync();
+                if (organization != null)
                 {
-                    var organization = await _organizationRepo.Get(x => x.Id == organizationId).FirstOrDefaultAsync();
-                    if (organization != null)
-                    {
-                        organization.UserId = user.Id;
-                        await _organizationRepo.SaveChangesAsync();
-                        return dto;
-                    }
-
-                    throw new ArgumentException("Задан неверный id организации"); 
+                    organization.UserId = user.Id;
+                    await _organizationRepo.SaveChangesAsync();
+                    return dto;
                 }
 
-                return dto;
+                throw new ArgumentException("Задан неверный id организации"); 
             }
 
-            throw new ArgumentException("Неправильно задан email или пароль");
+            return dto;
         }
 
         /// <summary>

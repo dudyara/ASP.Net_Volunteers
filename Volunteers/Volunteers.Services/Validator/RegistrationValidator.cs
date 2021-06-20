@@ -8,12 +8,12 @@ namespace Volunteers.Services.Validator
     /// <summary>
     /// RegistrationDtoValidator
     /// </summary>
-    public class RegistrationDtoValidator : AbstractValidator<RegistrationDto>
+    public class RegistrationValidator : AbstractValidator<RegistrationDto>
     {
         /// <summary>
         /// RegistrationDtoValidator
         /// </summary>
-        public RegistrationDtoValidator()
+        public RegistrationValidator()
         {
             RuleFor(p => p.Email)
                 .NotEmpty()

@@ -128,6 +128,7 @@
             services.AddTransient<IValidator<OrganizationDto>, OrganizationValidator>();
             services.AddTransient<IValidator<RequestCreateDto>, RequestValidator>();
             services.AddTransient<IValidator<ActivityTypeDto>, ActivityTypeValidator>();
+            services.AddTransient<IValidator<RegistrationDto>, RegistrationValidator>();
 
             services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
