@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.Services.Services
+﻿namespace Volunteers.Services.Services
 {
     using System;
     using System.IdentityModel.Tokens.Jwt;
@@ -41,6 +40,7 @@ namespace Volunteers.Services.Services
          /// aervfmkmokv
          /// </summary>
          public DbRepository<User> UserRepository { get; set; }*/
+
         /// <summary>
         /// Authenticate
         /// </summary>
@@ -61,7 +61,7 @@ namespace Volunteers.Services.Services
                     {
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, "Organization")
-                   }),
+                    }),
                     Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = new SigningCredentials(
                         new SymmetricSecurityKey(key),

@@ -1,6 +1,5 @@
 ﻿namespace Volunteers.DB
 {
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.Entities;
@@ -67,16 +66,6 @@
             modelBuilder.Entity<Organization>()
                 .Property(b => b.IsDeleted)
                 .HasDefaultValue(false);
-
-            modelBuilder
-                .Entity<Role>()
-                .HasData(
-                new Role[]
-                {
-                     new Role { Id = 1, Name = "Admin" },
-                     new Role { Id = 2, Name = "Organization" }
-                })
-                ;
 
             modelBuilder.Entity<User>()
                 .HasIndex(x => x.RoleId)

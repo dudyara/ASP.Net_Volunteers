@@ -19,8 +19,7 @@
         /// Получение типов активностей компаний
         /// </summary>
         /// <param name="actDto">actDto</param>
-        /// <param name="service">service</param>
-        
+        /// <param name="service">service</param>      
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ActivityTypeDto>> Create(

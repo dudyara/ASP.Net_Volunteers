@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.Services.Dto
+﻿namespace Volunteers.Services.Dto
 {
     /// <summary>
     /// AuthenticateDto
@@ -19,13 +18,11 @@ namespace Volunteers.Services.Dto
         /// <summary>
         /// OrganizationDto
         /// </summary>
-
         public OrganizationDto Data { get; set; }
 
         /// <summary>
         /// UserId Key
         /// </summary>
-
         public long UserId { get; set; }
     }
 }

@@ -11,9 +11,6 @@
     public abstract class BaseManagerService<TEntity>
     where TEntity : class, IEntity
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
-
         /// <summary>
         /// BaseManager
         /// </summary>
@@ -27,8 +24,6 @@
             UserManager<User> userManager,
             IDtoValidator validator)
         {
-            signInManager = _signInManager;
-            userManager = _userManager;
             Repository = repository;
             Validator = validator;
         }

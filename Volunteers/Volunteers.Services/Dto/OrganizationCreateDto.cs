@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.Services.Dto
+﻿namespace Volunteers.Services.Dto
 {
     /// <summary>
     /// OrganizationCreateDto

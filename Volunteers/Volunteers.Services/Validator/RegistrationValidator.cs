@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.Services.Validator
+﻿namespace Volunteers.Services.Validator
 {
     using System.Linq;
     using FluentValidation;

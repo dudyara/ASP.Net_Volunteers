@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.DB.Migrations
+﻿namespace Volunteers.DB.Migrations
 {
     using Microsoft.EntityFrameworkCore.Migrations;
     public partial class New_Relationshiop1 : Migration

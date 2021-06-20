@@ -142,7 +142,7 @@
             }
 
             return dto;
-        }
+        }      
 
         /// <summary>
         /// AuthenticateAsync

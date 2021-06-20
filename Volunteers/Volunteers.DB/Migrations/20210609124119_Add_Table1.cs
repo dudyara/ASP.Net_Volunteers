@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.DB.Migrations
+﻿namespace Volunteers.DB.Migrations
 {
     using System;
     using Microsoft.EntityFrameworkCore.Migrations;

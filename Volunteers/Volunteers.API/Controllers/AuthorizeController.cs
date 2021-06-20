@@ -10,7 +10,7 @@
     /// <summary>
     /// Authorization controller
     /// </summary>
-    [Route("api/[controller]/[action]")] 
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthorizeController : ControllerBase
     {
@@ -34,7 +34,7 @@
         /// <param name="orgId">orgId</param>
         /// <param name="authorizationService">authorizationService</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>  
-        [HttpPost]
+        [HttpPost("RegisterUser")]
         public async Task<ActionResult<string>> RegisterUser(
             RegistrationDto dto,
             [FromQuery] string token,
@@ -67,8 +67,8 @@
         /// <param name="organizationDto">Dto</param>
         /// <param name="organizationService">Service</param>
         /// <param name="userId">orgId</param>
-        [Authorize(Roles = "Admin, Organization")] 
-        [HttpPost]
+        [Authorize(Roles = "Admin, Organization")]
+        [HttpPost("RegisterOrganization")]
         public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
             OrganizationDto organizationDto,
             [FromServices] OrganizationService organizationService,
@@ -87,7 +87,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
-        [HttpGet]
+        [HttpGet("GetToken")]
         public async Task<ActionResult<string>> GetToken(
             [FromServices] AuthorizationService service,
             long? id)
@@ -102,7 +102,7 @@
         /// <param name="loginDto">loginDto</param>
         /// <param name="authenticationService">authenticationService</param>
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("AuthenticateAsync")]
         public async Task<IActionResult> AuthenticateAsync(
             [FromBody] LoginDto loginDto,
             [FromServices] AuthorizationService authenticationService)
