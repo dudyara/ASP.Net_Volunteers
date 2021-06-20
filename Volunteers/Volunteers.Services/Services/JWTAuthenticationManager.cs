@@ -30,16 +30,7 @@
             SignInManager<User> signInManager,
             UserManager<User> userManager)
         {
-            /* this.tokenKey = "This is my test private key";
-             *//*Repository = repository;*//*
-             _signInManager = signInManager;
-             *//* _appDbContext = appDbContext;*/
         }
-
-        /* /// <summary>
-         /// aervfmkmokv
-         /// </summary>
-         public DbRepository<User> UserRepository { get; set; }*/
 
         /// <summary>
         /// Authenticate
