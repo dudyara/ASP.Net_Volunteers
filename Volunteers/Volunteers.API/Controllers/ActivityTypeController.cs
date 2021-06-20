@@ -37,7 +37,7 @@
         [HttpGet]
         public async Task<ActionResult<List<ActivityTypeDto>>> Get(
             [FromServices] ActivityTypeService service,
-            [FromQuery] string filter)
+            [FromBody] ActivityTypeFilterDto filter)
         {
             var result = await service.Get(filter);
             return result;
