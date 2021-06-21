@@ -58,7 +58,7 @@
         /// Update
         /// </summary>
         /// <param name="service">service</param>
-        /// <param name="orgDto">orgDto</param> 
+        /// <param name="orgDto">orgDto</param>
         [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<OrganizationDto>> Update(
@@ -80,7 +80,7 @@
             [FromServices] OrganizationService service,
             [FromQuery] long id)
         {
-            var result = await service.Delete(id); 
+            var result = await service.Delete(id);
             return result ?? NotFound();
         }
     }

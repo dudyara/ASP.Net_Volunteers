@@ -45,7 +45,7 @@
             {
                 return BadRequest();
             }
-            
+
             if (orgId.HasValue)
             {
                 return Ok(await authorizationService.AddUserAsync(dto, orgId));
