@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -125,11 +126,11 @@
         /// <param name="service">service</param>
         /// <returns></returns>
         [HttpGet("export")]
-        public async Task<ActionResult<Request>> ArchiveExcel(
+        public async Task<Stream> ArchiveExcel(
             [FromServices] RequestService service)
         {
             var result = await service.ArchiveExcel();
-            return result ?? NotFound();
+            return result;
         }
     }
 }

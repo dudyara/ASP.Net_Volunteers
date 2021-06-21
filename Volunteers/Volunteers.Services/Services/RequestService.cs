@@ -184,7 +184,7 @@
         /// ArchiveExcel
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult<Request>> ArchiveExcel()
+        public async Task<Stream> ArchiveExcel()
         {
             Excel.Application ex = new Excel.Application
             {
@@ -227,7 +227,12 @@
             workBook.Close();
             ex.Quit();
 
-            return null;
+            using (var memoryStream = new MemoryStream())
+            {
+                workBook.SaveAs(memoryStream);
+            }
+
+            return null /* workBook*/;
         }
     }
 }
