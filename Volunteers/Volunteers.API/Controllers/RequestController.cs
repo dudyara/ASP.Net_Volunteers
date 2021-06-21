@@ -118,7 +118,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <returns></returns>
-        [HttpGet("ArchiveExcel")]
+        [HttpGet("export")]
         public async Task<ActionResult<Request>> ArchiveExcel(
             [FromServices] RequestService service)
         {

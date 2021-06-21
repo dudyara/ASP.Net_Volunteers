@@ -200,16 +200,29 @@
                 .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            for (int i = 1; i <= requests.Count; i++)
+            sheet.Cells[1, 1] = "Заявка";
+            sheet.Cells[1, 2] = "Описание";
+            sheet.Cells[1, 3] = "Телефон";
+            sheet.Cells[1, 4] = "Комментарий";
+            sheet.Cells[1, 5] = "Организация";
+            sheet.Cells[1, 6] = "Дата создания";
+            sheet.Cells[1, 7] = "Дата завершения";
+
+            for (int i = 2; i <= requests.Count + 1; i++)
             {
-                sheet.Cells[i, 1] = string.Format(requests[i].Name);
-                sheet.Cells[i, 2] = string.Format(requests[i].Description);
-                sheet.Cells[i, 3] = string.Format(requests[i].PhoneNumber);
-                sheet.Cells[i, 4] = string.Format(requests[i].Comment);
-                sheet.Cells[i, 5] = string.Format(requests[i].Owner);
-                sheet.Cells[i, 6] = string.Format(requests[i].Created);
-                sheet.Cells[i, 7] = string.Format(requests[i].Completed);
+                sheet.Cells[i, 1] = requests[i - 2].Name;
+                sheet.Cells[i, 2] = requests[i - 2].Description;
+                sheet.Cells[i, 3] = requests[i - 2].PhoneNumber;
+                sheet.Cells[i, 4] = requests[i - 2].Comment;
+                sheet.Cells[i, 5] = requests[i - 2].Owner;
+                sheet.Cells[i, 6] = requests[i - 2].Created;
+                sheet.Cells[i, 7] = requests[i - 2].Completed;
             }
+
+            Excel.Range range = sheet.get_Range("f2", "g" + requests.Count + 1);
+            range.NumberFormat = "hh: mm: ss DD/MM/YYYY";
+            sheet.Columns.AutoFit();
+            sheet.Rows.AutoFit();
 
             ex.Application.ActiveWorkbook.SaveAs("Архивные заявки(" + DateTime.Now + ").xlsx");
 
