@@ -9,11 +9,6 @@
     public class OrganizationDto : BaseDto
     {
         /// <summary>
-        /// Id
-        /// </summary>
-        public long Id { get; set; }
-
-        /// <summary>
         /// Название фонда.
         /// </summary>
         public string Name { get; set; }
