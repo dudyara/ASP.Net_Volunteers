@@ -1,6 +1,5 @@
 ﻿namespace Volunteers.Services.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -57,7 +56,27 @@
                 org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
             for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
                 org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
-            await Repository.Add(org);
+            await Repository.AddAsync(org);
+            orgDto.Id = await Repository.Get(s => s.Mail == org.Mail).Select(x => x.Id).FirstOrDefaultAsync();
+            return orgDto;
+        }
+
+        /// <summary>
+        /// Create
+        /// </summary>
+        /// <param name="orgDto">org.</param>
+        /// <param name="id">user id</param>
+        public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto, long id)
+        {
+            var org = Mapper.Map<Organization>(orgDto);
+            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
+                org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
+            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
+                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
+            org.UserId = id;
+            await Repository.AddAsync(org);
+            orgDto.UserId = id;
+            orgDto.Id = await Repository.Get(s => s.Mail == orgDto.Mail).Select(x => x.Id).FirstOrDefaultAsync();
             return orgDto;
         }
 
@@ -110,7 +129,7 @@
                 });
             }
 
-            await Repository.Update(org);
+            await Repository.UpdateAsync(org);
             return orgDto;
         }
     }

@@ -29,7 +29,7 @@
         /// Add
         /// </summary>
         /// <param name="newEntity">newEntity</param>
-        Task<long> Add(TEntity newEntity);
+        Task<long> AddAsync(TEntity newEntity);
 
         /// <summary>
         /// AddRange
@@ -41,14 +41,14 @@
         /// Delete
         /// </summary>
         /// <param name="id">entity</param>
-        Task Delete(long id);
+        Task DeleteAsync(long id);
 
         /// <summary>
         /// Удаление по сущности
         /// </summary>
         /// <param name="activeEntity">activeEntity</param>
         /// <returns></returns>
-        Task Delete(TEntity activeEntity);
+        Task DeleteAsync(TEntity activeEntity);
 
         /// <summary>
         /// Remove
@@ -66,7 +66,7 @@
         /// Update
         /// </summary>
         /// <param name="entity">entity</param>
-        Task Update(TEntity entity);
+        Task UpdateAsync(TEntity entity);
 
         /// <summary>
         /// UpdateRange

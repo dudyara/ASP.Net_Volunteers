@@ -36,7 +36,7 @@
         }
 
         /// <inheritdoc />
-        public async Task<long> Add(TEntity newEntity)
+        public async Task<long> AddAsync(TEntity newEntity)
         {
             var entity = await _context.Set<TEntity>().AddAsync(newEntity);
             await _context.SaveChangesAsync();
@@ -51,7 +51,7 @@
         }
 
         /// <inheritdoc />
-        public async Task Delete(long id)
+        public async Task DeleteAsync(long id)
         {
             var activeEntity = await _context.Set<TEntity>().FirstOrDefaultAsync(x => x.Id == id);
             if (activeEntity is ISoftDeletable deletable)
@@ -64,7 +64,7 @@
         }
 
         /// <inheritdoc />
-        public async Task Delete(TEntity activeEntity)
+        public async Task DeleteAsync(TEntity activeEntity)
         {
             if (activeEntity is ISoftDeletable deletable)
             {
@@ -90,7 +90,7 @@
         }
 
         /// <inheritdoc />
-        public async Task Update(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
             await Task.Run(() => _context.Set<TEntity>().Update(entity));
             await _context.SaveChangesAsync();

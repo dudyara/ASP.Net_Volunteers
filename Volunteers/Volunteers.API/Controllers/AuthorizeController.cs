@@ -1,61 +1,118 @@
 ﻿namespace Volunteers.API.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
+    using Volunteers.Services.Dto;
+    using Volunteers.Services.Services;
 
     /// <summary>
     /// Authorization controller
     /// </summary>
+    [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
-    [Route("[controller]")]
     public class AuthorizeController : ControllerBase
     {
         private readonly ILogger<AuthorizeController> _logger;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthorizeController"/> class.
         /// </summary>
         /// <param name="logger">logger</param>
-        /// <param name="signInManager">signInManager</param>
-        /// <param name="userManager">userManager</param>
         public AuthorizeController(
-            ILogger<AuthorizeController> logger,
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager)
+            ILogger<AuthorizeController> logger)
         {
             _logger = logger;
-            _signInManager = signInManager;
-            _userManager = userManager;
-        }
-
-        /// <summary>
-        /// Test method get
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<List<string>> Get()
-        {
-            return await _userManager.Users.Select(x => x.UserName).ToListAsync();
         }
 
         /// <summary>
         /// Test add new user
         /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IdentityResult> AddUser()
+        /// <param name="dto">dto</param>
+        /// <param name="token">token</param>
+        /// <param name="orgId">orgId</param>
+        /// <param name="authorizationService">authorizationService</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>  
+        [HttpPost("RegisterUser")]
+        public async Task<ActionResult<string>> RegisterUser(
+            RegistrationDto dto,
+            [FromQuery] string token,
+            [FromQuery] long? orgId,
+            [FromServices] AuthorizationService authorizationService)
         {
-            var user = new IdentityUser { Email = "helltrial@gmail.com", UserName = "Testlogin" };
-            return await _userManager.CreateAsync(user, "aA123123123!");
+            if (!await authorizationService.CheckRegistrationToken(token))
+            {
+                return BadRequest();
+            }
+
+            if (orgId.HasValue)
+            {
+                return Ok(await authorizationService.AddUserAsync(dto, orgId));
+            }
+
+            var result = await authorizationService.AddUserAsync(dto);
+
+            if (result == dto)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest();
+        }
+
+        /// <summary>
+        /// RegisterOrganization
+        /// </summary>
+        /// <param name="organizationDto">Dto</param>
+        /// <param name="organizationService">Service</param>
+        /// <param name="userId">orgId</param>
+        [Authorize]
+        [HttpPost("RegisterOrganization")]
+        public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
+            OrganizationDto organizationDto,
+            [FromServices] OrganizationService organizationService,
+            [FromQuery] long? userId)
+        {
+            if (userId.HasValue)
+            {
+                return await organizationService.Create(organizationDto, (long)userId);
+            }
+
+            return await organizationService.Create(organizationDto);
+        }
+
+        /// <summary>
+        /// GetToken
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <param name="id">orgId</param>
+        [HttpGet("GetToken")]
+        public async Task<ActionResult<string>> GetToken(
+            [FromServices] AuthorizationService service,
+            long? id)
+        {
+            var link = await service.GenerateLink(id);
+            return link;
+        }
+
+        /// <summary>
+        /// Authenticate
+        /// </summary>
+        /// <param name="loginDto">loginDto</param>
+        /// <param name="authenticationService">authenticationService</param>
+        [AllowAnonymous]
+        [HttpPost("AuthenticateAsync")]
+        public async Task<IActionResult> AuthenticateAsync(
+            [FromBody] LoginDto loginDto,
+            [FromServices] AuthorizationService authenticationService)
+        {
+            var token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password); 
+
+            if (token == null)
+                return Unauthorized();
+
+            return Ok(token);
         }
     }
 }
