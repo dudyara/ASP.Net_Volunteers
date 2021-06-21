@@ -19,7 +19,8 @@
         /// Получение типов активностей компаний
         /// </summary>
         /// <param name="actDto">actDto</param>
-        /// <param name="service">service</param>
+        /// <param name="service">service</param>      
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ActivityTypeDto>> Create(
             [FromBody] ActivityTypeDto actDto,
@@ -46,6 +47,7 @@
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult<ActivityTypeDto>> Update(
             [FromBody] ActivityTypeDto actDto,
@@ -60,6 +62,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<ActivityType>> Delete(
             [FromQuery] long id,

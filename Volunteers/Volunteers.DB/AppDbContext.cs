@@ -1,6 +1,5 @@
 ﻿namespace Volunteers.DB
 {
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.Entities;
@@ -24,6 +23,11 @@
         /// Funds - таблица фондов.
         /// </summary>
         public DbSet<Organization> Organizations { get; set; }
+
+        /// <summary>
+        /// RegistrationToken - таблица для токенов для регистрации
+        /// </summary>
+        public DbSet<RegistrationToken> RegistrationToken { get; set; }
 
         /// <summary>
         /// Requests - таблица запросов.
@@ -58,19 +62,14 @@
             modelBuilder.Entity<Request>()
                 .Property(b => b.IsDeleted)
                 .HasDefaultValue(false);
-
+               
             modelBuilder.Entity<Organization>()
                 .Property(b => b.IsDeleted)
                 .HasDefaultValue(false);
 
-            modelBuilder
-                .Entity<Role>().HasData(
-                new Role[]
-                {
-                     new Role { Id = 1, Name = "Admin" },
-                     new Role { Id = 2, Name = "Organization" }
-                })
-                ;
+            modelBuilder.Entity<User>()
+                .HasIndex(x => x.RoleId)
+                .IsUnique(false);
             modelBuilder
                 .Entity<Organization>()
                 .HasMany(a => a.ActivityTypes)
@@ -84,6 +83,8 @@
                     .HasOne(pt => pt.Organization)
                     .WithMany(p => p.ActivityTypeOrganizations)
                     .HasForeignKey(pt => pt.OrganizationId));
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

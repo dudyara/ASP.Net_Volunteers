@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
@@ -9,9 +10,11 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210617180948_New_relationship5")]
+    partial class New_relationship5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -315,12 +318,6 @@ namespace Volunteers.DB.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -336,6 +333,20 @@ namespace Volunteers.DB.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ConcurrencyStamp = "a435ddf4-e22a-40f3-a687-4199d184a253",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            ConcurrencyStamp = "6294e81c-23c7-4ad4-a38a-f14cfd800ebd",
+                            Name = "Organization"
+                        });
                 });
 
             modelBuilder.Entity("Volunteers.Entities.User", b =>
@@ -382,9 +393,6 @@ namespace Volunteers.DB.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -403,8 +411,6 @@ namespace Volunteers.DB.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -514,17 +520,6 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Volunteers.Entities.User", b =>
-                {
-                    b.HasOne("Volunteers.Entities.Role", "Role")
-                        .WithOne("User")
-                        .HasForeignKey("Volunteers.Entities.User", "RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Volunteers.Entities.ActivityType", b =>
                 {
                     b.Navigation("ActivityTypeOrganizations");
@@ -542,11 +537,6 @@ namespace Volunteers.DB.Migrations
             modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>
                 {
                     b.Navigation("Organization");
-                });
-
-            modelBuilder.Entity("Volunteers.Entities.Role", b =>
-                {
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.User", b =>
