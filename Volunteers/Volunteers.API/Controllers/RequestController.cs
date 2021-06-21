@@ -23,7 +23,7 @@
         /// <param name="service">service.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Request>> Create(
+        public async Task<ActionResult<Request>> Create( 
             [FromBody] RequestCreateDto request,
             [FromServices] RequestService service)
         {
@@ -44,6 +44,7 @@
         /// <param name="status">status</param>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get(
             [FromQuery] RequestStatus status,
@@ -59,6 +60,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
+        [Authorize]
         [HttpGet("count")]
         public async Task<int[]> GetCount(
             [FromQuery] long id,
@@ -74,6 +76,7 @@
         /// <param name="reqDto">reqDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
+        [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<Request>> ChangeStatus(
             [FromBody] RequestChangeStatusDto reqDto,
@@ -89,6 +92,7 @@
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
+        [Authorize(Roles = "Organization")]
         [HttpPut("comment")]
         public async Task<ActionResult<Request>> CreateComment(
             [FromBody] RequestCreateComment commentDto,
@@ -104,6 +108,7 @@
         /// <param name="id">id</param>
         /// <param name="service">service</param>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<Request>> Delete(
             [FromQuery] long id,

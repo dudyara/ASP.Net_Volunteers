@@ -37,10 +37,10 @@
         /// </summary>
         /// <param name="filter">filter</param>
         /// <returns></returns>
-        public async Task<List<ActivityTypeDto>> Get(string filter)
+        public async Task<List<ActivityTypeDto>> Get(ActivityTypeFilterDto filter)
         {
             var result = new List<ActivityTypeDto>();
-            if (filter == "filter")
+            if (filter.Flag == true)
             {
                 result = await Repository
                     .Get()

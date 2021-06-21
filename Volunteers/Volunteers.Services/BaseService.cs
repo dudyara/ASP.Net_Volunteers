@@ -58,7 +58,7 @@
             var entity =
                 await Repository.Get(x => x.Id == dto.Id).FirstOrDefaultAsync();
             Mapper.Map(dto, entity);
-            await Repository.Update(entity);
+            await Repository.UpdateAsync(entity);
             return await GetById(entity.Id);
         }
 
@@ -71,7 +71,7 @@
             _ = dto ?? throw new ArgumentException("Должен быть задан добавляемый объект");
             await Validator.ValidateAndThrowAsync(dto);
             var entity = Mapper.Map<TEntity>(dto);
-            await Repository.Add(entity);
+            await Repository.AddAsync(entity);
             var map = await GetById(entity.Id);
             return map;
         }
@@ -99,7 +99,7 @@
         public virtual async Task DeleteAsync(long id)
         {
             var entity = await Repository.Get(x => x.Id == id).FirstOrDefaultAsync();
-            await Repository.Delete(entity);
+            await Repository.DeleteAsync(entity);
         }
 
         /// <summary>

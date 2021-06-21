@@ -1,16 +1,20 @@
 ﻿namespace Volunteers.API
 {
     using System;
+    using System.Collections.Generic;
+    using System.Text;
     using DB;
     using Entities;
     using FluentValidation;
     using FluentValidation.AspNetCore;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
     using Services;
@@ -44,11 +48,11 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-              .AddFluentValidation(s =>
-               {
-                   s.RegisterValidatorsFromAssemblyContaining<Startup>();
-                   s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-               });
+                .AddFluentValidation(s =>
+                {
+                    s.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                });
             services.Scan(scan =>
                 scan.FromAssemblyOf<BaseService<BaseEntity, BaseDto>>()
                     .AddClasses(x => x.Where(t => t.Name.EndsWith("Service")))
@@ -56,10 +60,7 @@
                     .WithTransientLifetime());
             services.AddMvc()
                 .AddNewtonsoftJson(
-                    options =>
-                    {
-                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    });
+                    options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; });
             ConfigureDbConnection(services);
 
             services.AddSwaggerGen(c =>
@@ -70,18 +71,71 @@
                     Title = "API",
                     Description = "Volunteers API",
                 });
+                c.AddSecurityDefinition(
+                    "Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer"
+                    });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                        },
+                        new List<string>()
+                    }
+                });
             });
+
+            var tokenKey = Configuration.GetValue<string>("TokenKey");
+            var key = Encoding.ASCII.GetBytes(tokenKey);
+
+            services.AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             services.AddSingleton<IVolunteerMapper, VolunteerMapper>();
 
-            services.AddScoped<IDtoValidator, DtoValidator>();     
+            services.AddScoped<IDtoValidator, DtoValidator>();
             services.AddTransient<IValidator<OrganizationDto>, OrganizationValidator>();
             services.AddTransient<IValidator<RequestCreateDto>, RequestValidator>();
             services.AddTransient<IValidator<ActivityTypeDto>, ActivityTypeValidator>();
+            services.AddTransient<IValidator<RegistrationDto>, RegistrationValidator>();
 
             services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
             services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();
+            services.AddTransient<IDbRepository<RegistrationToken>, DbRepository<RegistrationToken>>();
+            services.AddTransient<IDbRepository<User>, DbRepository<User>>();
+            services.AddTransient<IDbRepository<Role>, DbRepository<Role>>();
         }
 
         /// <summary>
@@ -93,10 +147,7 @@
         {
             app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volunteers API");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volunteers API"); });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -105,9 +156,9 @@
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseMiddleware<ErrorCodesMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

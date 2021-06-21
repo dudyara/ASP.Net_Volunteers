@@ -140,7 +140,7 @@
                     break;
             }
 
-            await Repository.Update(request);
+            await Repository.UpdateAsync(request);
             return request;
         }
 
@@ -152,7 +152,7 @@
         {
             var request = await Repository.Get(x => (x.Id == commentDto.RequestId)).FirstOrDefaultAsync();
             request.Comment = commentDto.Comment;
-            await Repository.Update(request);
+            await Repository.UpdateAsync(request);
             return request;
         }
 
@@ -176,7 +176,7 @@
             var request = Mapper.Map<Request>(requestDto);
             request.Created = DateTime.Now;
             request.RequestStatus = RequestStatus.Waiting;
-            await Repository.Add(request);
+            await Repository.AddAsync(request);
             return request;
         }
 

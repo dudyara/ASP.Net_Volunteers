@@ -57,5 +57,10 @@
         /// Координаты
         /// </summary>
         public double[] Location { get; set; }
+
+        /// <summary>
+        /// UserId
+        /// </summary>
+        public long? UserId { get; set; } = null;
     }
 }

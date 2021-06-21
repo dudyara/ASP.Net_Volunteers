@@ -2,16 +2,23 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volunteers.DB;
 
 namespace Volunteers.DB.Migrations
 {
+    /// <summary>
+    /// New_Relationship1
+    /// </summary>
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210615132841_New_Relationshiop1")]
+  
+    partial class New_Relationshiop1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc/>
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,7 +137,7 @@ namespace Volunteers.DB.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("TypeName")
@@ -172,13 +179,8 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("varchar(500)");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
-                    b.Property<double[]>("Location")
-                        .HasColumnType("double precision[]");
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Logo")
                         .HasColumnType("text");
@@ -192,22 +194,10 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(500)");
 
-                    b.Property<long?>("RegistrationTokenId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("WorkingHours")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RegistrationTokenId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Organizations");
                 });
@@ -239,14 +229,8 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<DateTime>("ExpireTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Token")
                         .HasColumnType("text");
@@ -266,7 +250,7 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("varchar(500)");
 
-                    b.Property<DateTime?>("Completed")
+                    b.Property<DateTime?>("Complited")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("Created")
@@ -279,10 +263,8 @@ namespace Volunteers.DB.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(500)");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(500)");
@@ -315,12 +297,6 @@ namespace Volunteers.DB.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -336,6 +312,20 @@ namespace Volunteers.DB.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            ConcurrencyStamp = "6c433093-442d-435a-a4da-ad8f8601bbc4",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            ConcurrencyStamp = "5ae661ca-a499-4c2f-9fc8-4bde55c8414f",
+                            Name = "Organization"
+                        });
                 });
 
             modelBuilder.Entity("Volunteers.Entities.User", b =>
@@ -373,6 +363,9 @@ namespace Volunteers.DB.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<long>("OrganizationId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
@@ -381,9 +374,6 @@ namespace Volunteers.DB.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
-
-                    b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -404,7 +394,8 @@ namespace Volunteers.DB.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("OrganizationId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -479,21 +470,6 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("Volunteers.Entities.Organization", b =>
-                {
-                    b.HasOne("Volunteers.Entities.RegistrationToken", "RegistrationToken")
-                        .WithOne("Organization")
-                        .HasForeignKey("Volunteers.Entities.Organization", "RegistrationTokenId");
-
-                    b.HasOne("Volunteers.Entities.User", "User")
-                        .WithOne("Organization")
-                        .HasForeignKey("Volunteers.Entities.Organization", "UserId");
-
-                    b.Navigation("RegistrationToken");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Volunteers.Entities.Phone", b =>
                 {
                     b.HasOne("Volunteers.Entities.Organization", "Organization")
@@ -516,13 +492,13 @@ namespace Volunteers.DB.Migrations
 
             modelBuilder.Entity("Volunteers.Entities.User", b =>
                 {
-                    b.HasOne("Volunteers.Entities.Role", "Role")
+                    b.HasOne("Volunteers.Entities.Organization", "Organization")
                         .WithOne("User")
-                        .HasForeignKey("Volunteers.Entities.User", "RoleId")
+                        .HasForeignKey("Volunteers.Entities.User", "OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Role");
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.ActivityType", b =>
@@ -537,21 +513,8 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("PhoneNumbers");
 
                     b.Navigation("Requests");
-                });
 
-            modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>
-                {
-                    b.Navigation("Organization");
-                });
-
-            modelBuilder.Entity("Volunteers.Entities.Role", b =>
-                {
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Volunteers.Entities.User", b =>
-                {
-                    b.Navigation("Organization");
                 });
 #pragma warning restore 612, 618
         }

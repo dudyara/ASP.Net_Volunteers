@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
@@ -15,23 +16,22 @@
     [ApiController]
     public class OrganizationController : Controller
     {
+        private readonly ILogger _logger;
+
         /// <summary>
-        /// Добавить новую организацию.
+        /// OrganizationController
         /// </summary>
-        /// <param name="org">organization.</param>
-        /// <param name="service">service.</param>
-        [HttpPost]
-        public async Task<ActionResult<OrganizationDto>> Create(
-            OrganizationDto org, [FromServices] OrganizationService service)
+        /// <param name="logger">logger</param>
+        public OrganizationController(ILogger<OrganizationController> logger)
         {
-            var result = await service.Create(org);
-            return result ?? NotFound();
+            _logger = logger;
         }
 
         /// <summary>
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
@@ -59,6 +59,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
+        [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<OrganizationDto>> Update(
             [FromServices] OrganizationService service,
@@ -73,6 +74,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<Organization>> Delete(
             [FromServices] OrganizationService service,

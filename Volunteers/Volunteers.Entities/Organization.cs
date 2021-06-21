@@ -74,5 +74,25 @@
 
         /// <inheritdoc/>
         public DateTime? Deleted { get; set; }
+
+        /// <summary>
+        /// UserId
+        /// </summary>
+        public long? UserId { get; set; }
+
+        /// <summary>
+        /// User 
+        /// </summary>
+        public User User { get; set; }
+        
+        /// <summary>
+        /// RegistrationTokenId
+        /// </summary>
+        public long? RegistrationTokenId { get; set; }
+
+        /// <summary>
+        /// RegistrationToken
+        /// </summary>
+        public RegistrationToken RegistrationToken { get; set; }
     }
 }
