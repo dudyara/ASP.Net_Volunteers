@@ -140,7 +140,7 @@
                     break;
             }
 
-            await Repository.UpdateAsync(request);
+            await Repository.Update(request);
             return request;
         }
 
@@ -152,7 +152,7 @@
         {
             var request = await Repository.Get(x => (x.Id == commentDto.RequestId)).FirstOrDefaultAsync();
             request.Comment = commentDto.Comment;
-            await Repository.UpdateAsync(request);
+            await Repository.Update(request);
             return request;
         }
 
@@ -176,7 +176,7 @@
             var request = Mapper.Map<Request>(requestDto);
             request.Created = DateTime.Now;
             request.RequestStatus = RequestStatus.Waiting;
-            await Repository.AddAsync(request);
+            await Repository.Add(request);
             return request;
         }
 
@@ -224,9 +224,10 @@
             sheet.Columns.AutoFit();
             sheet.Rows.AutoFit();
 
-            ex.Application.ActiveWorkbook.SaveAs("Архивные заявки(" + DateTime.Now + ").xlsx");
+            workBook.Close();
+            ex.Quit();
 
-            return null;
+            return File();
         }
     }
 }
