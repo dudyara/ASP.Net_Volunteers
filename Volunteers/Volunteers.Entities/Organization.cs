@@ -78,7 +78,6 @@
         /// <summary>
         /// UserId
         /// </summary>
-
         public long? UserId { get; set; }
 
         /// <summary>

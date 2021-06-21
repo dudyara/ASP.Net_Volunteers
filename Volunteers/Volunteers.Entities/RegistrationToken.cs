@@ -1,6 +1,7 @@
 ﻿namespace Volunteers.Entities
 {
     using System;
+
     /// <summary>
     /// RegistrationToken
     /// </summary>
