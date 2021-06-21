@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
     using FluentValidation;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -13,6 +15,7 @@
     using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
+    using Excel = Microsoft.Office.Interop.Excel;
 
     /// <summary>
     /// RequestService
@@ -175,6 +178,42 @@
             request.RequestStatus = RequestStatus.Waiting;
             await Repository.Add(request);
             return request;
+        }
+
+        /// <summary>
+        /// ArchiveExcel
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult<Request>> ArchiveExcel()
+        {
+            Excel.Application ex = new Excel.Application
+            {
+                Visible = true,
+                SheetsInNewWorkbook = 1
+            };
+            Excel.Workbook workBook = ex.Workbooks.Add(Type.Missing);
+            Excel.Worksheet sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1);
+
+            var requests = await Repository
+                .Get()
+                .Where(r => r.RequestStatus == RequestStatus.Done)
+                .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            for (int i = 1; i <= requests.Count; i++)
+            {
+                sheet.Cells[i, 1] = string.Format(requests[i].Name);
+                sheet.Cells[i, 2] = string.Format(requests[i].Description);
+                sheet.Cells[i, 3] = string.Format(requests[i].PhoneNumber);
+                sheet.Cells[i, 4] = string.Format(requests[i].Comment);
+                sheet.Cells[i, 5] = string.Format(requests[i].Owner);
+                sheet.Cells[i, 6] = string.Format(requests[i].Created);
+                sheet.Cells[i, 7] = string.Format(requests[i].Completed);
+            }
+
+            ex.Application.ActiveWorkbook.SaveAs("Архивные заявки(" + DateTime.Now + ").xlsx");
+
+            return null;
         }
     }
 }

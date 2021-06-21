@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
@@ -111,6 +110,19 @@
             [FromServices] RequestService service)
         {
             var result = await service.Delete(id);
+            return result ?? NotFound();
+        }
+
+        /// <summary>
+        /// ArchiveExcel
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <returns></returns>
+        [HttpGet("ArchiveExcel")]
+        public async Task<ActionResult<Request>> ArchiveExcel(
+            [FromServices] RequestService service)
+        {
+            var result = await service.ArchiveExcel();
             return result ?? NotFound();
         }
     }
