@@ -6,6 +6,7 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -180,7 +181,10 @@
                 var total_token = tokenHandler.WriteToken(token);
                 authenticateDto.Token = total_token;
                 authenticateDto.Role = roleUser.ToString();
-                var organizationResult = _organizationRepo.Get(t => t.UserId == user.Id).FirstOrDefault();
+                var organizationResult = await _organizationRepo
+                    .Get(t => t.UserId == user.Id)
+                    .ProjectTo<OrganizationDto>(Mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
                 if (organizationResult != null)
                 {
                     var organizationDto = Mapper.Map<OrganizationDto>(organizationResult);

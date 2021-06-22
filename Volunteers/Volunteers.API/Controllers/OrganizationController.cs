@@ -59,14 +59,14 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
-        [Authorize(Roles = "Organization")]
+        // [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<OrganizationDto>> Update(
             [FromServices] OrganizationService service,
             [FromBody] OrganizationDto orgDto)
         {
             var result = await service.Update(orgDto);
-            return result ?? NotFound();
+            return result;
         }
 
         /// <summary>

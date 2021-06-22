@@ -22,8 +22,8 @@
                 cfg.CreateMap<Request, RequestDto>()
                     .ForMember(src => src.Owner, opt => opt.MapFrom(c => c.Organization.Name));
                 cfg.CreateMap<OrganizationDto, Organization>()
-                    .ForMember(d => d.PhoneNumbers, (options) => options.Ignore())
-                    .ForMember(d => d.ActivityTypes, (options) => options.Ignore());
+                    .ForMember(x => x.ActivityTypes, opt => opt.MapFrom(x => x.ActivityTypes.Select(z => z.TypeName)))
+                    .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(x => x.PhoneNumbers.Select(z => z)));
                 cfg.CreateMap<Organization, OrganizationDto>()
                     .ForMember(x => x.ActivityTypes, opt => opt.MapFrom(x => x.ActivityTypes.Where(at => !at.IsDeleted)))
                     .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(x => x.PhoneNumbers.Select(pn => pn.PhoneNumber)));
