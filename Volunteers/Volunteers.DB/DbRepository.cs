@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.Entities;
-
+    using Volunteers.Entities.Models;
     /// <inheritdoc />
     public class DbRepository<TEntity> : IDbRepository<TEntity>
     where TEntity : class, IEntity
@@ -26,7 +26,13 @@
         /// <inheritdoc />
         public IQueryable<TEntity> Get()
         {
-             return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
+            return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
+        }
+
+        /// <inheritdoc/>
+        public IQueryable<TEntity> Get(RequestParameters requestParameters)
+        {
+            return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize).Take(requestParameters.PageSize).AsQueryable();
         }
 
         /// <inheritdoc />

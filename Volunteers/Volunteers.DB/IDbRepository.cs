@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
+    using Entities.Models;
     using Volunteers.Entities;
 
     /// <summary>
@@ -18,7 +19,16 @@
         /// Get
         /// </summary>
         /// <param name="selector">selector</param>
+        /// <param name="requestParameters">requestParameters</param>
         IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> selector);
+
+        /// <summary>
+        /// Get with parameters
+        /// </summary>
+        /// <param name="selector">selector</param>
+        /// <param name="requestParameters">requestParameters</param>
+        /// <returns></returns>
+        IQueryable<TEntity> Get(RequestParameters requestParameters);
 
         /// <summary>
         /// Get

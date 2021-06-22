@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
+    using Volunteers.Entities.Models;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
 
@@ -45,14 +46,16 @@
         /// <param name="status">status</param>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
+        /// <param name="requestParameters">requestParameters</param>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RequestDto>>> Get(
             [FromQuery] RequestStatus status,
             [FromQuery] long id,
+            [FromQuery] RequestParameters requestParameters,
             [FromServices] RequestService service)
         {
-            var result = await service.Get(status, id);
+            var result = await service.Get(status, id, requestParameters);
             return result ?? NotFound();
         }
 

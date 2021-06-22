@@ -11,6 +11,7 @@
     using Volunteers.DB;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
+    using Volunteers.Entities.Models;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
 
@@ -35,18 +36,19 @@
         /// </summary>
         /// <param name="status">status</param>
         /// <param name="orgId">id</param>
-        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId)
+        /// <param name="requestParameters">requestParameters</param>
+        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId, [FromQuery] RequestParameters requestParameters)
         {
             var requestsDto = new List<RequestDto>();
             if ((status == 0) && (orgId == 0))
             {
-                requestsDto = await Repository.Get().ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
+                requestsDto = await Repository.Get(requestParameters).ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
             }
             else
             if (status == 0)
             {
                 requestsDto = await Repository
-                    .Get()
+                    .Get(requestParameters)
                     .Where(r => r.OrganizationId == orgId)
                     .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
@@ -55,7 +57,7 @@
             if (orgId == 0)
             {
                 requestsDto = await Repository
-                    .Get()
+                    .Get(requestParameters)
                     .Where(r => r.RequestStatus == status)
                     .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
@@ -63,7 +65,7 @@
             else
             {
                 requestsDto = await Repository
-                    .Get()
+                    .Get(requestParameters)
                     .Where(r => r.OrganizationId == orgId)
                     .Where(r => r.RequestStatus == status)
                     .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
