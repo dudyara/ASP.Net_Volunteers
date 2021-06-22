@@ -23,7 +23,8 @@
                     .ForMember(src => src.Owner, opt => opt.MapFrom(c => c.Organization.Name));
                 cfg.CreateMap<OrganizationDto, Organization>()
                     .ForMember(x => x.ActivityTypes, opt => opt.MapFrom(x => x.ActivityTypes.Select(z => z.TypeName)))
-                    .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(x => x.PhoneNumbers.Select(z => z)));
+                    .ForMember(x => x.PhoneNumbers, opt => opt.Ignore())
+                    .AfterMap(MapPhones);
                 cfg.CreateMap<Organization, OrganizationDto>()
                     .ForMember(x => x.ActivityTypes, opt => opt.MapFrom(x => x.ActivityTypes.Where(at => !at.IsDeleted)))
                     .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(x => x.PhoneNumbers.Select(pn => pn.PhoneNumber)));
@@ -53,6 +54,18 @@
         public void Map<TSource, TDestination>(TSource source, TDestination destination)
         {
             Mapper.Map(source, destination);
+        }
+
+        private void MapPhones(OrganizationDto dto, Organization entity)
+        {
+            var entityPhoneNumbers = entity.PhoneNumbers.Select(x => x.PhoneNumber).ToList();
+            var newPhoneNumbers = dto.PhoneNumbers.Except(entityPhoneNumbers).ToList();
+            var deletedPhones = entityPhoneNumbers.Except(dto.PhoneNumbers).ToList();
+
+            newPhoneNumbers.ForEach(x => entity.PhoneNumbers.Add(new Phone { PhoneNumber = x, OrganizationId = entity.Id }));
+            deletedPhones.ForEach(deletedPhone =>
+                entity.PhoneNumbers.Remove(entity.PhoneNumbers.First(phone =>
+                    phone.PhoneNumber.Equals(deletedPhone))));
         }
     }
 }
