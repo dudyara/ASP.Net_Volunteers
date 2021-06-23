@@ -36,8 +36,8 @@
         public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
         {
-            var result = await service.Get();
-            return result ?? NotFound();
+            var result = await service.GetAsync();
+            return result;
         }
 
         /// <summary>

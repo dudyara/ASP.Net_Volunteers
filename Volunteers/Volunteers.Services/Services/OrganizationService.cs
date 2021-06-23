@@ -32,29 +32,12 @@
         }
 
         /// <summary>
-        /// Get
-        /// </summary>
-        /// <returns>.</returns>
-        public async Task<ActionResult<List<OrganizationDto>>> Get()
-        {
-            var orgs = await Repository
-                .Get()
-                .ProjectTo<OrganizationDto>(Mapper.ConfigurationProvider)
-                .ToListAsync();
-            return orgs;
-        }
-
-        /// <summary>
         /// Create
         /// </summary>
         /// <param name="orgDto">org.</param>
         public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto)
         {
             var org = Mapper.Map<Organization>(orgDto);
-            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
-                org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
-            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
-                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             await Repository.AddAsync(org);
             orgDto.Id = await Repository.Get(s => s.Mail == org.Mail).Select(x => x.Id).FirstOrDefaultAsync();
             return orgDto;
@@ -68,10 +51,6 @@
         public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto, long id)
         {
             var org = Mapper.Map<Organization>(orgDto);
-            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
-                org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
-            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
-                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             org.UserId = id;
             await Repository.AddAsync(org);
             orgDto.UserId = id;
