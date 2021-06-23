@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.IO.Compression;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
@@ -227,12 +228,10 @@
             workBook.Close();
             ex.Quit();
 
-            using (var memoryStream = new MemoryStream())
-            {
-                workBook.SaveAs(memoryStream);
-            }
-
-            return null /* workBook*/;
+            var memoryStream = new MemoryStream();
+            workBook.SaveAs(memoryStream);
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }
