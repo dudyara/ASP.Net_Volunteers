@@ -1,8 +1,10 @@
 ﻿namespace Volunteers.Services.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using FluentValidation;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -31,31 +33,12 @@
         }
 
         /// <summary>
-        /// Get
-        /// </summary>
-        /// <returns>.</returns>
-        public async Task<ActionResult<List<OrganizationDto>>> Get()
-        {
-            var orgs = await Repository
-                .Get()
-                .Include(d => d.ActivityTypes)
-                .Include(c => c.PhoneNumbers)
-                .ToListAsync();
-            var orgDto = Mapper.Map<List<OrganizationDto>>(orgs);
-            return orgDto;
-        }
-
-        /// <summary>
         /// Create
         /// </summary>
         /// <param name="orgDto">org.</param>
         public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto)
         {
             var org = Mapper.Map<Organization>(orgDto);
-            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
-                org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
-            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
-                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             await Repository.AddAsync(org);
             orgDto.Id = await Repository.Get(s => s.Mail == org.Mail).Select(x => x.Id).FirstOrDefaultAsync();
             return orgDto;
@@ -69,14 +52,29 @@
         public async Task<ActionResult<OrganizationDto>> Create(OrganizationDto orgDto, long id)
         {
             var org = Mapper.Map<Organization>(orgDto);
-            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
-                org.PhoneNumbers.Add(new Phone() { PhoneNumber = orgDto.PhoneNumbers[i] });
-            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
-                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization() { ActivityTypeId = orgDto.ActivityTypes[i].Id });
             org.UserId = id;
             await Repository.AddAsync(org);
             orgDto.UserId = id;
             orgDto.Id = await Repository.Get(s => s.Mail == orgDto.Mail).Select(x => x.Id).FirstOrDefaultAsync();
+            return orgDto;
+        }
+
+        /// <summary>
+        /// ChangeLogo
+        /// </summary>
+        /// <param name="logo">logo</param>
+        /// <returns></returns>
+        public async Task<ActionResult<OrganizationDto>> ChangeLogo(OrganizationLogoDto logo)
+        {
+            var org = await Repository
+                .Get()
+                .Include(x => x.ActivityTypes)
+                .Include(x => x.PhoneNumbers)
+                .Where(x => x.Id == logo.Id)
+                .FirstOrDefaultAsync();
+            org.Logo = logo.Logo;
+            await Repository.UpdateAsync(org);
+            var orgDto = Mapper.Map<OrganizationDto>(org);
             return orgDto;
         }
 
@@ -87,12 +85,11 @@
         /// <returns></returns>
         public async Task<ActionResult<List<OrganizationDto>>> GetByIds(List<long> ids)
         {
-            var result = await Repository
+            var organizationDtos = await Repository
                 .Get()
                 .Where(x => x.ActivityTypes.Any(at => ids.Contains(at.Id)))
-                .Include(x => x.PhoneNumbers)
+                .ProjectTo<OrganizationDto>(Mapper.ConfigurationProvider)
                 .ToListAsync();
-            var organizationDtos = Mapper.Map<List<OrganizationDto>>(result);
             return organizationDtos;
         }
 
@@ -117,18 +114,12 @@
         /// <returns></returns>
         public async Task<ActionResult<OrganizationDto>> Update(OrganizationDto orgDto)
         {
-            var org = Mapper.Map<Organization>(orgDto);
-            for (int i = 0; i < orgDto.PhoneNumbers.Count; i++)
-                org.PhoneNumbers.Add(new Phone() { Id = orgDto.Id, PhoneNumber = orgDto.PhoneNumbers[i] });
-            for (int i = 0; i < orgDto.ActivityTypes.Count; i++)
-            {
-                org.ActivityTypeOrganizations.Add(new ActivityTypeOrganization()
-                {
-                    OrganizationId = orgDto.Id,
-                    ActivityTypeId = orgDto.ActivityTypes[i].Id
-                });
-            }
-
+            var org = await Repository
+                .Get(o => o.Id == orgDto.Id)
+                .Include(p => p.PhoneNumbers)
+                .Include(a => a.ActivityTypes)
+                .FirstOrDefaultAsync();
+            Mapper.Map(orgDto, org);
             await Repository.UpdateAsync(org);
             return orgDto;
         }
