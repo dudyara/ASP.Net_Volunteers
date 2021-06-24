@@ -49,6 +49,21 @@
         }
 
         /// <summary>
+        /// ChangeLogo
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <param name="logo">orgDto</param>
+        [Authorize(Roles = "Organization")]
+        [HttpPut("logo")]
+        public async Task<ActionResult<OrganizationLogoDto>> ChangeLogo(
+            [FromServices] OrganizationService service,
+            [FromBody] OrganizationLogoDto logo)
+        {
+            var result = await service.ChangeLogo(logo);
+            return result ?? NotFound();
+        }
+
+        /// <summary>
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
@@ -80,7 +95,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
-        // [Authorize(Roles = "Organization")]
+        [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<OrganizationDto>> Update(
             [FromServices] OrganizationService service,

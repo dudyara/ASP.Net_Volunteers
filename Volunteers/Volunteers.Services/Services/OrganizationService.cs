@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.Services.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -56,6 +57,22 @@
             orgDto.UserId = id;
             orgDto.Id = await Repository.Get(s => s.Mail == orgDto.Mail).Select(x => x.Id).FirstOrDefaultAsync();
             return orgDto;
+        }
+
+        /// <summary>
+        /// ChangeLogo
+        /// </summary>
+        /// <param name="logo">logo</param>
+        /// <returns></returns>
+        public async Task<ActionResult<OrganizationLogoDto>> ChangeLogo(OrganizationLogoDto logo)
+        {
+            var org = await Repository
+                .Get()
+                .Where(x => x.Id == logo.Id)
+                .FirstOrDefaultAsync();
+            org.Logo = logo.Link;
+            await Repository.UpdateAsync(org);
+            return logo;
         }
 
         /// <summary>
