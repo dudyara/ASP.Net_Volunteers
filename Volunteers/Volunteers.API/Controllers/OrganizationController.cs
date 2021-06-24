@@ -52,14 +52,14 @@
         /// ChangeLogo
         /// </summary>
         /// <param name="service">service</param>
-        /// <param name="logo">orgDto</param>
+        /// <param name="logoDto">orgDto</param>
         [Authorize(Roles = "Organization")]
         [HttpPut("logo")]
-        public async Task<ActionResult<OrganizationLogoDto>> ChangeLogo(
+        public async Task<ActionResult<OrganizationDto>> ChangeLogo(
             [FromServices] OrganizationService service,
-            [FromBody] OrganizationLogoDto logo)
+            [FromBody] OrganizationLogoDto logoDto)
         {
-            var result = await service.ChangeLogo(logo);
+            var result = await service.ChangeLogo(logoDto);
             return result ?? NotFound();
         }
 

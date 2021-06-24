@@ -8,6 +8,6 @@
         /// <summary>
         /// Logo
         /// </summary>
-        public string Link { get; set; }
+        public string Logo { get; set; }
     }
 }

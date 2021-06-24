@@ -64,15 +64,18 @@
         /// </summary>
         /// <param name="logo">logo</param>
         /// <returns></returns>
-        public async Task<ActionResult<OrganizationLogoDto>> ChangeLogo(OrganizationLogoDto logo)
+        public async Task<ActionResult<OrganizationDto>> ChangeLogo(OrganizationLogoDto logo)
         {
             var org = await Repository
                 .Get()
+                .Include(x => x.ActivityTypes)
+                .Include(x => x.PhoneNumbers)
                 .Where(x => x.Id == logo.Id)
                 .FirstOrDefaultAsync();
-            org.Logo = logo.Link;
+            org.Logo = logo.Logo;
             await Repository.UpdateAsync(org);
-            return logo;
+            var orgDto = Mapper.Map<OrganizationDto>(org);
+            return orgDto;
         }
 
         /// <summary>
