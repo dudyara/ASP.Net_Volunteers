@@ -30,7 +30,7 @@
         private readonly SignInManager<User> _signInManager;
         private readonly IDbRepository<Organization> _organizationRepo;
         private readonly IDbRepository<Role> _roleRepo;
-
+        private readonly IDbRepository<User> _userRepo;
         private readonly IConfiguration _configuration;
 
         /// <summary>
@@ -42,6 +42,7 @@
         /// <param name="organizationRepo">organizationRepo</param>
         /// <param name="configuration">configuration</param>
         /// <param name="roleRepo">roleRepo</param>
+        /// <param name="userRepo">userRepo</param>
         /// <param name="mapper">mapper</param>
         /// <param name="validator">validator</param>
         public AuthorizationService(
@@ -50,6 +51,7 @@
             IDbRepository<RegistrationToken> repository,
             IDbRepository<Organization> organizationRepo,
             IDbRepository<Role> roleRepo,
+            IDbRepository<User> userRepo,
             IConfiguration configuration,
             IVolunteerMapper mapper,
             IDtoValidator validator)
@@ -60,6 +62,7 @@
             _signInManager = signInManager;
             _configuration = configuration;
             _roleRepo = roleRepo;
+            _userRepo = userRepo;
             Mapper = mapper;
         }
 
@@ -125,6 +128,12 @@
         /// <param name="organizationId">id organization</param>
         public async Task<RegistrationDto> AddUserAsync(RegistrationDto dto, long? organizationId = null)
         {
+            var checkEmail = await _organizationRepo.Get(org => org.User.Email == dto.Email).FirstOrDefaultAsync();
+            if (!(checkEmail == null))
+            {
+                throw new Exception("Пользователь с такой почтой уже существует");
+            }
+
             var user = new User { Email = dto.Email, UserName = dto.Email };
             user.RoleId = 2;
             var result = await _userManager.CreateAsync(user, dto.Password);

@@ -62,27 +62,6 @@
         }
 
         /// <summary>
-        /// RegisterOrganization
-        /// </summary>
-        /// <param name="organizationDto">Dto</param>
-        /// <param name="organizationService">Service</param>
-        /// <param name="userId">orgId</param>
-        [Authorize]
-        [HttpPost("RegisterOrganization")]
-        public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
-            OrganizationDto organizationDto,
-            [FromServices] OrganizationService organizationService,
-            [FromQuery] long? userId)
-        {
-            if (userId.HasValue)
-            {
-                return await organizationService.Create(organizationDto, (long)userId);
-            }
-
-            return await organizationService.Create(organizationDto);
-        }
-
-        /// <summary>
         /// GetToken
         /// </summary>
         /// <param name="service">service</param>

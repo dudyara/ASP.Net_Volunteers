@@ -28,6 +28,27 @@
         }
 
         /// <summary>
+        /// RegisterOrganization
+        /// </summary>
+        /// <param name="organizationDto">Dto</param>
+        /// <param name="organizationService">Service</param>
+        /// <param name="userId">orgId</param>
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
+            OrganizationDto organizationDto,
+            [FromServices] OrganizationService organizationService,
+            [FromQuery] long? userId)
+        {
+            if (userId.HasValue)
+            {
+                return await organizationService.Create(organizationDto, (long)userId);
+            }
+
+            return await organizationService.Create(organizationDto);
+        }
+
+        /// <summary>
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
