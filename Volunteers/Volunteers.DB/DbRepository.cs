@@ -2,12 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading.Tasks;
+    using Linq.PredicateBuilder;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.Entities;
     using Volunteers.Entities.Models;
+
     /// <inheritdoc />
     public class DbRepository<TEntity> : IDbRepository<TEntity>
     where TEntity : class, IEntity
@@ -26,13 +29,7 @@
         /// <inheritdoc />
         public IQueryable<TEntity> Get()
         {
-            return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
-        }
-
-        /// <inheritdoc/>
-        public IQueryable<TEntity> Get(RequestParameters requestParameters)
-        {
-            return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).Skip((requestParameters.PageNumber - 1) * requestParameters.PageSize).Take(requestParameters.PageSize).AsQueryable();
+             return _context.Set<TEntity>().Where(x => ((ISoftDeletable)x).IsDeleted == false).AsQueryable();
         }
 
         /// <inheritdoc />
