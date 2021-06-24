@@ -42,7 +42,7 @@
             var totalRequestDto = new TotalRequestDto();
             /*            var query = Repository.FromBuilder(_ => _
                             .Conditional(orgId > 0)
-                            .Where(x => x.OrganizationId == orgId));*/
+                            .Where(x => x.OrganizationId == orgId));*/ 
 
             var filter_result = Enumerable.Empty<Request>().AsQueryable();
 
@@ -74,6 +74,7 @@
                 }
             }
 
+            // фильрация по организации
             if (orgId != 0)
             {
                 filter_result = filter_result.Where(p => p.OrganizationId == orgId);
