@@ -87,7 +87,7 @@
             var registrationToken = new RegistrationToken();
 
             // создаем ссылку, где указываем токен и id организации, если он есть
-            var link = $"{_configuration.GetValue<string>("BaseLink")}Authorize/RegisterUser?";
+            var link = $"{_configuration.GetValue<string>("BaseLink")}?";
 
             if (organizationId.HasValue)
             {
