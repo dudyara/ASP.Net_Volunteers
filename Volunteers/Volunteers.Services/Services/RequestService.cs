@@ -40,10 +40,6 @@
         public async Task<ActionResult<TotalRequestDto>> Get(RequestStatus status, long orgId, RequestGetWithFiltersDto requestDto)
         {
             var totalRequestDto = new TotalRequestDto();
-            /*            var query = Repository.FromBuilder(_ => _
-                            .Conditional(orgId > 0)
-                            .Where(x => x.OrganizationId == orgId));*/ 
-
             var filter_result = Enumerable.Empty<Request>().AsQueryable();
 
             // Фильтруем по статусу
@@ -82,6 +78,7 @@
 
             // пагинация
             var result = PagedList<Request>.ToPagedList(filter_result, requestDto.PageNumber, requestDto.PageSize);
+            totalRequestDto.Count = filter_result.Count();
             totalRequestDto.FinalDate = requestDto.FinalDate;
             totalRequestDto.StartDate = requestDto.StartDate;
             totalRequestDto.HasNext = result.HasNext;
@@ -89,74 +86,6 @@
 
             totalRequestDto.RequestDtos = await filter_result.ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
 
-            /* if (status.Equals(1))
-             {
-                 filter_result = Repository.Get();
-             }
-             else if (status.Equals(2))
-             {
-                 totalRequestDto.RequestDtos = await filter_result
-                     .Where(r => r.OrganizationId == orgId)
-                     .ProjectTo<RequestDto>(Mapper.ConfigurationProvider);
-             }
-             else
-             {
-
-             }
-             if (requestDto.StartDate == null && requestDto.FinalDate == null)
-             {
-                 filter_result = Repository.Get();
-             }
-             else if (requestDto.StartDate == null)
-             {
-                 filter_result = Repository.Get().Where(n => n.Deleted <= DateTime.Parse(requestDto.FinalDate));
-             }
-             else if (requestDto.FinalDate == null)
-             {
-                 filter_result = Repository.Get().Where(n => n.Created >= DateTime.Parse(requestDto.StartDate));
-             }
-             else
-             {
-                 filter_result = Repository.Get().Where(n => n.Created >= DateTime.Parse(requestDto.StartDate) && n.Deleted <= DateTime.Parse(requestDto.FinalDate));
-             }
-
-             var result = PagedList<Request>.ToPagedList(filter_result, requestDto.PageNumber, requestDto.PageSize);
-             totalRequestDto.FinalDate = requestDto.FinalDate;
-             totalRequestDto.StartDate = requestDto.StartDate;
-             totalRequestDto.HasNext = result.HasNext;
-             totalRequestDto.HasPrevious = result.HasPrevious;
-
-             var requestsDto = new List<RequestDto>();
-
-             if ((status == 0) && (orgId == 0))
-             {
-                 totalRequestDto.RequestDtos = await result.Items.ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
-             }
-             else
-             if (status == 0)
-             {
-                 totalRequestDto.RequestDtos = await result.Items
-                     .Where(r => r.OrganizationId == orgId)
-                     .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
-                     .ToListAsync();
-             }
-             else
-             if (orgId == 0)
-             {
-                 totalRequestDto.RequestDtos = await result.Items
-                     .Where(r => r.RequestStatus == status)
-                     .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
-                     .ToListAsync();
-             }
-             else
-             {
-                 totalRequestDto.RequestDtos = await result.Items
-                     .Where(r => r.OrganizationId == orgId)
-                     .Where(r => r.RequestStatus == status)
-                     .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
-                     .ToListAsync();
-             }
- */
             return totalRequestDto;
         }
 

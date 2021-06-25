@@ -12,6 +12,12 @@
         public List<RequestDto> RequestDtos { get; set; }
 
         /// <summary>
+        /// Count
+        /// </summary>
+
+        public int Count { get; set; }
+
+        /// <summary>
         /// hasPrevious
         /// </summary>
         public bool HasPrevious { get; set; }
