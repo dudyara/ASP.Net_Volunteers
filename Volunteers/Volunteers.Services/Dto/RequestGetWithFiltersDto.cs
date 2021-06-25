@@ -1,7 +1,7 @@
 ﻿namespace Volunteers.Services.Dto
 {
     using System;
-    using System.Collections.Generic;
+
     /// <summary>
     /// Dto с фильтрами
     /// </summary>
@@ -25,6 +25,6 @@
         /// <summary>
         /// FinalDate
         /// </summary>
-        public DateTime FinalDate { get; set; } = DateTime.Now; 
+        public DateTime FinalDate { get; set; } = DateTime.Now;
     }
 }
