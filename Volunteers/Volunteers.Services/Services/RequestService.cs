@@ -69,7 +69,7 @@
                 }
             }
 
-            // фильрация по организации
+            // фильтрация по организации
             if (orgId != 0)
             {
                 filter_result = filter_result.Where(p => p.OrganizationId == orgId);

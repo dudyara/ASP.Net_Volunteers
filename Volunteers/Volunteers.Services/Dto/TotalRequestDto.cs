@@ -1,6 +1,7 @@
 ﻿namespace Volunteers.Services.Dto
 {
     using System.Collections.Generic;
+
     /// <summary>
     /// TotalRequestDto
     /// </summary>
@@ -14,7 +15,6 @@
         /// <summary>
         /// Count
         /// </summary>
-
         public int Count { get; set; }
 
         /// <summary>

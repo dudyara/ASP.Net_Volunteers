@@ -24,7 +24,7 @@
         /// <param name="service">service.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Request>> Create( 
+        public async Task<ActionResult<Request>> Create(
             [FromBody] RequestCreateDto request,
             [FromServices] RequestService service)
         {
@@ -46,7 +46,7 @@
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
         /// <param name="requestDto">requestDto</param>
-        [Authorize]
+        // [Authorize]
         [HttpGet]
         public async Task<ActionResult<TotalRequestDto>> Get(
             [FromQuery] RequestStatus status,
@@ -56,7 +56,7 @@
         {
             var result = await service.Get(status, id, requestDto);
             return result ?? NotFound();
-        } 
+        }
 
         /// <summary>
         /// Получить количество заявок разных организаций
@@ -124,13 +124,19 @@
         /// <summary>
         /// ArchiveExcel
         /// </summary>
+        /// <param name="status">status</param>
+        /// <param name="id">id</param>
+        /// <param name="requestDto">requestDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
         [HttpGet("export")]
-        public async Task<FileStreamResult> ArchiveExcel(
+        public async Task<FileStreamResult> ExportExcel(
+            [FromQuery] RequestStatus status,
+            [FromQuery] long id,
+            [FromQuery] RequestGetWithFiltersDto requestDto,
             [FromServices] ExcelService service)
         {
-            var result = await service.ArchiveExcel();
+            var result = await service.ExportExcel(status, id, requestDto);
             return File(result, "application/xls", "Архивные заявки.xls");
         }
     }
