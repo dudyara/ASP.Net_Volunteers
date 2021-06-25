@@ -21,7 +21,7 @@
     /// <summary>
     /// AuthenticationService
     /// </summary>
-    public class AuthorizationService : BaseManagerService<RegistrationToken>
+    public class UserService : BaseManagerService<RegistrationToken>
     {
         /// <summary>
         /// BaseLink
@@ -45,7 +45,7 @@
         /// <param name="userRepo">userRepo</param>
         /// <param name="mapper">mapper</param>
         /// <param name="validator">validator</param>
-        public AuthorizationService(
+        public UserService(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             IDbRepository<RegistrationToken> repository,
