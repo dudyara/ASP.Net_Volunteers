@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
     using Volunteers.DB;
     using Volunteers.Entities;
@@ -69,14 +68,10 @@
             range.NumberFormat = "hh: mm: ss DD/MM/YYYY";
             sheet.Columns.AutoFit();
             sheet.Rows.AutoFit();
-
-            workBook.Close();
-            ex.Quit();
-
-            var memoryStream = new MemoryStream();
-            workBook.SaveAs(memoryStream);
-            memoryStream.Position = 0;
-            return memoryStream;
+            using MemoryStream stream = new MemoryStream();
+            workBook.SaveAs(stream);
+            stream.Position = 0;
+            return stream;
         }
     }
 }

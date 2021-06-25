@@ -22,7 +22,6 @@
         /// </summary>
         /// <param name="request">request.</param>
         /// <param name="service">service.</param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<Request>> Create(
             [FromBody] RequestCreateDto request,
@@ -46,7 +45,7 @@
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
         /// <param name="requestDto">requestDto</param>
-        // [Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<TotalRequestDto>> Get(
             [FromQuery] RequestStatus status,
@@ -78,7 +77,6 @@
         /// </summary>
         /// <param name="reqDto">reqDto</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [Authorize(Roles = "Organization")]
         [HttpPut]
         public async Task<ActionResult<Request>> ChangeStatus(
@@ -94,7 +92,6 @@
         /// </summary>
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [Authorize(Roles = "Organization")]
         [HttpPut("comment")]
         public async Task<ActionResult<Request>> CreateComment(
@@ -110,7 +107,6 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<ActionResult<Request>> Delete(
@@ -128,7 +124,6 @@
         /// <param name="id">id</param>
         /// <param name="requestDto">requestDto</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [HttpGet("export")]
         public async Task<FileStreamResult> ExportExcel(
             [FromQuery] RequestStatus status,
