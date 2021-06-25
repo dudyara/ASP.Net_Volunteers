@@ -29,6 +29,7 @@
         /// Add
         /// </summary>
         /// <param name="newEntity">newEntity</param>
+
         Task<long> AddAsync(TEntity newEntity);
 
         /// <summary>

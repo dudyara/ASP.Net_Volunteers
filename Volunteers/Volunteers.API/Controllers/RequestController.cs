@@ -45,16 +45,18 @@
         /// <param name="status">status</param>
         /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
+        /// <param name="requestDto">requestDto</param>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(
+        public async Task<ActionResult<TotalRequestDto>> Get(
             [FromQuery] RequestStatus status,
             [FromQuery] long id,
-            [FromServices] RequestService service)
+            [FromServices] RequestService service,
+            [FromQuery] RequestGetWithFiltersDto requestDto)
         {
-            var result = await service.Get(status, id);
+            var result = await service.Get(status, id, requestDto);
             return result ?? NotFound();
-        }
+        } 
 
         /// <summary>
         /// Получить количество заявок разных организаций
