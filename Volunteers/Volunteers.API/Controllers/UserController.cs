@@ -12,16 +12,16 @@
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorizeController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly ILogger<AuthorizeController> _logger;
+        private readonly ILogger<UserController> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthorizeController"/> class.
+        /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="logger">logger</param>
-        public AuthorizeController(
-            ILogger<AuthorizeController> logger)
+        public UserController(
+            ILogger<UserController> logger)
         {
             _logger = logger;
         }
@@ -34,12 +34,12 @@
         /// <param name="orgId">orgId</param>
         /// <param name="authorizationService">authorizationService</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>  
-        [HttpPost("RegisterUser")]
+        [HttpPost("reg")]
         public async Task<ActionResult<string>> RegisterUser(
             RegistrationDto dto,
             [FromQuery] string token,
             [FromQuery] long? orgId,
-            [FromServices] AuthorizationService authorizationService)
+            [FromServices] UserService authorizationService)
         {
             if (!await authorizationService.CheckRegistrationToken(token))
             {
@@ -66,9 +66,9 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
-        [HttpGet("GetToken")]
+        [HttpGet]
         public async Task<ActionResult<string>> GetToken(
-            [FromServices] AuthorizationService service,
+            [FromServices] UserService service,
             long? id)
         {
             var link = await service.GenerateLink(id);
@@ -81,10 +81,10 @@
         /// <param name="loginDto">loginDto</param>
         /// <param name="authenticationService">authenticationService</param>
         [AllowAnonymous]
-        [HttpPost("AuthenticateAsync")]
+        [HttpPost("auth")]
         public async Task<IActionResult> AuthenticateAsync(
             [FromBody] LoginDto loginDto,
-            [FromServices] AuthorizationService authenticationService)
+            [FromServices] UserService authenticationService)
         {
             var token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password); 
 
