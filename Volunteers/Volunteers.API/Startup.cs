@@ -10,10 +10,12 @@
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
@@ -143,6 +145,7 @@
         /// </summary>
         /// <param name="app">app</param>
         /// <param name="env">env</param>
+        /// <param name="logger">logger</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
@@ -152,6 +155,17 @@
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+            ILogger logger = loggerFactory.CreateLogger<Startup>();
+            app.Run(async (context) =>
+            {
+                logger.LogInformation("Requested Path: {0}", context.Request.Path);
+                await context.Response.WriteAsync("Hello World!");
+            });
 
             app.UseHttpsRedirection();
 
