@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.API.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,7 @@
                 return await organizationService.Create(organizationDto, (long)userId);
             }
 
+            _logger.LogInformation("Зарегистрирована организация " + organizationDto.Name + " " + DateTime.UtcNow.ToLongTimeString());
             return await organizationService.Create(organizationDto);
         }
 
@@ -60,6 +62,7 @@
             [FromBody] OrganizationLogoDto logoDto)
         {
             var result = await service.ChangeLogo(logoDto);
+            _logger.LogInformation("Изменен логотип организации " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
@@ -73,6 +76,7 @@
             [FromServices] OrganizationService service)
         {
             var result = await service.GetAsync();
+            _logger.LogInformation("Получен список организаций " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -87,6 +91,7 @@
             [FromQuery] List<long> ids)
         {
             var result = await service.GetByIds(ids);
+            _logger.LogInformation("Получены организации по id " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
@@ -102,6 +107,7 @@
             [FromBody] OrganizationDto orgDto)
         {
             var result = await service.Update(orgDto);
+            _logger.LogInformation("Организация обновлена " + orgDto.Name + " " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -117,6 +123,7 @@
             [FromQuery] long id)
         {
             var result = await service.Delete(id);
+            _logger.LogInformation("Организация удалена " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
     }

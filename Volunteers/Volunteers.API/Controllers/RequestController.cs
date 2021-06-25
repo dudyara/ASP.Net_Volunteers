@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
@@ -17,6 +18,17 @@
     [ApiController]
     public class RequestController : Controller
     {
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// ctor.
+        /// </summary>
+        /// <param name="logger">logger</param>
+        public RequestController(ILogger<RequestController> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// CreateRequest.
         /// </summary>
@@ -31,6 +43,7 @@
             try
             {
                 var result = await service.Create(request);
+                _logger.LogInformation("Создана заявка пользователя " + request.Name + " " + DateTime.UtcNow.ToLongTimeString());
                 return result ?? NotFound();
             }
             catch (Exception e)
@@ -53,6 +66,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.Get(status, id);
+            _logger.LogInformation("Получен список заявок " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
@@ -68,6 +82,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.GetCount(id);
+            _logger.LogInformation("Получено количество заявок " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -84,6 +99,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.ChangeStatus(reqDto);
+            _logger.LogInformation("Изменен статус заявки " + reqDto.RequestId + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
@@ -100,6 +116,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.CreateComment(commentDto);
+            _logger.LogInformation("Изменен комментарий заявки " + commentDto.RequestId + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
@@ -116,6 +133,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.Delete(id);
+            _logger.LogInformation("Удалена заявка " + id + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
     }

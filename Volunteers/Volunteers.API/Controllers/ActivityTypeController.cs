@@ -1,9 +1,11 @@
 ﻿namespace Volunteers.API.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
@@ -15,6 +17,17 @@
     [ApiController]
     public class ActivityTypeController : Controller
     {
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// ctor.
+        /// </summary>
+        /// <param name="logger">logger</param>
+        public ActivityTypeController(ILogger<ActivityTypeController> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// Получение типов активностей компаний
         /// </summary>
@@ -27,6 +40,7 @@
             [FromServices] ActivityTypeService service)
         {
             var result = await service.AddAsync(actDto);
+            _logger.LogInformation("Создан тип помощи " + actDto.TypeName + " " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -41,6 +55,7 @@
             [FromQuery] ActivityTypeFilterDto filter)
         {
             var result = await service.Get(filter);
+            _logger.LogInformation("Получены типы помощи " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -56,6 +71,7 @@
             [FromServices] ActivityTypeService service)
         {
             var result = await service.UpdateAsync(actDto);
+            _logger.LogInformation("Обновлен тип помощи " + actDto.TypeName + " " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -71,6 +87,7 @@
             [FromServices] ActivityTypeService service)
         {
             var result = await service.Delete(id);
+            _logger.LogInformation("Удален тип помощи " + id + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
     }

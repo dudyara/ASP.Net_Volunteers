@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.API.Controllers
 {
+    using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,7 @@
                 return Ok(result);
             }
 
+            _logger.LogInformation("Зарегистрирован пользователь " + dto.Email + " " + DateTime.UtcNow.ToLongTimeString());
             return BadRequest();
         }
 
@@ -72,6 +74,7 @@
             long? id)
         {
             var link = await service.GenerateLink(id);
+            _logger.LogInformation("Выдан токен " + DateTime.UtcNow.ToLongTimeString());
             return link;
         }
 
@@ -91,6 +94,7 @@
             if (token == null)
                 return Unauthorized();
 
+            _logger.LogInformation("Авторизован пользователь " + loginDto.Email + " " + DateTime.UtcNow.ToLongTimeString());
             return Ok(token);
         }
     }
