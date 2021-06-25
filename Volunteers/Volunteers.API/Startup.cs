@@ -145,9 +145,10 @@
         /// </summary>
         /// <param name="app">app</param>
         /// <param name="env">env</param>
-        /// <param name="logger">logger</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ErrorCodesMiddleware>();
+
             app.UseSwagger();
 
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volunteers API"); });
@@ -155,6 +156,17 @@
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             var loggerFactory = LoggerFactory.Create(builder =>
             {
@@ -164,19 +176,6 @@
             app.Run(async (context) =>
             {
                 logger.LogInformation("Requested Path: {0}", context.Request.Path);
-                await context.Response.WriteAsync("Hello World!");
-            });
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseMiddleware<ErrorCodesMiddleware>();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
             });
         }
 
