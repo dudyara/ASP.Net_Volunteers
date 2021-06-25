@@ -34,7 +34,7 @@
         /// <param name="orgId">orgId</param>
         /// <param name="authorizationService">authorizationService</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>  
-        [HttpPost("reg")]
+        [HttpPost("register")]
         public async Task<ActionResult<string>> RegisterUser(
             RegistrationDto dto,
             [FromQuery] string token,
