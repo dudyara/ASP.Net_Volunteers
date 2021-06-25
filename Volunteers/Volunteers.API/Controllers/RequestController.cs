@@ -126,7 +126,7 @@
         /// <returns></returns>
         [HttpGet("export")]
         public async Task<FileStreamResult> ArchiveExcel(
-            [FromServices] RequestService service)
+            [FromServices] ExcelService service)
         {
             var result = await service.ArchiveExcel();
             return File(result, "application/xls", "Архивные заявки.xls");
