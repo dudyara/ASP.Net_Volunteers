@@ -147,8 +147,6 @@
         /// <param name="env">env</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<ErrorCodesMiddleware>();
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Volunteers API"); });
@@ -160,6 +158,8 @@
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseMiddleware<ErrorCodesMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
