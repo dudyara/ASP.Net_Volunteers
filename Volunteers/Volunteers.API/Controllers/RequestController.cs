@@ -46,8 +46,8 @@
         /// <param name="filter">Фильтр.</param>
         [Authorize]
         [HttpGet]
-        public async Task<ResultPart<TotalRequestDto>> Get(
-            [FromServices] RequestService service,
+        public async Task<ResultPart<RequestDto>> Get(
+            [FromServices] RequestService service, 
             [FromQuery] RequestFilterDto filter)
         {
             return await service.Get(filter);

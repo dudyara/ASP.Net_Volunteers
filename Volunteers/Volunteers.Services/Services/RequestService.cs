@@ -1,5 +1,4 @@
-﻿using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
+﻿
 namespace Volunteers.Services.Services
 {
     using System;
@@ -13,7 +12,6 @@ namespace Volunteers.Services.Services
     using Volunteers.DB;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
-    using Volunteers.Entities.Models;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
 
@@ -37,16 +35,19 @@ namespace Volunteers.Services.Services
         /// Возвращает список 
         /// </summary>
         /// <param name="filter">filter</param>
-        public async Task<ResultPart<TotalRequestDto>> Get(RequestFilterDto filter)
+        public async Task<ResultPart<RequestDto>> Get(RequestFilterDto filter)
         {
-            return await Repository.FromBuilder(_ => _
+            var result = await Repository.FromBuilder(_ => _
                 .Equals(x => x.RequestStatus, filter.Status)
-                .And.Equals(x => x.OrganizationId, filter.OrganizationId)
+                .And.Conditional(filter.OrganizationId != 0)
+                .Where(x => x.OrganizationId == filter.OrganizationId)
                 .And.Conditional(filter.Status == RequestStatus.Execution)
                 .Where(x => filter.Start <= x.Created && x.Created <= filter.End)
                 .And.Conditional(filter.Status == RequestStatus.Done)
                 .Where(x => filter.Start <= x.Deleted && x.Deleted <= filter.End))
-                .GetResultPartAsync<TotalRequestDto>(Mapper, filter.Skip, filter.Limit);
+                .GetResultPartAsync<RequestDto>(Mapper, filter.Skip, filter.Limit);
+               
+            return result;
         }
 
         /// <summary>
