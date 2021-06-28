@@ -42,21 +42,16 @@
         /// <summary>
         /// Получить пулл заявок по введенному статусу и id организации.
         /// </summary>
-        /// <param name="status">status</param>
-        /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
-        /// <param name="requestDto">requestDto</param>
+        /// <param name="filter">Фильтр.</param>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<TotalRequestDto>> Get(
-            [FromQuery] RequestStatus status,
-            [FromQuery] long id,
+        public async Task<ResultPart<TotalRequestDto>> Get(
             [FromServices] RequestService service,
-            [FromQuery] RequestGetWithFiltersDto requestDto)
+            [FromQuery] RequestFilterDto filter)
         {
-            var result = await service.Get(status, id, requestDto);
-            return result ?? NotFound();
-        } 
+            return await service.Get(filter);
+        }
 
         /// <summary>
         /// Получить количество заявок разных организаций

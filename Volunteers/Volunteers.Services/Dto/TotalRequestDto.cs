@@ -1,10 +1,11 @@
 ﻿namespace Volunteers.Services.Dto
 {
     using System.Collections.Generic;
+
     /// <summary>
     /// TotalRequestDto
     /// </summary>
-    public class TotalRequestDto : RequestGetWithFiltersDto
+    public class TotalRequestDto : RequestFilterDto
     {
         /// <summary>
         /// requestDtos
@@ -14,7 +15,6 @@
         /// <summary>
         /// Count
         /// </summary>
-
         public int Count { get; set; }
 
         /// <summary>
