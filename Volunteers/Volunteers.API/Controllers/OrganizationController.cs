@@ -1,4 +1,5 @@
-﻿namespace Volunteers.API.Controllers
+﻿
+namespace Volunteers.API.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -6,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
+    using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
 
@@ -31,7 +33,7 @@
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpGet]
         public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
@@ -59,7 +61,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = Roles.Organization)]
         [HttpPut]
         public async Task<ActionResult<OrganizationDto>> Update(
             [FromServices] OrganizationService service,
@@ -74,7 +76,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         public async Task<ActionResult<Organization>> Delete(
             [FromServices] OrganizationService service,

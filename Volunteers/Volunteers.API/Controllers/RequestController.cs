@@ -74,7 +74,7 @@
         /// <param name="reqDto">reqDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = Roles.Organization)]
         [HttpPut]
         public async Task<ActionResult<Request>> ChangeStatus(
             [FromBody] RequestChangeStatusDto reqDto,
@@ -90,7 +90,7 @@
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
         /// <returns></returns>
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = Roles.Organization)]
         [HttpPut("comment")]
         public async Task<ActionResult<Request>> CreateComment(
             [FromBody] RequestCreateComment commentDto,
@@ -106,7 +106,7 @@
         /// <param name="id">id</param>
         /// <param name="service">service</param>
         /// <returns></returns>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         public async Task<ActionResult<Request>> Delete(
             [FromQuery] long id,

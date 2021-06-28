@@ -6,7 +6,7 @@
     /// <summary>
     /// Тип активности, которой занимается организация
     /// </summary>
-    public class ActivityType : BaseEntity, ISoftDeletable
+    public class ActivityType : BaseEntity, ISoftDeletable 
     {
         /// <summary>
         /// Название активности
