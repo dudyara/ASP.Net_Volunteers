@@ -6,6 +6,7 @@
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
+    using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@
     /// <summary>
     /// AuthenticationService
     /// </summary>
-    public class AuthorizationService : BaseManagerService<RegistrationToken>
+    public class UserService : BaseManagerService<RegistrationToken>
     {
         /// <summary>
         /// BaseLink
@@ -29,7 +30,7 @@
         private readonly SignInManager<User> _signInManager;
         private readonly IDbRepository<Organization> _organizationRepo;
         private readonly IDbRepository<Role> _roleRepo;
-
+        private readonly IDbRepository<User> _userRepo;
         private readonly IConfiguration _configuration;
 
         /// <summary>
@@ -41,14 +42,16 @@
         /// <param name="organizationRepo">organizationRepo</param>
         /// <param name="configuration">configuration</param>
         /// <param name="roleRepo">roleRepo</param>
+        /// <param name="userRepo">userRepo</param>
         /// <param name="mapper">mapper</param>
         /// <param name="validator">validator</param>
-        public AuthorizationService(
+        public UserService(
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             IDbRepository<RegistrationToken> repository,
             IDbRepository<Organization> organizationRepo,
             IDbRepository<Role> roleRepo,
+            IDbRepository<User> userRepo,
             IConfiguration configuration,
             IVolunteerMapper mapper,
             IDtoValidator validator)
@@ -59,6 +62,7 @@
             _signInManager = signInManager;
             _configuration = configuration;
             _roleRepo = roleRepo;
+            _userRepo = userRepo;
             Mapper = mapper;
         }
 
@@ -83,7 +87,7 @@
             var registrationToken = new RegistrationToken();
 
             // создаем ссылку, где указываем токен и id организации, если он есть
-            var link = $"{_configuration.GetValue<string>("BaseLink")}Authorize/RegisterUser?";
+            var link = $"{_configuration.GetValue<string>("BaseLink")}?";
 
             if (organizationId.HasValue)
             {
@@ -124,6 +128,12 @@
         /// <param name="organizationId">id organization</param>
         public async Task<RegistrationDto> AddUserAsync(RegistrationDto dto, long? organizationId = null)
         {
+            var checkEmail = await _organizationRepo.Get(org => org.User.Email == dto.Email).FirstOrDefaultAsync();
+            if (!(checkEmail == null))
+            {
+                throw new Exception("Пользователь с такой почтой уже существует");
+            }
+
             var user = new User { Email = dto.Email, UserName = dto.Email };
             user.RoleId = 2;
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -180,7 +190,10 @@
                 var total_token = tokenHandler.WriteToken(token);
                 authenticateDto.Token = total_token;
                 authenticateDto.Role = roleUser.ToString();
-                var organizationResult = _organizationRepo.Get(t => t.UserId == user.Id).FirstOrDefault();
+                var organizationResult = await _organizationRepo
+                    .Get(t => t.UserId == user.Id)
+                    .ProjectTo<OrganizationDto>(Mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
                 if (organizationResult != null)
                 {
                     var organizationDto = Mapper.Map<OrganizationDto>(organizationResult);

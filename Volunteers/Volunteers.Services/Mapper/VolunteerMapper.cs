@@ -24,8 +24,10 @@ namespace Volunteers.Services.Mapper
                 cfg.CreateMap<Request, RequestDto>()
                     .ForMember(src => src.Owner, opt => opt.MapFrom(c => c.Organization.Name)); 
                 cfg.CreateMap<OrganizationDto, Organization>()
-                    .ForMember(d => d.PhoneNumbers, (options) => options.Ignore())
-                    .ForMember(d => d.ActivityTypes, (options) => options.Ignore());
+                    .ForMember(x => x.ActivityTypes, opt => opt.Ignore())
+                    .ForMember(x => x.PhoneNumbers, opt => opt.Ignore())
+                    .AfterMap(MapPhones)
+                    .AfterMap(MapActivityTypes);
                 cfg.CreateMap<Organization, OrganizationDto>()
                     .ForMember(x => x.ActivityTypes, opt => opt.MapFrom(x => x.ActivityTypes.Where(at => !at.IsDeleted)))
                     .ForMember(x => x.PhoneNumbers, opt => opt.MapFrom(x => x.PhoneNumbers.Select(pn => pn.PhoneNumber)));
@@ -55,6 +57,31 @@ namespace Volunteers.Services.Mapper
         public void Map<TSource, TDestination>(TSource source, TDestination destination)
         {
             Mapper.Map(source, destination);
+        }
+
+        private void MapPhones(OrganizationDto dto, Organization entity)
+        {
+            var entityPhoneNumbers = entity.PhoneNumbers.Select(x => x.PhoneNumber).ToList();
+            var newPhoneNumbers = dto.PhoneNumbers.Except(entityPhoneNumbers).ToList();
+            var deletedPhones = entityPhoneNumbers.Except(dto.PhoneNumbers).ToList();
+
+            newPhoneNumbers.ForEach(x => entity.PhoneNumbers.Add(new Phone { PhoneNumber = x, OrganizationId = entity.Id }));
+            deletedPhones.ForEach(deletedPhone =>
+                entity.PhoneNumbers.Remove(entity.PhoneNumbers.First(phone =>
+                    phone.PhoneNumber.Equals(deletedPhone))));
+        }
+
+        private void MapActivityTypes(OrganizationDto dto, Organization entity)
+        {
+            var entityActivities = entity.ActivityTypes.Select(x => x.Id).ToList();
+            var newActivities = dto.ActivityTypes.Select(x => x.Id).Except(entityActivities).ToList();
+            var deletedActivities = entityActivities.Except(dto.ActivityTypes.Select(x => x.Id)).ToList();
+
+            newActivities.ForEach(x => entity.ActivityTypeOrganizations
+                .Add(new ActivityTypeOrganization { ActivityTypeId = x, OrganizationId = entity.Id }));
+            deletedActivities.ForEach(deletedActivities =>
+                entity.ActivityTypeOrganizations.Remove(entity.ActivityTypeOrganizations.First(act =>
+                    act.ActivityTypeId.Equals(deletedActivities))));
         }
     }
 }

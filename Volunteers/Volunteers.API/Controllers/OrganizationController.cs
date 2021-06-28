@@ -30,6 +30,42 @@ namespace Volunteers.API.Controllers
         }
 
         /// <summary>
+        /// RegisterOrganization
+        /// </summary>
+        /// <param name="organizationDto">Dto</param>
+        /// <param name="organizationService">Service</param>
+        /// <param name="userId">orgId</param>
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
+            OrganizationDto organizationDto,
+            [FromServices] OrganizationService organizationService,
+            [FromQuery] long? userId)
+        {
+            if (userId.HasValue)
+            {
+                return await organizationService.Create(organizationDto, (long)userId);
+            }
+
+            return await organizationService.Create(organizationDto);
+        }
+
+        /// <summary>
+        /// ChangeLogo
+        /// </summary>
+        /// <param name="service">service</param>
+        /// <param name="logoDto">orgDto</param>
+        [Authorize(Roles = "Organization")]
+        [HttpPut("logo")]
+        public async Task<ActionResult<OrganizationDto>> ChangeLogo(
+            [FromServices] OrganizationService service,
+            [FromBody] OrganizationLogoDto logoDto)
+        {
+            var result = await service.ChangeLogo(logoDto);
+            return result ?? NotFound();
+        }
+
+        /// <summary>
         /// Получить список организаций.
         /// </summary>
         /// <param name="service">Сервис.</param>
@@ -38,8 +74,8 @@ namespace Volunteers.API.Controllers
         public async Task<ActionResult<List<OrganizationDto>>> Get(
             [FromServices] OrganizationService service)
         {
-            var result = await service.Get();
-            return result ?? NotFound();
+            var result = await service.GetAsync();
+            return result;
         }
 
         /// <summary>
@@ -68,7 +104,7 @@ namespace Volunteers.API.Controllers
             [FromBody] OrganizationDto orgDto)
         {
             var result = await service.Update(orgDto);
-            return result ?? NotFound();
+            return result;
         }
 
         /// <summary>
