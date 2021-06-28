@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        /// CreateRequest.
+        /// Создание заявки.
         /// </summary>
         /// <param name="request">request.</param>
         /// <param name="service">service.</param>
@@ -104,7 +104,7 @@
         }
 
         /// <summary>
-        /// CreateComment.
+        /// Создание комментария.
         /// </summary>
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
@@ -121,7 +121,7 @@
         }
 
         /// <summary>
-        /// Delete
+        /// Удаление заявки
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>

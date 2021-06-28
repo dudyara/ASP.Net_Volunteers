@@ -29,7 +29,7 @@
         }
 
         /// <summary>
-        /// Получение типов активностей компаний
+        /// Создание типов активностей компаний
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>      
@@ -60,7 +60,7 @@
         }
 
         /// <summary>
-        /// Update
+        /// Изменение типов активности компании
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
@@ -76,7 +76,7 @@
         }
 
         /// <summary>
-        /// Delete
+        /// Удаление типа активности
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>

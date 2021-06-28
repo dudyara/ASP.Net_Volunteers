@@ -20,7 +20,7 @@
         private readonly ILogger _logger;
 
         /// <summary>
-        /// OrganizationController
+        /// ctor.
         /// </summary>
         /// <param name="logger">logger</param>
         public OrganizationController(ILogger<OrganizationController> logger)
@@ -29,7 +29,7 @@
         }
 
         /// <summary>
-        /// RegisterOrganization
+        /// Создание новой организации
         /// </summary>
         /// <param name="organizationDto">Dto</param>
         /// <param name="organizationService">Service</param>
@@ -51,7 +51,7 @@
         }
 
         /// <summary>
-        /// ChangeLogo
+        /// Изменение логотипа компании
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="logoDto">orgDto</param>
@@ -96,7 +96,7 @@
         }
 
         /// <summary>
-        /// Update
+        /// Изменение организации
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
@@ -112,7 +112,7 @@
         }
 
         /// <summary>
-        /// Delete
+        /// Удаление организации
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>

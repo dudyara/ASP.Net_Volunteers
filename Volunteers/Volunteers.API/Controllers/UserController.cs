@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Test add new user
+        /// Создание нового пользователя
         /// </summary>
         /// <param name="dto">dto</param>
         /// <param name="token">token</param>
@@ -64,7 +64,7 @@
         }
 
         /// <summary>
-        /// GetToken
+        /// Получение токена
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
@@ -79,7 +79,7 @@
         }
 
         /// <summary>
-        /// Authenticate
+        /// Авторизация пользователя
         /// </summary>
         /// <param name="loginDto">loginDto</param>
         /// <param name="authenticationService">authenticationService</param>
