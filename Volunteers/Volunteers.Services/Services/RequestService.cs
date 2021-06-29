@@ -1,4 +1,5 @@
-﻿namespace Volunteers.Services.Services
+﻿
+namespace Volunteers.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -31,46 +32,22 @@
         }
 
         /// <summary>
-        /// GetPull.
+        /// Возвращает список 
         /// </summary>
-        /// <param name="status">status</param>
-        /// <param name="orgId">id</param>
-        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(RequestStatus status, long orgId)
+        /// <param name="filter">filter</param>
+        public async Task<ResultPart<RequestDto>> Get(RequestFilterDto filter)
         {
-            var requestsDto = new List<RequestDto>();
-            if ((status == 0) && (orgId == 0))
-            {
-                requestsDto = await Repository.Get().ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
-            }
-            else
-            if (status == 0)
-            {
-                requestsDto = await Repository
-                    .Get()
-                    .Where(r => r.OrganizationId == orgId)
-                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
-                    .ToListAsync();
-            }
-            else
-            if (orgId == 0)
-            {
-                requestsDto = await Repository
-                    .Get()
-                    .Where(r => r.RequestStatus == status)
-                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
-                    .ToListAsync();
-            }
-            else
-            {
-                requestsDto = await Repository
-                    .Get()
-                    .Where(r => r.OrganizationId == orgId)
-                    .Where(r => r.RequestStatus == status)
-                    .ProjectTo<RequestDto>(Mapper.ConfigurationProvider)
-                    .ToListAsync();
-            }
-
-            return requestsDto;
+            var result = await Repository.FromBuilder(_ => _
+                .Equals(x => x.RequestStatus, filter.Status)
+                .And.Conditional(filter.OrganizationId != 0)
+                .Where(x => x.OrganizationId == filter.OrganizationId)
+                .And.Conditional(filter.Status == RequestStatus.Execution)
+                .Where(x => filter.Start <= x.Created && x.Created <= filter.End)
+                .And.Conditional(filter.Status == RequestStatus.Done)
+                .Where(x => filter.Start <= x.Deleted && x.Deleted <= filter.End))
+                .GetResultPartAsync<RequestDto>(Mapper, filter.Skip, filter.Limit);
+               
+            return result;
         }
 
         /// <summary>
