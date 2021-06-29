@@ -59,7 +59,7 @@
             var fullCount = calculateFullCount ? (await projected.CountAsync()) : 0;
 
             if (skip > 0)
-                projected = projected.Skip(skip.Value);
+                projected = projected.Skip((int)(skip.Value * limit));
 
             if (limit > 0)
                 projected = projected.Take(limit.Value);
