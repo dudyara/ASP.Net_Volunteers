@@ -9,7 +9,6 @@
     using Linq.PredicateBuilder;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.Entities;
-    using Volunteers.Entities.Models;
 
     /// <inheritdoc />
     public class DbRepository<TEntity> : IDbRepository<TEntity>

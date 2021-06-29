@@ -1,9 +1,11 @@
-﻿namespace Volunteers.API.Controllers
+﻿
+namespace Volunteers.API.Controllers
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Volunteers.Entities;
+    using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
 
@@ -18,7 +20,8 @@
         /// Получение типов активностей компаний
         /// </summary>
         /// <param name="actDto">actDto</param>
-        /// <param name="service">service</param>
+        /// <param name="service">service</param>      
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         public async Task<ActionResult<ActivityTypeDto>> Create(
             [FromBody] ActivityTypeDto actDto,
@@ -47,6 +50,7 @@
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut]
         public async Task<ActionResult<ActivityTypeDto>> Update(
             [FromBody] ActivityTypeDto actDto,
@@ -61,6 +65,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         public async Task<ActionResult<ActivityType>> Delete(
             [FromQuery] long id,

@@ -3,17 +3,12 @@
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading;
     using System.Threading.Tasks;
-    using Entities;
-    using JetBrains.Annotations;
     using Linq.PredicateBuilder;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Query.Internal;
+    using Volunteers.Entities;
 
     /// <summary>
-    /// RepositoryQueryBuilderExtensionns
+    /// QueryBuilder расширения для репозитроиев
     /// </summary>
     public static class RepositoryQueryBuilderExtensions
     {
@@ -53,6 +48,24 @@
             _ = builder ?? throw new ArgumentException("Builder cannot be null.", nameof(builder));
 
             return query.Build(builder, options);
+        }
+
+        /// <summary>Обновляет объект</summary>
+        /// <param name="repository">Репозиторий</param>
+        /// <param name="entity">Обновляемый объект.</param>
+        /// <typeparam name="T">The type of elements of the query.</typeparam>
+        public static async Task<T> UpdateAsync<T>(
+            [NotNull] this IDbRepository<T> repository,
+            T entity)
+            where T : class, IEntity
+        {
+            if (entity is ISoftDeletable deletable)
+            {
+                deletable.Deleted = null;
+            }
+
+            await repository.SaveChangesAsync();
+            return entity;
         }
     }
 }

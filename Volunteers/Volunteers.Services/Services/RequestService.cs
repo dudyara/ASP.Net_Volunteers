@@ -1,4 +1,5 @@
-﻿namespace Volunteers.Services.Services
+﻿
+namespace Volunteers.Services.Services
 {
     using System;
     using System.Linq;
@@ -10,7 +11,6 @@
     using Volunteers.DB;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
-    using Volunteers.Entities.Models;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
 
@@ -31,61 +31,22 @@
         }
 
         /// <summary>
-        /// GetPull.
+        /// Возвращает список 
         /// </summary>
-        /// <param name="status">status</param>
-        /// <param name="orgId">id</param>
-        /// <param name="requestDto">requestDto</param>
-        public async Task<ActionResult<TotalRequestDto>> Get(RequestStatus status, long orgId, RequestGetWithFiltersDto requestDto)
+        /// <param name="filter">filter</param>
+        public async Task<ResultPart<RequestDto>> Get(RequestFilterDto filter)
         {
-            var totalRequestDto = new TotalRequestDto();
-            var filter_result = Enumerable.Empty<Request>().AsQueryable();
-
-            // Фильтруем по статусу
-            if (status.Equals(RequestStatus.Waiting))
-            {
-                filter_result = Repository.Get();
-            }
-            else if (status.Equals(RequestStatus.Execution))
-            {
-                if (requestDto.StartDate != null)
-                {
-                    filter_result = Repository.Get().Where(n => n.Created >= requestDto.StartDate && n.Created <= requestDto.FinalDate).Where(s => s.RequestStatus == status);
-                }
-                else
-                {
-                    filter_result = Repository.Get().Where(n => n.Created <= requestDto.FinalDate).Where(s => s.RequestStatus == status);
-                }
-            }
-            else if (status.Equals(RequestStatus.Done))
-            {
-                if (requestDto.StartDate != null)
-                {
-                    filter_result = Repository.Get().Where(n => n.Deleted >= requestDto.FinalDate && n.Deleted <= requestDto.FinalDate).Where(s => s.RequestStatus == status);
-                }
-                else
-                {
-                    filter_result = Repository.Get().Where(n => n.Deleted <= requestDto.FinalDate).Where(s => s.RequestStatus == status);
-                }
-            }
-
-            // фильтрация по организации
-            if (orgId != 0)
-            {
-                filter_result = filter_result.Where(p => p.OrganizationId == orgId);
-            }
-
-            // пагинация
-            var result = PagedList<Request>.ToPagedList(filter_result, requestDto.PageNumber, requestDto.PageSize);
-            totalRequestDto.Count = filter_result.Count();
-            totalRequestDto.FinalDate = requestDto.FinalDate;
-            totalRequestDto.StartDate = requestDto.StartDate;
-            totalRequestDto.HasNext = result.HasNext;
-            totalRequestDto.HasPrevious = result.HasPrevious;
-
-            totalRequestDto.RequestDtos = await filter_result.ProjectTo<RequestDto>(Mapper.ConfigurationProvider).ToListAsync();
-
-            return totalRequestDto;
+            var result = await Repository.FromBuilder(_ => _
+                .Equals(x => x.RequestStatus, filter.Status)
+                .And.Conditional(filter.OrganizationId != 0)
+                .Where(x => x.OrganizationId == filter.OrganizationId)
+                .And.Conditional(filter.Status == RequestStatus.Execution)
+                .Where(x => filter.Start <= x.Created && x.Created <= filter.End)
+                .And.Conditional(filter.Status == RequestStatus.Done)
+                .Where(x => filter.Start <= x.Deleted && x.Deleted <= filter.End))
+                .GetResultPartAsync<RequestDto>(Mapper, filter.Skip, filter.Limit);
+               
+            return result;
         }
 
         /// <summary>

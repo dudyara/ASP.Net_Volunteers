@@ -33,7 +33,7 @@
                     await context.Response.WriteAsync("Код не задан");
                     break;
                 case 400:
-                    await context.Response.WriteAsync("nigga");
+                    await context.Response.WriteAsync("Ошибка валидации запроса");
                     break;
                 case 401:
                     await context.Response.WriteAsync("Пользователь не аутентифицирован");
