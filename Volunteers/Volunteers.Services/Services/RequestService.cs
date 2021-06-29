@@ -45,6 +45,7 @@ namespace Volunteers.Services.Services
                 .Where(x => filter.Start <= x.Created && x.Created <= filter.End)
                 .And.Conditional(filter.Status == RequestStatus.Done)
                 .Where(x => filter.Start <= x.Completed && x.Completed <= filter.End))
+                .OrderBy(x => x.Created)
                 .GetResultPartAsync<RequestDto>(Mapper, filter.Skip, filter.Limit);
                
             return result;
