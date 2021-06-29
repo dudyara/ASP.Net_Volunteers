@@ -46,7 +46,7 @@
         [Authorize]
         [HttpGet]
         public async Task<ResultPart<RequestDto>> Get(
-            [FromServices] RequestService service, 
+            [FromServices] RequestService service,
             [FromQuery] RequestFilterDto filter)
         {
             return await service.Get(filter);
@@ -104,7 +104,6 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         public async Task<ActionResult<Request>> Delete(
@@ -118,18 +117,14 @@
         /// <summary>
         /// ArchiveExcel
         /// </summary>
-        /// <param name="status">status</param>
-        /// <param name="id">id</param>
         /// <param name="requestDto">requestDto</param>
         /// <param name="service">service</param>
         [HttpGet("export")]
         public async Task<FileStreamResult> ExportExcel(
-            [FromQuery] RequestStatus status,
-            [FromQuery] long id,
-            [FromQuery] RequestGetWithFiltersDto requestDto,
+            [FromQuery] RequestFilterDto requestDto,
             [FromServices] ExcelService service)
         {
-            var result = await service.ExportExcel(status, id, requestDto);
+            var result = await service.ExportExcel(requestDto);
             return File(result, "application/xls", "Архивные заявки.xls");
         }
     }
