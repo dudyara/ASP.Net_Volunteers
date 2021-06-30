@@ -16,11 +16,18 @@
         {
             RuleFor(p => p.Name)
                 .NotEmpty()
-                .Length(1, 100);
+                    .WithMessage("Поле не должно быть пустым")
+                .Must(NoSymbols)
+                    .WithMessage("Поле должно содержать только буквы")
+                .Length(1, 100)
+                    .WithMessage("Количество символов должно быть от 1 до 100");
             RuleFor(p => p.PhoneNumber)
                 .NotEmpty()
+                    .WithMessage("Поле не должно быть пустым")
                 .Length(10)
-                .Must(IsPhoneValid);
+                    .WithMessage("Количество символов должно быть 10")
+                .Must(IsPhoneValid)
+                    .WithMessage("Номер должен содержать только цифры");
         }
 
         /// <summary>
@@ -31,6 +38,17 @@
         private bool IsPhoneValid(string phone)
         {
             return phone[1..].All(c => char.IsDigit(c));
+        }
+
+        private bool NoSymbols(string name)
+        {
+            var isDigit = name.Any(c => char.IsDigit(c));
+            var isSymbol = name.Any(d => char.IsSymbol(d));
+            var isPunctuation = name.Any(d => char.IsPunctuation(d));
+            if (isDigit == true || isSymbol == true || isPunctuation == true)
+                return false;
+            else
+                return true;
         }
     }
 }
