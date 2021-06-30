@@ -117,14 +117,17 @@
         /// <summary>
         /// ArchiveExcel
         /// </summary>
-        /// <param name="requestDto">requestDto</param>
-        /// <param name="service">service</param>
+        /// <param name="filter">filter</param>
+        /// <param name="excelService">Excel сервис</param>
+        /// <param name="requestService">Сервис заявок</param>
         [HttpGet("export")]
         public async Task<FileStreamResult> ExportExcel(
-            [FromQuery] RequestFilterDto requestDto,
-            [FromServices] ExcelService service)
+            [FromQuery] RequestFilterDto filter,
+            [FromServices] ExcelService excelService,
+            [FromServices] RequestService requestService)
         {
-            var result = await service.ExportExcel(requestDto);
+            var requests = (await requestService.Get(filter)).Result;
+            var result = await excelService.Export(requests);
             return File(result, "application/xls", "Архивные заявки.xls");
         }
     }

@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.Services.Mapper
+﻿namespace Volunteers.Services.Mapper
 {
     using System.Collections.Generic;
     using System.Linq;

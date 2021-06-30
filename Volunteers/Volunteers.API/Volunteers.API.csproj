@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volunteers.DB\Volunteers.DB.csproj" />
-    <ProjectReference Include="..\Volunteers.Entities\Volunteers.Entities.csproj" />
     <ProjectReference Include="..\Volunteers.Services\Volunteers.Services.csproj" />
   </ItemGroup>
 
