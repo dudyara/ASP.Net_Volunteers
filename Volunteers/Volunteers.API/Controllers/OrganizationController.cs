@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.API.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,7 @@
         private readonly ILogger _logger;
 
         /// <summary>
-        /// OrganizationController
+        /// ctor.
         /// </summary>
         /// <param name="logger">logger</param>
         public OrganizationController(ILogger<OrganizationController> logger)
@@ -29,7 +30,7 @@
         }
 
         /// <summary>
-        /// RegisterOrganization
+        /// Создание новой организации
         /// </summary>
         /// <param name="organizationDto">Dto</param>
         /// <param name="organizationService">Service</param>
@@ -46,11 +47,12 @@
                 return await organizationService.Create(organizationDto, (long)userId);
             }
 
+            _logger.LogInformation("Зарегистрирована организация " + organizationDto.Name + " " + DateTime.UtcNow.ToLongTimeString());
             return await organizationService.Create(organizationDto);
         }
 
         /// <summary>
-        /// ChangeLogo
+        /// Изменение логотипа компании
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="logoDto">orgDto</param>
@@ -61,6 +63,7 @@
             [FromBody] OrganizationLogoDto logoDto)
         {
             var result = await service.ChangeLogo(logoDto);
+            _logger.LogInformation("Изменен логотип организации " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
@@ -74,6 +77,7 @@
             [FromServices] OrganizationService service)
         {
             var result = await service.GetAsync();
+            _logger.LogInformation("Получен список организаций " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -88,11 +92,12 @@
             [FromQuery] List<long> ids)
         {
             var result = await service.GetByIds(ids);
+            _logger.LogInformation("Получены организации по id " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
         /// <summary>
-        /// Update
+        /// Изменение организации
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="orgDto">orgDto</param>
@@ -103,11 +108,12 @@
             [FromBody] OrganizationDto orgDto)
         {
             var result = await service.Update(orgDto);
+            _logger.LogInformation("Организация обновлена " + orgDto.Name + " " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
         /// <summary>
-        /// Delete
+        /// Удаление организации
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
@@ -122,6 +128,7 @@
             [FromQuery] long id)
         {
             var result = await service.Delete(id, requestService, userService);
+            _logger.LogInformation("Организация удалена " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
     }

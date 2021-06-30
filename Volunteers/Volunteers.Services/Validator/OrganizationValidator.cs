@@ -16,30 +16,49 @@
         {
             RuleFor(p => p.Name)
                 .NotEmpty()
-                .Length(1, 200);
+                    .WithMessage("Поле не должно быть пустым")
+                .Length(1, 200)
+                    .WithMessage("Поле должно содержать от 1 до 200 символов");
             RuleFor(p => p.Manager)
                 .NotEmpty()
-                .Length(1, 100);
+                    .WithMessage("Поле не должно быть пустым")
+                .Must(NoSymbols)
+                    .WithMessage("Поле должно содержать только буквы")
+                .Length(1, 100)
+                    .WithMessage("Поле должно содержать от 1 до 100 символов");
             RuleFor(p => p.Description)
                 .NotEmpty()
-                .Length(1, 500);
+                    .WithMessage("Поле не должно быть пустым")
+                .Length(1, 500)
+                    .WithMessage("Поле должно содержать от 1 до 500 символов");
             RuleForEach(p => p.ActivityTypes)
-                .NotEmpty();
+                .NotEmpty()
+                    .WithMessage("Поле не должно быть пустым");
             RuleFor(p => p.Mail)
                 .NotEmpty()
-                .EmailAddress();
+                    .WithMessage("Поле не должно быть пустым")
+                .EmailAddress()
+                    .WithMessage("Неверный формат электронной почты");
             RuleForEach(p => p.PhoneNumbers)
                 .NotEmpty()
+                    .WithMessage("Поле не должно быть пустым")
                 .Length(10)
-                .Must(IsPhoneValid);
+                    .WithMessage("Поле должно содержать 10 символов")
+                .Must(IsPhoneValid)
+                    .WithMessage("Поле может содержать только цифры");
             RuleFor(p => p.WorkingHours)
                 .NotEmpty()
-                .Length(1, 100);
+                    .WithMessage("Поле не должно быть пустым")
+                .Length(1, 100)
+                    .WithMessage("Поле должно содержать от 1 до 100 символов");
             RuleFor(p => p.Address)
                 .NotEmpty()
-                .Length(1, 100);
+                    .WithMessage("Поле не должно быть пустым")
+                .Length(1, 100)
+                    .WithMessage("Поле должно содержать от 1 до 100 символов");
             RuleFor(p => p.Location)
-                .NotEmpty();
+                .NotEmpty()
+                    .WithMessage("Поле не должно быть пустым");
         }
 
         /// <summary>
@@ -50,6 +69,22 @@
         private bool IsPhoneValid(string phone)
         {
             return phone[1..].All(c => char.IsDigit(c));
+        }
+
+        /// <summary>
+        /// Проверка отсутствия символов
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <returns></returns>
+        private bool NoSymbols(string name)
+        {
+            var isDigit = name.Any(c => char.IsDigit(c));
+            var isSymbol = name.Any(d => char.IsSymbol(d));
+            var isPunctuation = name.Any(d => char.IsPunctuation(d));
+            if (isDigit == true || isSymbol == true || isPunctuation == true)
+                return false;
+            else
+                return true;
         }
     }
 }
