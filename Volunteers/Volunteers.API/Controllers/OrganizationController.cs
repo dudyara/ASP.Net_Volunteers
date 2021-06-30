@@ -126,7 +126,7 @@
             [FromServices] RequestService requestService,
             [FromServices] UserService userService, 
             [FromQuery] long id)
-        {
+        
             var result = await service.Delete(id, requestService, userService);
             _logger.LogInformation("Организация удалена " + DateTime.UtcNow.ToLongTimeString()); 
             return result ?? NotFound();
