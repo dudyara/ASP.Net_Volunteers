@@ -23,7 +23,6 @@
         /// InvokeAsync
         /// </summary>
         /// <param name="context">context</param>
-        /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
             await _next.Invoke(context);

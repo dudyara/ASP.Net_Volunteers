@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Threading.Tasks;
     using DB;
     using Entities;
     using FluentValidation;
@@ -14,6 +15,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
@@ -155,13 +157,24 @@
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseMiddleware<ErrorCodesMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMiddleware<ErrorCodesMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+            ILogger logger = loggerFactory.CreateLogger<Startup>();
+            app.Run(async (context) =>
+            {
+                await Task.Run(() => logger.LogInformation("Requested Path: {0}", context.Request.Path));
             });
         }
 

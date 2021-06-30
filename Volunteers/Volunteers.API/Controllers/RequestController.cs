@@ -1,10 +1,10 @@
 ﻿namespace Volunteers.API.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
@@ -17,8 +17,19 @@
     [ApiController]
     public class RequestController : Controller
     {
+        private readonly ILogger _logger;
+
         /// <summary>
-        /// CreateRequest.
+        /// ctor.
+        /// </summary>
+        /// <param name="logger">logger</param>
+        public RequestController(ILogger<RequestController> logger)
+        {
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// Создание заявки.
         /// </summary>
         /// <param name="request">request.</param>
         /// <param name="service">service.</param>
@@ -30,6 +41,7 @@
             try
             {
                 var result = await service.Create(request);
+                _logger.LogInformation("Создана заявка пользователя " + request.Name + " " + DateTime.UtcNow.ToLongTimeString());
                 return result ?? NotFound();
             }
             catch (Exception e)
@@ -49,7 +61,9 @@
             [FromServices] RequestService service,
             [FromQuery] RequestFilterDto filter)
         {
-            return await service.Get(filter);
+            var result = await service.Get(filter);
+            _logger.LogInformation("Получен список заявок " + DateTime.UtcNow.ToLongTimeString());
+            return result;
         }
 
         /// <summary>
@@ -64,6 +78,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.GetCount(id);
+            _logger.LogInformation("Получено количество заявок " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
 
@@ -72,7 +87,6 @@
         /// </summary>
         /// <param name="reqDto">reqDto</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [Authorize(Roles = Roles.Organization)]
         [HttpPut]
         public async Task<ActionResult<Request>> ChangeStatus(
@@ -80,15 +94,15 @@
             [FromServices] RequestService service)
         {
             var result = await service.ChangeStatus(reqDto);
+            _logger.LogInformation("Изменен статус заявки " + reqDto.RequestId + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
         /// <summary>
-        /// CreateComment.
+        /// Создание комментария.
         /// </summary>
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
-        /// <returns></returns>
         [Authorize(Roles = Roles.Organization)]
         [HttpPut("comment")]
         public async Task<ActionResult<Request>> CreateComment(
@@ -96,11 +110,12 @@
             [FromServices] RequestService service)
         {
             var result = await service.CreateComment(commentDto);
+            _logger.LogInformation("Изменен комментарий заявки " + commentDto.RequestId + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
         /// <summary>
-        /// Delete
+        /// Удаление заявки
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
@@ -111,6 +126,7 @@
             [FromServices] RequestService service)
         {
             var result = await service.Delete(id);
+            _logger.LogInformation("Удалена заявка " + id + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
 
