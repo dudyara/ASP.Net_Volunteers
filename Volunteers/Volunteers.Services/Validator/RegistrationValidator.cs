@@ -16,12 +16,16 @@
         {
             RuleFor(p => p.Email)
                 .NotEmpty()
-                .EmailAddress();
+                    .WithMessage("Поле не должно быть пустым")
+                .EmailAddress()
+                    .WithMessage("Неверный формат электронной почты");
             RuleFor(p => p.Password)
                 .NotEmpty()
+                    .WithMessage("Поле не должно быть пустым")
                 .MinimumLength(6)
+                    .WithMessage("Поле должно содержать как минимум 6 символов")
                 .Must(IsPasswordValid)
-                    .WithMessage("Пароль должен содержать символы верхнего и нижнего регистров, цифры и не алфавитно-цифровые символы");
+                    .WithMessage("Пароль должен содержать строчные и заглавные буквы, цифры и символы");
         }
 
         private bool IsPasswordValid(string passwd)

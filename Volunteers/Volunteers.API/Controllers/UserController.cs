@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.API.Controllers
 {
+    using System;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@
         }
 
         /// <summary>
-        /// Test add new user
+        /// Создание нового пользователя
         /// </summary>
         /// <param name="dto">dto</param>
         /// <param name="token">token</param>
@@ -59,11 +60,12 @@
                 return Ok(result);
             }
 
+            _logger.LogInformation("Зарегистрирован пользователь " + dto.Email + " " + DateTime.UtcNow.ToLongTimeString());
             return BadRequest();
         }
 
         /// <summary>
-        /// GetToken
+        /// Получение токена
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
@@ -74,11 +76,12 @@
             long? id)
         {
             var link = await service.GenerateLink(id);
+            _logger.LogInformation("Выдан токен " + DateTime.UtcNow.ToLongTimeString());
             return link;
         }
 
         /// <summary>
-        /// Authenticate
+        /// Авторизация пользователя
         /// </summary>
         /// <param name="loginDto">loginDto</param>
         /// <param name="authenticationService">authenticationService</param>
@@ -93,6 +96,7 @@
             if (token == null)
                 return Unauthorized();
 
+            _logger.LogInformation("Авторизован пользователь " + loginDto.Email + " " + DateTime.UtcNow.ToLongTimeString());
             return Ok(token);
         }
     }

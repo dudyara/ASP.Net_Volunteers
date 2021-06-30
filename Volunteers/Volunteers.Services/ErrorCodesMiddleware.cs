@@ -23,7 +23,6 @@
         /// InvokeAsync
         /// </summary>
         /// <param name="context">context</param>
-        /// <returns></returns>
         public async Task InvokeAsync(HttpContext context)
         {
             await _next.Invoke(context);
@@ -33,7 +32,7 @@
                     await context.Response.WriteAsync("Код не задан");
                     break;
                 case 400:
-                    await context.Response.WriteAsync("nigga");
+                    await context.Response.WriteAsync("Ошибка валидации запроса");
                     break;
                 case 401:
                     await context.Response.WriteAsync("Пользователь не аутентифицирован");
