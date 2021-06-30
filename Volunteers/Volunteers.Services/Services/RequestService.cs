@@ -19,6 +19,7 @@
     /// </summary>
     public class RequestService : BaseService<Request, RequestDto>
     {
+
         /// <summary>
         /// Метод заявок.
         /// </summary>
