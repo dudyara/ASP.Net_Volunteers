@@ -62,6 +62,11 @@
                 deletable.Deleted = DateTime.Now;
             }
 
+            else
+            {
+                _context.Set<TEntity>().Remove(activeEntity);
+            }
+
             await _context.SaveChangesAsync();
         }
 

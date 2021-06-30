@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
     using Volunteers.Entities;
+    using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
 
@@ -18,18 +19,27 @@
     /// </summary>
     public class OrganizationService : BaseService<Organization, OrganizationDto>
     {
+
+        private readonly IDbRepository<Request> _requestRepo;
+        private readonly IDbRepository<User> _userRepo;
         /// <summary>
         /// OrganizationService.
         /// </summary>
         /// <param name="mapper">mapper.</param>
         /// <param name="repository">repository.</param>
         /// <param name="validator">validator</param>
+        /// <param name="requestRepo">requestRepo</param>
+        /// <param name="userRepo">userRepo</param>
         public OrganizationService(
             IVolunteerMapper mapper,
             IDbRepository<Organization> repository,
-            IDtoValidator validator)
+            IDtoValidator validator, 
+            IDbRepository<Request> requestRepo, 
+            IDbRepository<User> userRepo)
             : base(mapper, repository, validator)
         {
+            _requestRepo = requestRepo;
+            _userRepo = userRepo;
         }
 
         /// <summary>
@@ -97,13 +107,35 @@
         /// Delete
         /// </summary>
         /// <param name="id">id</param>
+        /// <param name="requestService">requestService</param>
+        /// <param name="userService">userService</param>
         /// <returns></returns>
-        public async Task<ActionResult<Organization>> Delete(long id)
+        public async Task<ActionResult<Organization>> Delete(long id, [FromServices] RequestService requestService, [FromServices] UserService userService)
         {
+            // находим заявки компании
+            var allRequests = await _requestRepo.Get().Where(x => x.OrganizationId == id)
+                .Where(n => n.RequestStatus == RequestStatus.Execution).ToListAsync();
+
+            // меняес статус
+            foreach (var request in allRequests)
+            {
+                await requestService.ChangeStatus(new RequestChangeStatusDto()
+                {
+                    RequestId = request.Id,
+                    RequestStatus = RequestStatus.Waiting
+                });
+            }
+
+            // удаляем компанию
             var org = await Repository
                 .Get()
                 .FirstOrDefaultAsync(x => x.Id == id);
+            org.UserId = null;
+
+            // получает пользователя по компании
+            var userId = await Repository.Get().Where(x => x.Id == id).Select(t => t.UserId).FirstOrDefaultAsync(); 
             await DeleteAsync(id);
+            _ = _userRepo.DeleteAsync((long)userId); 
             return org;
         }
 
