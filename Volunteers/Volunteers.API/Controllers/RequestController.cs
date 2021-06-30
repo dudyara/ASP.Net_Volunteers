@@ -1,7 +1,6 @@
 ﻿namespace Volunteers.API.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -62,9 +61,9 @@
             [FromServices] RequestService service, 
             [FromQuery] RequestFilterDto filter)
         {
-            var result = await service.Get(status, id);
+            var result = await service.Get(filter);
             _logger.LogInformation("Получен список заявок " + DateTime.UtcNow.ToLongTimeString());
-            return result ?? NotFound();
+            return result;
         }
 
         /// <summary>
