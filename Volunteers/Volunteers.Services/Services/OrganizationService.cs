@@ -1,4 +1,5 @@
-﻿namespace Volunteers.Services.Services
+﻿
+namespace Volunteers.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +7,7 @@
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
     using FluentValidation;
+    using Microsoft.AspNetCore.Http.Features;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Volunteers.DB;
@@ -20,6 +22,7 @@
     public class OrganizationService : BaseService<Organization, OrganizationDto>
     {
 
+        private readonly RequestService _requestService;
         private readonly IDbRepository<Request> _requestRepo;
         private readonly IDbRepository<User> _userRepo;
         /// <summary>
@@ -30,16 +33,19 @@
         /// <param name="validator">validator</param>
         /// <param name="requestRepo">requestRepo</param>
         /// <param name="userRepo">userRepo</param>
+        /// <param name="requestService">requsetService</param>
         public OrganizationService(
             IVolunteerMapper mapper,
             IDbRepository<Organization> repository,
             IDtoValidator validator, 
             IDbRepository<Request> requestRepo, 
-            IDbRepository<User> userRepo)
+            IDbRepository<User> userRepo,
+            [FromServices] RequestService requestService)
             : base(mapper, repository, validator)
         {
             _requestRepo = requestRepo;
             _userRepo = userRepo;
+            _requestService = requestService;
         }
 
         /// <summary>
@@ -110,7 +116,7 @@
         /// <param name="requestService">requestService</param>
         /// <param name="userService">userService</param>
         /// <returns></returns>
-        public async Task<ActionResult<Organization>> Delete(long id, [FromServices] RequestService requestService, [FromServices] UserService userService)
+        public async Task<ActionResult<Organization>> Delete(long id)
         {
             // находим заявки компании
             var allRequests = await _requestRepo.Get().Where(x => x.OrganizationId == id)
@@ -119,7 +125,7 @@
             // меняес статус
             foreach (var request in allRequests)
             {
-                await requestService.ChangeStatus(new RequestChangeStatusDto()
+                await _requestService.ChangeStatus(new RequestChangeStatusDto()
                 {
                     RequestId = request.Id,
                     RequestStatus = RequestStatus.Waiting
@@ -135,7 +141,7 @@
             // получает пользователя по компании
             var userId = await Repository.Get().Where(x => x.Id == id).Select(t => t.UserId).FirstOrDefaultAsync(); 
             await DeleteAsync(id);
-            _ = _userRepo.DeleteAsync((long)userId); 
+            await _userRepo.DeleteAsync((long)userId); 
             return org;
         }
 

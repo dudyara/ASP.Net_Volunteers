@@ -189,7 +189,7 @@
                         new Claim(ClaimTypes.Email, email),
                         new Claim(ClaimTypes.Role, roleUser.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddHours(5),
+                    Expires = DateTime.UtcNow.AddHours(24), 
                     SigningCredentials = new SigningCredentials(
                         new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha512Signature)
