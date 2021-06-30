@@ -1,4 +1,6 @@
-﻿namespace Volunteers.API
+﻿using System.Threading.Tasks;
+
+namespace Volunteers.API
 {
     using System;
     using System.Collections.Generic;
@@ -175,7 +177,7 @@
             ILogger logger = loggerFactory.CreateLogger<Startup>();
             app.Run(async (context) =>
             {
-                logger.LogInformation("Requested Path: {0}", context.Request.Path);
+                await Task.Run(() => logger.LogInformation("Requested Path: {0}", context.Request.Path));
             });
         }
 
