@@ -111,13 +111,17 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">id</param>
+        /// <param name="requestService">requestService</param>
+        /// <param name="userService">userService</param>
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         public async Task<ActionResult<Organization>> Delete(
             [FromServices] OrganizationService service,
+            [FromServices] RequestService requestService,
+            [FromServices] UserService userService, 
             [FromQuery] long id)
         {
-            var result = await service.Delete(id);
+            var result = await service.Delete(id, requestService, userService);
             return result ?? NotFound();
         }
     }
