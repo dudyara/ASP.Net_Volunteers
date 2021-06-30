@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
 
@@ -68,7 +69,8 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
-        [HttpGet]
+        [HttpGet("GetToken")]
+        [Authorize(Roles = Roles.Admin)] 
         public async Task<ActionResult<string>> GetToken(
             [FromServices] UserService service,
             long? id)

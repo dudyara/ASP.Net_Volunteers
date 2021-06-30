@@ -54,15 +54,13 @@
         /// <summary>
         /// Получить пулл заявок по введенному статусу и id организации.
         /// </summary>
-        /// <param name="status">status</param>
-        /// <param name="id">id</param>
         /// <param name="service">Сервис.</param>
+        /// <param name="filter">Фильтр.</param>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RequestDto>>> Get(
-            [FromQuery] RequestStatus status,
-            [FromQuery] long id,
-            [FromServices] RequestService service)
+        public async Task<ResultPart<RequestDto>> Get(
+            [FromServices] RequestService service, 
+            [FromQuery] RequestFilterDto filter)
         {
             var result = await service.Get(status, id);
             _logger.LogInformation("Получен список заявок " + DateTime.UtcNow.ToLongTimeString());
@@ -90,7 +88,7 @@
         /// </summary>
         /// <param name="reqDto">reqDto</param>
         /// <param name="service">service</param>
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = Roles.Organization)]
         [HttpPut]
         public async Task<ActionResult<Request>> ChangeStatus(
             [FromBody] RequestChangeStatusDto reqDto,
@@ -106,7 +104,7 @@
         /// </summary>
         /// <param name="commentDto">commentDto</param>
         /// <param name="service">service</param>
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = Roles.Organization)]
         [HttpPut("comment")]
         public async Task<ActionResult<Request>> CreateComment(
             [FromBody] RequestCreateComment commentDto,
@@ -122,7 +120,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         public async Task<ActionResult<Request>> Delete(
             [FromQuery] long id,

@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
+    using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
 
@@ -33,7 +34,7 @@
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>      
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         public async Task<ActionResult<ActivityTypeDto>> Create(
             [FromBody] ActivityTypeDto actDto,
@@ -64,7 +65,7 @@
         /// </summary>
         /// <param name="actDto">actDto</param>
         /// <param name="service">service</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut]
         public async Task<ActionResult<ActivityTypeDto>> Update(
             [FromBody] ActivityTypeDto actDto,
@@ -80,7 +81,7 @@
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="service">service</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete]
         public async Task<ActionResult<ActivityType>> Delete(
             [FromQuery] long id,
