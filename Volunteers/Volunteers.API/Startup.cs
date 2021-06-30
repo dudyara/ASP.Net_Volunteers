@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-
-namespace Volunteers.API
+﻿namespace Volunteers.API
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Threading.Tasks;
     using DB;
     using Entities;
     using FluentValidation;
@@ -12,7 +11,6 @@ namespace Volunteers.API
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
