@@ -75,7 +75,17 @@
         /// CheckRegistrationToken
         /// </summary>
         /// <param name="token">token</param>
-        public async Task<bool> CheckRegistrationToken(string token) => (await Repository.Get(s => s.Token == token).FirstOrDefaultAsync()) != null;
+        public async Task<bool> CheckRegistrationToken(string token)
+        {
+            var result = await Repository.Get(s => s.Token == token).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                await Repository.DeleteAsync(result);
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// GetToken
