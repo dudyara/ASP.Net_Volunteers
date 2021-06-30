@@ -134,9 +134,9 @@
                 throw new Exception("Пользователь с такой почтой уже существует");
             }
 
-            var user = new User { Email = dto.Email, UserName = dto.Email };
+            var user = new User { Email = dto.Email, UserName = dto.Email };  
             user.RoleId = 2;
-            var result = await _userManager.CreateAsync(user, dto.Password);
+            var result = await _userManager.CreateAsync(user, dto.Password);  
 
             if (organizationId.HasValue)
             {
@@ -179,7 +179,7 @@
                         new Claim(ClaimTypes.Email, email),
                         new Claim(ClaimTypes.Role, roleUser.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddHours(1),
+                    Expires = DateTime.UtcNow.AddHours(5),
                     SigningCredentials = new SigningCredentials(
                         new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha512Signature)
