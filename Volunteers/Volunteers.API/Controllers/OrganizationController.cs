@@ -38,7 +38,7 @@
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<OrganizationDto>> RegisterOrganization(
-            OrganizationDto organizationDto,
+            [FromBody] OrganizationDto organizationDto,
             [FromServices] OrganizationService organizationService,
             [FromQuery] long? userId)
         {
