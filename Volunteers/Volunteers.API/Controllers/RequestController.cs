@@ -1,6 +1,9 @@
-﻿namespace Volunteers.API.Controllers
+﻿
+namespace Volunteers.API.Controllers
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -162,12 +165,13 @@
             [FromServices] RequestService requestService)
         { 
             var requests = (await requestService.Get(filter)).Result;
-            var filePath = @"C:\Users\Ruslan\Desktop\Volunteers_Filter\Volunteers\Volunteers.DB\DATAExcel.xls";
-            excelMakeService.Export(requests, filePath);
+            var buildDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
+            var filePath = buildDir + @"\DATAExcel.xlsx";
+            excelMakeService.Export(requests, filePath);
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            string fileName = "DATAExcel.xls";
-            return PhysicalFile(filePath, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            string fileName = $"Заявки от {filter.Start}.xls";
+            return PhysicalFile(filePath, fileType, fileName); 
         }
     }
 }
