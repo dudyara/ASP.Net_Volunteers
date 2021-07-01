@@ -146,5 +146,28 @@
             var result = await excelService.Export(requests);
             return File(result, "application/xls", "Архивные заявки.xls");
         }
+
+        /// <summary>
+        /// GetFile
+        /// </summary>
+        /// <param name="filter">filter</param>
+        /// <param name="excelMakeService">excelMakeService</param>
+        /// <param name="requestService">requestService</param>
+        /// <returns></returns>
+        [HttpGet("GetFilePlease")]
+
+        public async Task<FileResult> GetFilesAsync(
+            [FromQuery] RequestFilterDto filter,
+            [FromServices] ExcelMakeService excelMakeService,
+            [FromServices] RequestService requestService)
+        { 
+            var requests = (await requestService.Get(filter)).Result;
+            var filePath = @"C:\Users\Ruslan\Desktop\Volunteers_Filter\Volunteers\Volunteers.DB\DATAExcel.xls";
+            excelMakeService.Export(requests, filePath);
+
+            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = "DATAExcel.xls";
+            return PhysicalFile(filePath, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
     }
 }
