@@ -1,5 +1,6 @@
 ﻿namespace Volunteers.Services.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using NPOI.HSSF.UserModel;
@@ -49,16 +50,21 @@
                 cell4.SetCellValue(requests[i - 1].Owner);
 
                 var cell5 = row.CreateCell(5);
-                cell5.SetCellValue(requests[i - 1].Created);
+                cell5.SetCellValue(Convert.ToDateTime(requests[i - 1].Created).ToString("yy-MM-dd HH:mm:ss"));
 
                 var cell6 = row.CreateCell(6);
-                cell6.SetCellValue(requests[i - 1].Completed);
+                cell6.SetCellValue(Convert.ToDateTime(requests[i - 1].Completed).ToString("yy-MM-dd HH:mm:ss"));
             }
 
-            using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-            {
-                workbook.Write(stream);
-            }
+            sheet.AutoSizeColumn(0);
+            sheet.AutoSizeColumn(1);
+            sheet.AutoSizeColumn(2);
+            sheet.AutoSizeColumn(3);
+            sheet.AutoSizeColumn(4);
+            sheet.AutoSizeColumn(5);
+
+            using FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            workbook.Write(stream);
         }
 
         /// <summary>
