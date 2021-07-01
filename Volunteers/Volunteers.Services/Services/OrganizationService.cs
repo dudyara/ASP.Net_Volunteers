@@ -96,8 +96,7 @@
         public async Task<ActionResult<List<OrganizationDto>>> GetByIds(List<long> ids)
         {
             var organizationDtos = await Repository
-                .Get()
-                .Where(x => x.ActivityTypes.Any(at => ids.Contains(at.Id)))
+                .Get(x => x.ActivityTypes.Any(at => ids.Contains(at.Id)))
                 .ProjectTo<OrganizationDto>(Mapper.ConfigurationProvider)
                 .ToListAsync();
             return organizationDtos;
@@ -127,12 +126,14 @@
 
             // удаляем организацию
             var org = await Repository
-                .Get()
-                .FirstOrDefaultAsync(x => x.Id == organizationId);
+                .Get(x => x.Id == organizationId)
+                .FirstOrDefaultAsync();
             org.UserId = null;
 
             // получает пользователя по компании
-            var userId = await Repository.Get().Where(x => x.Id == organizationId).Select(t => t.UserId).FirstOrDefaultAsync();
+            var userId = await Repository.Get(x => x.Id == organizationId)
+                .Select(t => t.UserId)
+                .FirstOrDefaultAsync();
             await DeleteAsync(organizationId);
             await _userRepo.DeleteAsync((long)userId);
             return org;

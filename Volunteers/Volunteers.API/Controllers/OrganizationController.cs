@@ -124,7 +124,7 @@
             [FromQuery] long id)
         {
             var result = await service.Delete(id);
-            _logger.LogInformation("Организация удалена " + DateTime.UtcNow.ToLongTimeString()); 
+            _logger.LogInformation("Организация удалена " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
         }
     }
