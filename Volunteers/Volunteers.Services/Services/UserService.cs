@@ -8,7 +8,6 @@
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
@@ -16,7 +15,6 @@
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
-    using Volunteers.Services.Validator;
 
     /// <summary>
     /// AuthenticationService

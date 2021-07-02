@@ -25,7 +25,7 @@
 
             using (var scope = host.Services.CreateScope())
             {
-                var services = scope.ServiceProvider;
+                var services = scope.ServiceProvider;   
                 try
                 {
                     var userManager = services.GetRequiredService<UserManager<User>>();
@@ -35,7 +35,7 @@
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while seeding the database.");
+                    logger.LogError(ex, "An error occurred while seeding the database.");   
                 }
             }
 

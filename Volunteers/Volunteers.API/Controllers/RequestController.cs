@@ -1,6 +1,9 @@
-﻿namespace Volunteers.API.Controllers
+﻿
+namespace Volunteers.API.Controllers
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -34,7 +37,7 @@
         /// <param name="request">request.</param>
         /// <param name="service">service.</param>
         [HttpPost]
-        public async Task<ActionResult<Request>> Create( 
+        public async Task<ActionResult<Request>> Create(
             [FromBody] RequestCreateDto request,
             [FromServices] RequestService service)
         {
@@ -58,7 +61,7 @@
         [Authorize]
         [HttpGet]
         public async Task<ResultPart<RequestDto>> Get(
-            [FromServices] RequestService service, 
+            [FromServices] RequestService service,
             [FromQuery] RequestFilterDto filter)
         {
             var result = await service.Get(filter);
@@ -128,6 +131,30 @@
             var result = await service.Delete(id);
             _logger.LogInformation("Удалена заявка " + id + " " + DateTime.UtcNow.ToLongTimeString());
             return result ?? NotFound();
+        }
+
+        /// <summary>
+        /// GetFile
+        /// </summary>
+        /// <param name="filter">filter</param>
+        /// <param name="excelMakeService">excelMakeService</param>
+        /// <param name="requestService">requestService</param>
+        /// <returns></returns>
+        [HttpGet("GetFilePlease")]
+
+        public async Task<FileResult> GetFilesAsync(
+            [FromQuery] RequestFilterDto filter,
+            [FromServices] ExcelMakeService excelMakeService,
+            [FromServices] RequestService requestService)
+        { 
+            var requests = (await requestService.Get(filter)).Result;
+            var buildDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var filePath = buildDir + @"\DATAExcel.xlsx";
+            excelMakeService.Export(requests, filePath);
+            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            string fileName = $"Заявки от {filter.Start}.xls";
+            return PhysicalFile(filePath, fileType, fileName); 
         }
     }
 }
