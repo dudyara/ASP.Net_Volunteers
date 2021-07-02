@@ -134,23 +134,6 @@ namespace Volunteers.API.Controllers
         }
 
         /// <summary>
-        /// ArchiveExcel
-        /// </summary>
-        /// <param name="filter">filter</param>
-        /// <param name="excelService">Excel сервис</param>
-        /// <param name="requestService">Сервис заявок</param>
-        [HttpGet("export")]
-        public async Task<FileStreamResult> ExportExcel(
-            [FromQuery] RequestFilterDto filter,
-            [FromServices] ExcelService excelService,
-            [FromServices] RequestService requestService)
-        {
-            var requests = (await requestService.Get(filter)).Result;
-            var result = await excelService.Export(requests);
-            return File(result, "application/xls", "Архивные заявки.xls");
-        }
-
-        /// <summary>
         /// GetFile
         /// </summary>
         /// <param name="filter">filter</param>

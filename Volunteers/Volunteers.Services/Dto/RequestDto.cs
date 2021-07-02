@@ -13,7 +13,7 @@
         /// <summary>
         /// Дата и время заявки.
         /// </summary>
-        public string Completed { get; set; } = null;
+        public string Completed { get; set; } = null;   
 
         /// <summary>
         /// ФИО Клиента.
