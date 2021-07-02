@@ -130,6 +130,9 @@ namespace Volunteers.DB.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
