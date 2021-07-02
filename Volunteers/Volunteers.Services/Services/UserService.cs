@@ -77,9 +77,12 @@
         /// <param name="token">token</param>
         public async Task<bool> CheckRegistrationToken(string token)
         {
-            var result = await Repository.Get(s => s.Token == token).FirstOrDefaultAsync();
+            var result = await Repository.GetAll(s => s.Token == token).FirstOrDefaultAsync();
             if (result != null)
             {
+                var organization = await _organizationRepo.Get(x => x.Id == result.Id).FirstOrDefaultAsync();
+                organization.RegistrationTokenId = null;
+                await _organizationRepo.SaveChangesAsync();
                 await Repository.DeleteAsync(result);
                 return true;
             }

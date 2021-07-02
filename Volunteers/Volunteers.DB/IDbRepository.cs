@@ -23,6 +23,12 @@
         /// <summary>
         /// Get
         /// </summary>
+        /// <param name="selector">selector</param>
+        IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> selector);
+
+        /// <summary>
+        /// Get
+        /// </summary>
         IQueryable<TEntity> Get();
 
         /// <summary>

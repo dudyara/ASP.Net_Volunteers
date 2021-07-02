@@ -5,7 +5,7 @@
     /// <summary>
     /// RegistrationToken
     /// </summary>
-    public class RegistrationToken : BaseEntity, ISoftDeletable
+    public class RegistrationToken : BaseEntity
     {
         /// <summary>
         /// Token
@@ -21,12 +21,6 @@
         /// Organization
         /// </summary>
         public Organization Organization { get; set; }
-
-        /// <inheritdoc/>
-        public bool IsDeleted { get; set; }
-
-        /// <inheritdoc/>
-        public DateTime? Deleted { get; set; }
 
         /// <summary>
         /// GenerateToken

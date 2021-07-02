@@ -38,6 +38,12 @@
         }
 
         /// <inheritdoc />
+        public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> selector)
+        {
+            return _context.Set<TEntity>().Where(selector).AsQueryable();
+        }
+
+        /// <inheritdoc />
         public async Task<long> AddAsync(TEntity newEntity)
         {
             var entity = await _context.Set<TEntity>().AddAsync(newEntity);
@@ -61,7 +67,6 @@
                 deletable.IsDeleted = true;
                 deletable.Deleted = DateTime.Now;
             }
-
             else
             {
                 _context.Set<TEntity>().Remove(activeEntity);
@@ -77,6 +82,10 @@
             {
                 deletable.IsDeleted = true;
                 deletable.Deleted = DateTime.Now;
+            }
+            else
+            {
+                _context.Set<TEntity>().Remove(activeEntity);
             }
 
             await _context.SaveChangesAsync();
