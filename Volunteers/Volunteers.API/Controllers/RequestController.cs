@@ -153,7 +153,12 @@ namespace Volunteers.API.Controllers
             var filePath = buildDir + @"\DATAExcel.xlsx";
             excelMakeService.Export(requests, filePath);
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            string fileName = $"Заявки от {filter.Start}.xls";
+            string fileName = "Заявки.xls";
+            if (filter.Start != DateTime.MinValue)
+            {
+                fileName = $"Заявки от {filter.Start}.xls";
+            }
+                
             return PhysicalFile(filePath, fileType, fileName); 
         }
     }
