@@ -64,7 +64,7 @@
             return BadRequest();
         }
 
-        /// <summary>
+        /// <summary> 
         /// Получение токена
         /// </summary>
         /// <param name="service">service</param>
