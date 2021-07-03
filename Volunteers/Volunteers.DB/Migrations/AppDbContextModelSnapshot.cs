@@ -242,14 +242,8 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<DateTime>("ExpireTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Token")
                         .HasColumnType("text");
