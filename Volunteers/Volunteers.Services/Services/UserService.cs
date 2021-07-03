@@ -226,7 +226,6 @@
         /// Delete
         /// </summary>
         /// <param name="id">id пользователей</param>
-        /// <returns></returns>
         public void Delete(long id)
         {
             Repository.DeleteAsync(id);
