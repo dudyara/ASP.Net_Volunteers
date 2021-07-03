@@ -9,5 +9,10 @@
         /// Название вида активности
         /// </summary>
         public string TypeName { get; set; }
+
+        /// <summary>
+        /// Картинка
+        /// </summary>
+        public string Image { get; set; }
     }
 }

@@ -62,7 +62,7 @@
             modelBuilder.Entity<Request>()
                 .Property(b => b.IsDeleted)
                 .HasDefaultValue(false);
-               
+
             modelBuilder.Entity<Organization>()
                 .Property(b => b.IsDeleted)
                 .HasDefaultValue(false);
