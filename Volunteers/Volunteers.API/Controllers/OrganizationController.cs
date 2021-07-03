@@ -56,7 +56,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="logoDto">orgDto</param>
-        [Authorize(Roles = "Organization")]
+        [Authorize(Roles = Roles.Organization)]
         [HttpPut("logo")]
         public async Task<ActionResult<OrganizationDto>> ChangeLogo(
             [FromServices] OrganizationService service,

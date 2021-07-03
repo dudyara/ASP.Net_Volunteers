@@ -140,7 +140,7 @@ namespace Volunteers.API.Controllers
         /// <param name="excelMakeService">excelMakeService</param>
         /// <param name="requestService">requestService</param>
         /// <returns></returns>
-        [HttpGet("GetFilePlease")]
+        [HttpGet("getFile")]
 
         public async Task<FileResult> GetFilesAsync(
             [FromQuery] RequestFilterDto filter,
