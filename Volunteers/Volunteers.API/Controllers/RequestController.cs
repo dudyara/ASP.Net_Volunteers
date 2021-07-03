@@ -1,5 +1,4 @@
-﻿
-namespace Volunteers.API.Controllers
+﻿namespace Volunteers.API.Controllers
 {
     using System;
     using System.IO;
@@ -134,7 +133,7 @@ namespace Volunteers.API.Controllers
         }
 
         /// <summary>
-        /// GetFile
+        /// Получение экселя
         /// </summary>
         /// <param name="filter">filter</param>
         /// <param name="excelMakeService">excelMakeService</param>

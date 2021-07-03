@@ -69,7 +69,7 @@
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
-        [HttpGet("GetToken")]
+        [HttpGet("tokenGet")]
         [Authorize(Roles = Roles.Admin)] 
         public async Task<ActionResult<string>> GetToken(
             [FromServices] UserService service,
