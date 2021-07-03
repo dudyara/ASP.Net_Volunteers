@@ -139,13 +139,13 @@
         /// <param name="excelMakeService">excelMakeService</param>
         /// <param name="requestService">requestService</param>
         /// <returns></returns>
-        [HttpGet("getReport")] 
+        [HttpGet("getReport")]
 
         public async Task<FileResult> GetFilesAsync(
             [FromQuery] RequestFilterDto filter,
             [FromServices] ExcelMakeService excelMakeService,
             [FromServices] RequestService requestService)
-        { 
+        {
             var requests = (await requestService.Get(filter)).Result;
             var buildDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -157,8 +157,8 @@
             {
                 fileName = $"Заявки от {filter.Start}.xls";
             }
-                
-            return PhysicalFile(filePath, fileType, fileName); 
+
+            return PhysicalFile(filePath, fileType, fileName);
         }
     }
 }

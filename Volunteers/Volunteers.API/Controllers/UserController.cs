@@ -35,7 +35,7 @@
         /// <param name="token">token</param>
         /// <param name="orgId">orgId</param>
         /// <param name="authorizationService">authorizationService</param>
-        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>  
+        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpPost("register")]
         public async Task<ActionResult<string>> RegisterUser(
             RegistrationDto dto,
@@ -64,13 +64,13 @@
             return BadRequest();
         }
 
-        /// <summary> 
+        /// <summary>
         /// Получение токена
         /// </summary>
         /// <param name="service">service</param>
         /// <param name="id">orgId</param>
         [HttpGet("tokenGet")]
-        [Authorize(Roles = Roles.Admin)] 
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult<string>> GetToken(
             [FromServices] UserService service,
             long? id)
@@ -91,7 +91,8 @@
             [FromBody] LoginDto loginDto,
             [FromServices] UserService authenticationService)
         {
-            var token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password); 
+            AuthenticateDto token;
+            token = await authenticationService.AuthenticateAsync(loginDto.Email, loginDto.Password);
 
             if (token == null)
                 return Unauthorized();

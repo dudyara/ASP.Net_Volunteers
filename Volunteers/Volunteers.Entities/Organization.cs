@@ -81,10 +81,10 @@
         public long? UserId { get; set; }
 
         /// <summary>
-        /// User 
+        /// User
         /// </summary>
         public User User { get; set; }
-        
+
         /// <summary>
         /// RegistrationTokenId
         /// </summary>

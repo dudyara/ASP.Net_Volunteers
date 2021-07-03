@@ -13,7 +13,7 @@
         /// AppDbContext
         /// </summary>
         /// <param name="options">options</param>
-        public AppDbContext(DbContextOptions<AppDbContext> options) 
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
             Database.EnsureCreated();

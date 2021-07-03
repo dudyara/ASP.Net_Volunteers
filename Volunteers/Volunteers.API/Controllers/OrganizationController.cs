@@ -10,7 +10,7 @@
     using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Services;
-     
+
     /// <summary>
     /// OrganizationController
     /// </summary>
