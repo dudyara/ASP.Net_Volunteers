@@ -10,7 +10,7 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210704061331_Init")]
+    [Migration("20210704101248_Init")]
     partial class Init
     {
         /// <inheritdoc/>
@@ -276,7 +276,6 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("varchar(500)");
 
                     b.Property<bool>("IsDeleted")
@@ -291,7 +290,6 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("RequestStatus")
