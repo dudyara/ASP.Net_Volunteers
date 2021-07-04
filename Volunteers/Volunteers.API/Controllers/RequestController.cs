@@ -145,19 +145,26 @@
             [FromServices] ExcelMakeService excelMakeService,
             [FromServices] RequestService requestService)
         {
-            var requests = (await requestService.GetFilter(filter)).Result;
             var buildDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
             var filePath = buildDir + @"\DATAExcel.xlsx";
-            excelMakeService.Export(requests, filePath);
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "Заявки.xls";
-            if (filter.Start != DateTime.MinValue)
+            try
             {
-                fileName = $"Заявки от {filter.Start}.xls";
-            }
+                var requests = (await requestService.GetFilter(filter)).Result;
+                excelMakeService.Export(requests, filePath);
+                if (filter.Start != DateTime.MinValue)
+                {
+                    fileName = $"Заявки от {filter.Start}.xls";
+                }
 
-            return PhysicalFile(filePath, fileType, fileName);
+                return PhysicalFile(filePath, fileType, fileName);
+            }
+            catch (Exception ex)
+            { 
+                excelMakeService.Export(ex.Message, filePath);
+                return PhysicalFile(filePath, fileType, fileName);
+            }
         }
     }
 }
