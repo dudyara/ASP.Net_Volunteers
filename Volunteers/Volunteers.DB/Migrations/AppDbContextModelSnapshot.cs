@@ -146,13 +146,20 @@ namespace Volunteers.DB.Migrations
 
             modelBuilder.Entity("Volunteers.Entities.ActivityTypeOrganization", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
                     b.Property<long>("ActivityTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("OrganizationId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ActivityTypeId", "OrganizationId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityTypeId");
 
                     b.HasIndex("OrganizationId");
 
