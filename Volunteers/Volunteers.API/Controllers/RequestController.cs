@@ -5,6 +5,7 @@
     using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
@@ -20,14 +21,17 @@
     public class RequestController : Controller
     {
         private readonly ILogger _logger;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         /// <summary>
         /// ctor.
         /// </summary>
         /// <param name="logger">logger</param>
-        public RequestController(ILogger<RequestController> logger)
+        /// <param name="webHostEnvironment">webHostEnviroment</param>
+        public RequestController(ILogger<RequestController> logger, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
+            this._webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -145,14 +149,17 @@
             [FromServices] ExcelMakeService excelMakeService,
             [FromServices] RequestService requestService)
         {
-            var buildDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var filePath = buildDir + @"\DATAExcel.xlsx";
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            string contentRootPath = _webHostEnvironment.ContentRootPath;
+
+            var filePath = contentRootPath + @"\DATAExcel.xls";
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "Заявки.xls";
+            string path = Path.Combine(contentRootPath, "DATAExcel.xls");
             try
             {
                 var requests = (await requestService.GetFilter(filter)).Result;
-                excelMakeService.Export(requests, filePath);
+                excelMakeService.Export(requests, path);
                 if (filter.Start != DateTime.MinValue)
                 {
                     fileName = $"Заявки от {filter.Start}.xls";
@@ -162,7 +169,7 @@
             }
             catch (Exception ex)
             { 
-                excelMakeService.Export(ex.Message, filePath);
+                excelMakeService.Export(ex.Message, path);
                 return PhysicalFile(filePath, fileType, fileName);
             }
         }
