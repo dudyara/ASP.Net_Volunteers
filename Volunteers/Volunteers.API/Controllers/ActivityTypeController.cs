@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Volunteers.Entities;
@@ -89,7 +90,7 @@
         {
             var result = await service.Delete(id);
             if (result == null)
-                return BadRequest("У данного вида помощи есть организации.");
+                return BadRequest("У данного типа помощи есть организации. ");
             _logger.LogInformation("Удален тип помощи " + id + " " + DateTime.UtcNow.ToLongTimeString());
             return result;
         }
