@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Возвращает список 
+        /// Возвращает список
         /// </summary>
         /// <param name="filter">filter</param>
         public async Task<ResultPart<RequestDto>> Get(RequestFilterDto filter)

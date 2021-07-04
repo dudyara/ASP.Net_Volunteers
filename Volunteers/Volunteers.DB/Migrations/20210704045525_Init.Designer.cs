@@ -9,12 +9,9 @@ using Volunteers.DB;
 
 namespace Volunteers.DB.Migrations
 {
-    /// <summary>
-    /// AddTable1
-    /// </summary>
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210702085244_Add-Table1")]
-    partial class AddTable1
+    [Migration("20210704045525_Init")]
+    partial class Init
     {
         /// <inheritdoc/>
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,6 +132,9 @@ namespace Volunteers.DB.Migrations
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");

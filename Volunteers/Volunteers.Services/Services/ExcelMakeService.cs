@@ -34,26 +34,19 @@
                 // создание новой строки
                 var row = sheet.CreateRow(i);
 
-                var cell0 = row.CreateCell(0);
-                cell0.SetCellValue(requests[i - 1].Name);
+                row.CreateCell(0).SetCellValue(requests[i - 1].Name);
 
-                var cell1 = row.CreateCell(1);
-                cell1.SetCellValue(requests[i - 1].Description);
+                row.CreateCell(1).SetCellValue(requests[i - 1].Description);
 
-                var cell2 = row.CreateCell(2);
-                cell2.SetCellValue(requests[i - 1].PhoneNumber);
+                row.CreateCell(2).SetCellValue(requests[i - 1].PhoneNumber);
 
-                var cell3 = row.CreateCell(3);
-                cell3.SetCellValue(requests[i - 1].Comment);
+                row.CreateCell(3).SetCellValue(requests[i - 1].Comment);
 
-                var cell4 = row.CreateCell(4);
-                cell4.SetCellValue(requests[i - 1].Owner);
+                row.CreateCell(4).SetCellValue(requests[i - 1].Owner);
 
-                var cell5 = row.CreateCell(5);
-                cell5.SetCellValue(Convert.ToDateTime(requests[i - 1].Created).ToString("yy-MM-dd HH:mm:ss"));
+                row.CreateCell(5).SetCellValue(Convert.ToDateTime(requests[i - 1].Created).ToString("yy-MM-dd HH:mm"));
 
-                var cell6 = row.CreateCell(6);
-                cell6.SetCellValue(Convert.ToDateTime(requests[i - 1].Completed).ToString("yy-MM-dd HH:mm:ss"));
+                row.CreateCell(6).SetCellValue(Convert.ToDateTime(requests[i - 1].Completed).ToString("yy-MM-dd HH:mm"));
             }
 
             sheet.AutoSizeColumn(0);
@@ -71,30 +64,23 @@
         /// Создание первой строки для таблицы
         /// </summary>
         /// <param name="sheet">sheet</param>
-        public void CreateFirstRow(NPOI.SS.UserModel.ISheet sheet)
+        private void CreateFirstRow(NPOI.SS.UserModel.ISheet sheet)
         {
             var row = sheet.CreateRow(0);
-            var cell0 = row.CreateCell(0);
-            cell0.SetCellValue("Заявка");
-            var cell1 = row.CreateCell(1);
-            cell1.SetCellValue("Описание");
-            var cell2 = row.CreateCell(2);
-            cell2.SetCellValue("Телефон");
-            var cell3 = row.CreateCell(3);
-            cell3.SetCellValue("Комментарий");
-            var cell4 = row.CreateCell(4);
-            cell4.SetCellValue("Организация");
-            var cell5 = row.CreateCell(5);
-            cell5.SetCellValue("Дата создания");
-            var cell6 = row.CreateCell(6);
-            cell6.SetCellValue("Дата завершения");
+            row.CreateCell(0).SetCellValue("Заявка");
+            row.CreateCell(1).SetCellValue("Описание");
+            row.CreateCell(2).SetCellValue("Телефон");
+            row.CreateCell(3).SetCellValue("Комментарий");
+            row.CreateCell(4).SetCellValue("Организация");
+            row.CreateCell(5).SetCellValue("Дата создания");
+            row.CreateCell(6).SetCellValue("Дата завершения");
         }
 
         /// <summary>
         /// DeletePreviousFile
         /// </summary>
         /// <param name="filePath">files path</param>
-        public void DeletePreviousFile(string filePath)
+        private void DeletePreviousFile(string filePath)
         {
             if (File.Exists(filePath))
             {

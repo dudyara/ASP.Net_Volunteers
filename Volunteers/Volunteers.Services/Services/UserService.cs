@@ -50,7 +50,7 @@
             IConfiguration configuration,
             IVolunteerMapper mapper,
             IDtoValidator validator)
-            : base(repository, signInManager, userManager, validator)
+            : base(repository, validator)
         {
             _userManager = userManager;
             _organizationRepo = organizationRepo;

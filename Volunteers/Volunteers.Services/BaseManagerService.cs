@@ -15,13 +15,9 @@
         /// BaseManager
         /// </summary>
         /// <param name="repository">repository</param>
-        /// <param name="signInManager">signInManager</param>
-        /// <param name="userManager">userManager</param>
         /// <param name="validator">validator</param>
         protected BaseManagerService(
             IDbRepository<TEntity> repository,
-            SignInManager<User> signInManager,
-            UserManager<User> userManager,
             IDtoValidator validator)
         {
             Repository = repository;
