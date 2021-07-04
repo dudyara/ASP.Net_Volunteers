@@ -10,7 +10,7 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210704045525_Init")]
+    [Migration("20210704061331_Init")]
     partial class Init
     {
         /// <inheritdoc/>
@@ -235,7 +235,7 @@ namespace Volunteers.DB.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Phone");
+                    b.ToTable("Phones");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>

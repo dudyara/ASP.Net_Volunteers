@@ -232,7 +232,7 @@ namespace Volunteers.DB.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Phone");
+                    b.ToTable("Phones");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>

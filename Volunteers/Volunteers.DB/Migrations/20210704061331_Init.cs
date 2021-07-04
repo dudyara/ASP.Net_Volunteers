@@ -4,9 +4,7 @@
     using Microsoft.EntityFrameworkCore.Migrations;
     using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-    /// <summary>
-    /// Init
-    /// </summary>
+    /// <inheritdoc/>
     public partial class Init : Migration
     {
         /// <inheritdoc/>
@@ -259,7 +257,7 @@
                 });
 
             migrationBuilder.CreateTable(
-                name: "Phone",
+                name: "Phones",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -269,9 +267,9 @@
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Phone", x => x.Id);
+                    table.PrimaryKey("PK_Phones", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Phone_Organizations_OrganizationId",
+                        name: "FK_Phones_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
                         principalColumn: "Id",
@@ -366,8 +364,8 @@
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Phone_OrganizationId",
-                table: "Phone",
+                name: "IX_Phones_OrganizationId",
+                table: "Phones",
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
@@ -398,7 +396,7 @@
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Phone");
+                name: "Phones");
 
             migrationBuilder.DropTable(
                 name: "Requests");
