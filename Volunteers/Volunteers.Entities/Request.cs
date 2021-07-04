@@ -22,19 +22,16 @@
         /// <summary>
         /// Телефон клиента.
         /// </summary>
-        [Required]
         public string PhoneNumber { get; set; }
 
         /// <summary>
         /// Описание заявки.
         /// </summary>
-        [Required]
         public string Description { get; set; }
 
         /// <summary>
         /// Дата и время заявки.
         /// </summary>
-        [Required]
         public DateTime Created { get; set; }
 
         /// <summary>
