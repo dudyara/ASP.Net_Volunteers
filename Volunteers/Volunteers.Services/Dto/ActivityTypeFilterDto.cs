@@ -8,6 +8,6 @@
         /// <summary>
         /// Filter
         /// </summary>
-        public bool Flag { get; set; }
+        public bool WithOrganizations { get; set; }
     }
 }

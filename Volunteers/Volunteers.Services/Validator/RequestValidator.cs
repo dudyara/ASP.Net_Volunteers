@@ -42,13 +42,10 @@
 
         private bool NoSymbols(string name)
         {
-            var isDigit = name.Any(c => char.IsDigit(c));
-            var isSymbol = name.Any(d => char.IsSymbol(d));
-            var isPunctuation = name.Any(d => char.IsPunctuation(d));
-            if (isDigit == true || isSymbol == true || isPunctuation == true)
-                return false;
-            else
-                return true;
+            var isDigit = name.Any(char.IsDigit);
+            var isSymbol = name.Any(char.IsSymbol);
+            var isPunctuation = name.Any(char.IsPunctuation);
+            return !isDigit && !isSymbol && !isPunctuation;
         }
     }
 }

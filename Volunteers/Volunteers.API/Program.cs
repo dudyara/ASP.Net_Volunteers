@@ -39,7 +39,7 @@
                 }
             }
 
-            host.Run();
+            await host.RunAsync();
         }
 
         /// <summary>
