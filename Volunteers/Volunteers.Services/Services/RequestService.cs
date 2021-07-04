@@ -1,7 +1,6 @@
 ﻿namespace Volunteers.Services.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
@@ -19,6 +18,7 @@
     /// </summary>
     public class RequestService : BaseService<Request, RequestDto>
     {
+
         /// <summary>
         /// Метод заявок.
         /// </summary>
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Возвращает список 
+        /// Возвращает список
         /// </summary>
         /// <param name="filter">filter</param>
         public async Task<ResultPart<RequestDto>> Get(RequestFilterDto filter)
@@ -46,7 +46,7 @@
                 .Where(x => filter.Start <= x.Completed && x.Completed <= filter.End))
                 .OrderBy(x => x.Created)
                 .GetResultPartAsync<RequestDto>(Mapper, filter.Skip, filter.Limit);
-               
+
             return result;
         }
 

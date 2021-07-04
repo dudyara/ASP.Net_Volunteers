@@ -10,7 +10,7 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210519165817_Init")]
+    [Migration("20210704061331_Init")]
     partial class Init
     {
         /// <inheritdoc/>
@@ -123,6 +123,45 @@ namespace Volunteers.DB.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Volunteers.Entities.ActivityType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActivityTypes");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.ActivityTypeOrganization", b =>
+                {
+                    b.Property<long>("ActivityTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OrganizationId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ActivityTypeId", "OrganizationId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("ActivityTypeOrganization");
+                });
+
             modelBuilder.Entity("Volunteers.Entities.Organization", b =>
                 {
                     b.Property<long>("Id")
@@ -130,36 +169,91 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Adress")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<string>("Address")
+                        .HasColumnType("varchar(500)");
 
-                    b.Property<string>("ChiefFIO")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<double[]>("Location")
+                        .HasColumnType("double precision[]");
 
                     b.Property<string>("Logo")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Mail")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Manager")
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(500)");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
+                    b.Property<long?>("RegistrationTokenId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkingHours")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RegistrationTokenId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Organizations");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.Phone", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<long>("OrganizationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Phones");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("ExpireTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegistrationToken");
                 });
 
             modelBuilder.Entity("Volunteers.Entities.Request", b =>
@@ -169,26 +263,29 @@ namespace Volunteers.DB.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<string>("Comment")
+                        .HasColumnType("varchar(500)");
 
-                    b.Property<int>("Age")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("Completed")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(500)");
 
-                    b.Property<string>("FIO")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
-                    b.Property<DateTime?>("FinishDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("text");
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(500)");
 
                     b.Property<long?>("OrganizationId")
                         .HasColumnType("bigint");
@@ -197,14 +294,8 @@ namespace Volunteers.DB.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("RequestPriority")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("RequestStatus")
                         .HasColumnType("bigint");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -223,6 +314,12 @@ namespace Volunteers.DB.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -285,6 +382,9 @@ namespace Volunteers.DB.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -303,6 +403,8 @@ namespace Volunteers.DB.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -358,6 +460,51 @@ namespace Volunteers.DB.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Volunteers.Entities.ActivityTypeOrganization", b =>
+                {
+                    b.HasOne("Volunteers.Entities.ActivityType", "ActivityType")
+                        .WithMany("ActivityTypeOrganizations")
+                        .HasForeignKey("ActivityTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Volunteers.Entities.Organization", "Organization")
+                        .WithMany("ActivityTypeOrganizations")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ActivityType");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.Organization", b =>
+                {
+                    b.HasOne("Volunteers.Entities.RegistrationToken", "RegistrationToken")
+                        .WithOne("Organization")
+                        .HasForeignKey("Volunteers.Entities.Organization", "RegistrationTokenId");
+
+                    b.HasOne("Volunteers.Entities.User", "User")
+                        .WithOne("Organization")
+                        .HasForeignKey("Volunteers.Entities.Organization", "UserId");
+
+                    b.Navigation("RegistrationToken");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.Phone", b =>
+                {
+                    b.HasOne("Volunteers.Entities.Organization", "Organization")
+                        .WithMany("PhoneNumbers")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organization");
+                });
+
             modelBuilder.Entity("Volunteers.Entities.Request", b =>
                 {
                     b.HasOne("Volunteers.Entities.Organization", "Organization")
@@ -367,9 +514,44 @@ namespace Volunteers.DB.Migrations
                     b.Navigation("Organization");
                 });
 
+            modelBuilder.Entity("Volunteers.Entities.User", b =>
+                {
+                    b.HasOne("Volunteers.Entities.Role", "Role")
+                        .WithOne("User")
+                        .HasForeignKey("Volunteers.Entities.User", "RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.ActivityType", b =>
+                {
+                    b.Navigation("ActivityTypeOrganizations");
+                });
+
             modelBuilder.Entity("Volunteers.Entities.Organization", b =>
                 {
+                    b.Navigation("ActivityTypeOrganizations");
+
+                    b.Navigation("PhoneNumbers");
+
                     b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.RegistrationToken", b =>
+                {
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.Role", b =>
+                {
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Volunteers.Entities.User", b =>
+                {
+                    b.Navigation("Organization");
                 });
 #pragma warning restore 612, 618
         }

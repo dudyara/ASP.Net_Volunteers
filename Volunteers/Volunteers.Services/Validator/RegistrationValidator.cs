@@ -28,17 +28,14 @@
                     .WithMessage("Пароль должен содержать строчные и заглавные буквы, цифры и символы");
         }
 
-        private bool IsPasswordValid(string passwd)
+        private bool IsPasswordValid(string password)
         {
-            var isDigit = passwd.Any(c => char.IsDigit(c));
-            var isLower = passwd.Any(d => char.IsLower(d));
-            var isUpper = passwd.Any(c => char.IsUpper(c));
-            var isSymbol = passwd.Any(d => char.IsSymbol(d));
-            var isPunctuation = passwd.Any(d => char.IsPunctuation(d));
-            if (isDigit == true && isLower == true && isUpper == true && (isSymbol == true || isPunctuation == true))
-                return true;
-            else
-                return false;
+            var isDigit = password.Any(char.IsDigit);
+            var isLower = password.Any(char.IsLower);
+            var isUpper = password.Any(char.IsUpper);
+            var isSymbol = password.Any(char.IsSymbol);
+            var isPunctuation = password.Any(char.IsPunctuation);
+            return isDigit && isLower && isUpper && (isSymbol || isPunctuation);
         }
     }
 }

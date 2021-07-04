@@ -53,7 +53,6 @@
                 .AddFluentValidation(s =>
                 {
                     s.RegisterValidatorsFromAssemblyContaining<Startup>();
-                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                 });
             services.Scan(scan =>
                 scan.FromAssemblyOf<BaseService<BaseEntity, BaseDto>>()
@@ -132,12 +131,12 @@
             services.AddTransient<IValidator<ActivityTypeDto>, ActivityTypeValidator>();
             services.AddTransient<IValidator<RegistrationDto>, RegistrationValidator>();
 
-            services.AddTransient<IDbRepository<Organization>, DbRepository<Organization>>();
-            services.AddTransient<IDbRepository<Request>, DbRepository<Request>>();
-            services.AddTransient<IDbRepository<ActivityType>, DbRepository<ActivityType>>();
-            services.AddTransient<IDbRepository<RegistrationToken>, DbRepository<RegistrationToken>>();
-            services.AddTransient<IDbRepository<User>, DbRepository<User>>();
-            services.AddTransient<IDbRepository<Role>, DbRepository<Role>>();
+            services.AddScoped<IDbRepository<Organization>, DbRepository<Organization>>();
+            services.AddScoped<IDbRepository<Request>, DbRepository<Request>>();
+            services.AddScoped<IDbRepository<ActivityType>, DbRepository<ActivityType>>();
+            services.AddScoped<IDbRepository<RegistrationToken>, DbRepository<RegistrationToken>>();
+            services.AddScoped<IDbRepository<User>, DbRepository<User>>();
+            services.AddScoped<IDbRepository<Role>, DbRepository<Role>>();
         }
 
         /// <summary>

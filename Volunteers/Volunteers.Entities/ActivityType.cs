@@ -14,6 +14,11 @@
         public string TypeName { get; set; }
 
         /// <summary>
+        /// Картинка
+        /// </summary>
+        public string Image { get; set; }
+
+        /// <summary>
         /// связь с таблицей огранизаций
         /// </summary>
         public List<Organization> Organizations { get; set; } = new List<Organization>();

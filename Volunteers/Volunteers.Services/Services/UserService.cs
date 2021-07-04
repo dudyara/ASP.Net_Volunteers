@@ -8,7 +8,6 @@
     using System.Threading.Tasks;
     using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
@@ -16,7 +15,6 @@
     using Volunteers.Entities;
     using Volunteers.Services.Dto;
     using Volunteers.Services.Mapper;
-    using Volunteers.Services.Validator;
 
     /// <summary>
     /// AuthenticationService
@@ -30,7 +28,6 @@
         private readonly SignInManager<User> _signInManager;
         private readonly IDbRepository<Organization> _organizationRepo;
         private readonly IDbRepository<Role> _roleRepo;
-        private readonly IDbRepository<User> _userRepo;
         private readonly IConfiguration _configuration;
 
         /// <summary>
@@ -42,7 +39,6 @@
         /// <param name="organizationRepo">organizationRepo</param>
         /// <param name="configuration">configuration</param>
         /// <param name="roleRepo">roleRepo</param>
-        /// <param name="userRepo">userRepo</param>
         /// <param name="mapper">mapper</param>
         /// <param name="validator">validator</param>
         public UserService(
@@ -51,18 +47,16 @@
             IDbRepository<RegistrationToken> repository,
             IDbRepository<Organization> organizationRepo,
             IDbRepository<Role> roleRepo,
-            IDbRepository<User> userRepo,
             IConfiguration configuration,
             IVolunteerMapper mapper,
             IDtoValidator validator)
-            : base(repository, signInManager, userManager, validator)
+            : base(repository, validator)
         {
             _userManager = userManager;
             _organizationRepo = organizationRepo;
             _signInManager = signInManager;
             _configuration = configuration;
             _roleRepo = roleRepo;
-            _userRepo = userRepo;
             Mapper = mapper;
         }
 
@@ -75,7 +69,20 @@
         /// CheckRegistrationToken
         /// </summary>
         /// <param name="token">token</param>
-        public async Task<bool> CheckRegistrationToken(string token) => (await Repository.Get(s => s.Token == token).FirstOrDefaultAsync()) != null;
+        public async Task<bool> CheckRegistrationToken(string token)
+        {
+            var result = await Repository.GetAll(s => s.Token == token).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                var organization = await _organizationRepo.Get(x => x.Id == result.Id).FirstOrDefaultAsync();
+                organization.RegistrationTokenId = null;
+                await _organizationRepo.SaveChangesAsync();
+                await Repository.DeleteAsync(result);
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// GetToken
@@ -148,11 +155,11 @@
                     return dto;
                 }
 
-                throw new ArgumentException("Задан неверный id организации"); 
+                throw new ArgumentException("Задан неверный id организации");
             }
 
             return dto;
-        }      
+        }
 
         /// <summary>
         /// AuthenticateAsync
@@ -179,7 +186,7 @@
                         new Claim(ClaimTypes.Email, email),
                         new Claim(ClaimTypes.Role, roleUser.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddHours(1),
+                    Expires = DateTime.UtcNow.AddHours(24),
                     SigningCredentials = new SigningCredentials(
                         new SymmetricSecurityKey(key),
                         SecurityAlgorithms.HmacSha512Signature)
@@ -209,6 +216,15 @@
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="id">id пользователей</param>
+        public void Delete(long id)
+        {
+            Repository.DeleteAsync(id);
         }
     }
 }
