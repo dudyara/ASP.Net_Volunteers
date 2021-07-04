@@ -7,7 +7,6 @@
     /// <inheritdoc/>
     public partial class Init : Migration
     {
-
         /// <inheritdoc/>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -237,14 +236,12 @@
                 name: "ActivityTypeOrganization",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     OrganizationId = table.Column<long>(type: "bigint", nullable: false),
                     ActivityTypeId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivityTypeOrganization", x => x.Id);
+                    table.PrimaryKey("PK_ActivityTypeOrganization", x => new { x.ActivityTypeId, x.OrganizationId });
                     table.ForeignKey(
                         name: "FK_ActivityTypeOrganization_ActivityTypes_ActivityTypeId",
                         column: x => x.ActivityTypeId,
@@ -306,11 +303,6 @@
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ActivityTypeOrganization_ActivityTypeId",
-                table: "ActivityTypeOrganization",
-                column: "ActivityTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ActivityTypeOrganization_OrganizationId",
