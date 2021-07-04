@@ -136,7 +136,6 @@
                 .FirstOrDefaultAsync();
             await DeleteAsync(organizationId);
 
-            await DeleteAsync(organizationId);
             if (userId.HasValue)
             {
                 await _userRepo.DeleteAsync((long)userId);
