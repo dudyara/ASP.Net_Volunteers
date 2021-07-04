@@ -70,7 +70,7 @@
         /// <returns></returns>
         private bool IsPhoneValid(string phone)
         {
-            return phone[1..].All(c => char.IsDigit(c));
+            return phone[1..].All(char.IsDigit);
         }
 
         /// <summary>
