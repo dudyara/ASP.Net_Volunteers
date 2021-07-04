@@ -21,12 +21,12 @@
             string password = "Avk21!";
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
-                await roleManager.CreateAsync(new Role { Name = "Admin" });
+                await roleManager.CreateAsync(new Role { Id = 1, Name = "Admin" });
             }
 
             if (await roleManager.FindByNameAsync("Organization") == null)
             {
-                await roleManager.CreateAsync(new Role { Name = "Organization" });
+                await roleManager.CreateAsync(new Role { Id = 2, Name = "Organization" });
             }
 
             if (await userManager.FindByEmailAsync("adminEmail") == null)
