@@ -51,6 +51,26 @@
         }
 
         /// <summary>
+        /// Фильтр для Excel документа
+        /// </summary>
+        /// <param name="filter">filter</param>
+        /// <returns></returns>
+        public async Task<ResultPart<RequestDto>> GetFilter(RequestFilterExcelDto filter)
+        {
+            var result = await Repository.FromBuilder(_ => _
+                    .Equals(x => x.RequestStatus, filter.Status)
+                    .And.Conditional(filter.OrganizationId != 0)
+                    .Where(x => x.OrganizationId == filter.OrganizationId)
+                    .And.Conditional(filter.Status == RequestStatus.Execution)
+                    .Where(x => filter.Start <= x.Created && x.Created <= filter.Final)
+                    .And.Conditional(filter.Status == RequestStatus.Done)
+                    .Where(x => filter.Start <= x.Completed && x.Completed <= filter.Final))
+                .OrderBy(x => x.Created)
+                .GetResultPartAsync<RequestDto>(Mapper, null, null);
+            return result;
+        }
+
+        /// <summary>
         /// GetCount
         /// </summary>
         /// <param name="orgId">orgId.</param>

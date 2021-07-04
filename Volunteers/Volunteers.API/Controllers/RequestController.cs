@@ -141,11 +141,11 @@
         [HttpGet("getReport")]
 
         public async Task<FileResult> GetFilesAsync(
-            [FromQuery] RequestFilterDto filter,
+            [FromQuery] RequestFilterExcelDto filter,
             [FromServices] ExcelMakeService excelMakeService,
             [FromServices] RequestService requestService)
         {
-            var requests = (await requestService.Get(filter)).Result;
+            var requests = (await requestService.GetFilter(filter)).Result;
             var buildDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             var filePath = buildDir + @"\DATAExcel.xlsx";

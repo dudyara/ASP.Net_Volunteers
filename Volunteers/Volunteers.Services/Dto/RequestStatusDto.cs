@@ -18,7 +18,7 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Value 
+        /// Value
         /// </summary>
         public string Value { get; set; }
     }
