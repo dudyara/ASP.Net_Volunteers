@@ -88,8 +88,10 @@
             [FromServices] ActivityTypeService service)
         {
             var result = await service.Delete(id);
+            if (result == null)
+                return BadRequest("У данного вида помощи есть организации.");
             _logger.LogInformation("Удален тип помощи " + id + " " + DateTime.UtcNow.ToLongTimeString());
-            return result ?? NotFound();
+            return result;
         }
     }
 }

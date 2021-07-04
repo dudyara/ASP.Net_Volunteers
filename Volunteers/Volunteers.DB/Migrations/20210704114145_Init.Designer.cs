@@ -10,7 +10,7 @@ using Volunteers.DB;
 namespace Volunteers.DB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210704101248_Init")]
+    [Migration("20210704114145_Init")]
     partial class Init
     {
         /// <inheritdoc/>
@@ -149,13 +149,20 @@ namespace Volunteers.DB.Migrations
 
             modelBuilder.Entity("Volunteers.Entities.ActivityTypeOrganization", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
                     b.Property<long>("ActivityTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("OrganizationId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ActivityTypeId", "OrganizationId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityTypeId");
 
                     b.HasIndex("OrganizationId");
 
