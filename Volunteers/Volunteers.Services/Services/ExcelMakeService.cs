@@ -45,9 +45,9 @@
 
                 row.CreateCell(4).SetCellValue(requests[i - 1].Owner);
 
-                row.CreateCell(5).SetCellValue(DateTime.ParseExact(requests[i - 1].Created, "yy-MM-dd HH:mm", CultureInfo.InvariantCulture));
+                row.CreateCell(5).SetCellValue(Convert.ToDateTime(requests[i - 1].Created).ToString("yy-MM-dd HH:mm"));
 
-                row.CreateCell(6).SetCellValue(DateTime.ParseExact(requests[i - 1].Completed, "yy-MM-dd HH:mm", CultureInfo.InvariantCulture));
+                row.CreateCell(6).SetCellValue(Convert.ToDateTime(requests[i - 1].Completed).ToString("yy-MM-dd HH:mm"));
             }
 
             sheet.AutoSizeColumn(0);
