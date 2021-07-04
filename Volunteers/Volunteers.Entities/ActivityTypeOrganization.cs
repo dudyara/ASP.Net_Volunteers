@@ -3,7 +3,7 @@
     /// <summary>
     /// ActivityTypeOrganization - промежуточная сущность
     /// </summary>
-    public class ActivityTypeOrganization
+    public class ActivityTypeOrganization : BaseEntity
     {
         /// <summary>
         /// связь с таблицей огранизаций
