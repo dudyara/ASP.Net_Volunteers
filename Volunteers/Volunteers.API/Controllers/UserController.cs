@@ -43,7 +43,7 @@
             [FromQuery] long? orgId,
             [FromServices] UserService authorizationService)
         {
-            if (!await authorizationService.CheckRegistrationToken(token))
+            if (!await authorizationService.CheckRegistrationToken(token, orgId))
             {
                 return BadRequest();
             }
