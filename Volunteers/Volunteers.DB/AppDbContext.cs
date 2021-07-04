@@ -25,6 +25,11 @@
         public DbSet<Organization> Organizations { get; set; }
 
         /// <summary>
+        /// Phones - таблица телефонов.
+        /// </summary>
+        public DbSet<Phone> Phones { get; set; }
+
+        /// <summary>
         /// RegistrationToken - таблица для токенов для регистрации
         /// </summary>
         public DbSet<RegistrationToken> RegistrationToken { get; set; }
