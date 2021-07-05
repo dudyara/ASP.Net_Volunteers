@@ -15,23 +15,6 @@
         /// <summary>
         /// Export
         /// </summary>
-        /// <param name="message">message</param>
-        /// <param name="filePath">filePath</param>
-        public void Export(string message, string filePath)
-        {
-            // создание книги ЭКСЕЛЬ
-            var workbook = new HSSFWorkbook();
-
-            // добавление листа
-            var sheet = workbook.CreateSheet("Заявки");
-
-            var row = sheet.CreateRow(0);
-            row.CreateCell(0).SetCellValue(message);
-        }
-
-        /// <summary>
-        /// Export
-        /// </summary>
         /// <param name="requests">requests</param>
         /// <param name="filePath">filePath</param>
         public void Export(List<RequestDto> requests, string filePath)

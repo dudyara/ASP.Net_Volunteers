@@ -150,28 +150,25 @@
             [FromServices] RequestService requestService)
         {
             string webRootPath = _webHostEnvironment.WebRootPath;
-            string contentRootPath = _webHostEnvironment.ContentRootPath;
+            /*string contentRootPath = _webHostEnvironment.ContentRootPath;*/
 
-            var filePath = contentRootPath + @"\DATAExcel.xls";
+            // var filePath = contentRootPath + @"\DATAExcel.xls";
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "Заявки.xls";
-            string path = Path.Combine(contentRootPath, "DATAExcel.xls");
-            try
+            if (string.IsNullOrWhiteSpace(webRootPath))
             {
-                var requests = (await requestService.GetFilter(filter)).Result;
-                excelMakeService.Export(requests, path);
-                if (filter.Start != DateTime.MinValue)
-                {
-                    fileName = $"Заявки от {filter.Start}.xls";
-                }
+                _webHostEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "DATAExcel.xls");
+            }
 
-                return PhysicalFile(filePath, fileType, fileName);
+            string path = _webHostEnvironment.WebRootPath;
+            var requests = (await requestService.GetFilter(filter)).Result;
+            excelMakeService.Export(requests, path);
+            if (filter.Start != DateTime.MinValue)
+            {
+                fileName = $"Заявки от {filter.Start}.xls";
             }
-            catch (Exception ex)
-            { 
-                excelMakeService.Export(ex.Message, path);
-                return PhysicalFile(filePath, fileType, fileName);
-            }
+
+            return PhysicalFile(path, fileType, fileName);
         }
     }
 }
