@@ -8,6 +8,8 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using NPOI.SS.UserModel;
+    using NPOI.XSSF.UserModel;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
@@ -150,24 +152,13 @@
             [FromServices] RequestService requestService)
         {
             string webRootPath = _webHostEnvironment.WebRootPath;
-            /*string contentRootPath = _webHostEnvironment.ContentRootPath;*/
+            string contentRootPath = _webHostEnvironment.ContentRootPath;
 
             // var filePath = contentRootPath + @"\DATAExcel.xls";
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "Заявки.xls";
-            try
-            {
-                if (string.IsNullOrWhiteSpace(webRootPath))
-                {
-                    _webHostEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "DATAExcel.xls");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogInformation("Ошибка: " + ex.Message);
-            }
 
-            string path = _webHostEnvironment.WebRootPath;
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "DATAExcel.xls");
             var requests = (await requestService.GetFilter(filter)).Result;
             excelMakeService.Export(requests, path);
             if (filter.Start != DateTime.MinValue)
