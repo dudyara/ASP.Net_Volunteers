@@ -137,24 +137,31 @@
         /// <param name="excelService">excelService</param>
         /// <param name="requestService">requestService</param>
         [HttpGet("export")]
-
-        public async Task<FileResult> Export(
+        [Produces("application/octet-stream")]
+        public async Task<IActionResult> Export(
             [FromQuery] RequestFilterExcelDto filter,
             [FromServices] ExcelService excelService,
             [FromServices] RequestService requestService)
         {
-            string fileName = "Заявки.xls";
-            
-            var requests = (await requestService.GetFilter(filter)).Result;
-            excelService.Export(requests, out var stream);
-
-            if (filter.Start != DateTime.MinValue)
+            try
             {
-                fileName = $"Заявки от {filter.Start}.xls";
-            }
+                string fileName = "Заявки.xls";
 
-            string fileType = "application/octet-stream";
-            return File(stream, fileType, fileName);
+                var requests = (await requestService.GetFilter(filter)).Result;
+                excelService.Export(requests, out var stream);
+
+                if (filter.Start != DateTime.MinValue)
+                {
+                    fileName = $"Заявки от {filter.Start}.xls";
+                }
+
+                string fileType = "application/octet-stream";
+                return File(stream, fileType, fileName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"{ex.Message}{Environment.NewLine} {ex.StackTrace}");
+            }
         }
     }
 }
