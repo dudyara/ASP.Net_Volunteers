@@ -145,7 +145,6 @@
         {
             var user = await _userRepo.Get(x => x.Id == dto.UserId).FirstOrDefaultAsync();
             var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
-            await Repository.SaveChangesAsync();
             return result;
         }
 
