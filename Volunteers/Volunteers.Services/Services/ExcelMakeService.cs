@@ -12,22 +12,6 @@
     /// </summary>
     public class ExcelMakeService
     {
-        /// <summary>
-        /// Export
-        /// </summary>
-        /// <param name="message">message</param>
-        /// <param name="filePath">filePath</param>
-        public void Export(string message, string filePath)
-        {
-            // создание книги ЭКСЕЛЬ
-            var workbook = new HSSFWorkbook();
-
-            // добавление листа
-            var sheet = workbook.CreateSheet("Заявки");
-
-            var row = sheet.CreateRow(0);
-            row.CreateCell(0).SetCellValue(message);
-        }
 
         /// <summary>
         /// Export
@@ -63,6 +47,11 @@
                 row.CreateCell(4).SetCellValue(requests[i - 1].Owner);
 
                 row.CreateCell(5).SetCellValue(Convert.ToDateTime(requests[i - 1].Created).ToString("yy-MM-dd HH:mm"));
+
+                if (Convert.ToDateTime(requests[i - 1].Completed) == DateTime.MinValue)
+                {
+                    row.CreateCell(6).SetCellValue("Не завершен");
+                }
 
                 row.CreateCell(6).SetCellValue(Convert.ToDateTime(requests[i - 1].Completed).ToString("yy-MM-dd HH:mm"));
             }

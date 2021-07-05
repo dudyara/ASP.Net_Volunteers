@@ -151,14 +151,11 @@
             [FromServices] ExcelMakeService excelMakeService,
             [FromServices] RequestService requestService)
         {
-            string webRootPath = _webHostEnvironment.WebRootPath;
-            string contentRootPath = _webHostEnvironment.ContentRootPath;
-
             // var filePath = contentRootPath + @"\DATAExcel.xls";
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "Заявки.xls";
 
-            string path = Path.Combine(_webHostEnvironment.WebRootPath, "DATAExcel.xls");
+            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "DATAExcel.xls");
             var requests = (await requestService.GetFilter(filter)).Result;
             excelMakeService.Export(requests, path);
             if (filter.Start != DateTime.MinValue)
