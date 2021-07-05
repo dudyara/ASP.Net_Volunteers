@@ -28,6 +28,7 @@
         private readonly SignInManager<User> _signInManager;
         private readonly IDbRepository<Organization> _organizationRepo;
         private readonly IDbRepository<Role> _roleRepo;
+        private readonly IDbRepository<User> _userRepo;
         private readonly IConfiguration _configuration;
 
         /// <summary>
@@ -39,6 +40,7 @@
         /// <param name="organizationRepo">organizationRepo</param>
         /// <param name="configuration">configuration</param>
         /// <param name="roleRepo">roleRepo</param>
+        /// <param name="userRepo">userRepo</param>
         /// <param name="mapper">mapper</param>
         /// <param name="validator">validator</param>
         public UserService(
@@ -47,6 +49,7 @@
             IDbRepository<RegistrationToken> repository,
             IDbRepository<Organization> organizationRepo,
             IDbRepository<Role> roleRepo,
+            IDbRepository<User> userRepo,
             IConfiguration configuration,
             IVolunteerMapper mapper,
             IDtoValidator validator)
@@ -56,6 +59,7 @@
             _organizationRepo = organizationRepo;
             _signInManager = signInManager;
             _configuration = configuration;
+            _userRepo = userRepo;
             _roleRepo = roleRepo;
             Mapper = mapper;
         }
@@ -131,6 +135,17 @@
             await Repository.AddAsync(registrationToken);
             await Repository.SaveChangesAsync();
             return link += $"token={registrationToken.Token}";
+        }
+
+        /// <summary>
+        /// ChangePassword
+        /// </summary>
+        /// <param name="dto">dto</param>
+        public async Task<IdentityResult> ChangePassword(PasswordDto dto)
+        {
+            var user = await _userRepo.Get(x => x.Id == dto.UserId).FirstOrDefaultAsync();
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            return result;
         }
 
         /// <summary>
@@ -210,6 +225,7 @@
                 {
                     var organizationDto = Mapper.Map<OrganizationDto>(organizationResult);
                     authenticateDto.Data = organizationDto;
+                    authenticateDto.UserId = user.Id;
                 }
                 else
                 {

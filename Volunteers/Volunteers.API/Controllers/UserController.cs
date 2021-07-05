@@ -100,5 +100,23 @@
             _logger.LogInformation("Авторизован пользователь " + loginDto.Email + " " + DateTime.UtcNow.ToLongTimeString());
             return Ok(token);
         }
+
+        /// <summary>
+        /// Изменение пароля
+        /// </summary>
+        /// <param name="dto">dto</param>
+        /// <param name="service">service</param>
+        [Authorize]
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangePassword(
+        [FromBody] PasswordDto dto,
+        [FromServices] UserService service)
+        {
+            var result = await service.ChangePassword(dto);
+            if (result.Succeeded == false)
+                return BadRequest("Неверный пароль");
+            _logger.LogInformation("Изменен пароль пользователя " + dto.UserId + " " + DateTime.UtcNow.ToLongTimeString());
+            return Ok();
+        }
     }
 }

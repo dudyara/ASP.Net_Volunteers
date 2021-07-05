@@ -130,6 +130,7 @@
             services.AddTransient<IValidator<RequestCreateDto>, RequestValidator>();
             services.AddTransient<IValidator<ActivityTypeDto>, ActivityTypeValidator>();
             services.AddTransient<IValidator<RegistrationDto>, RegistrationValidator>();
+            services.AddTransient<IValidator<PasswordDto>, PasswordValidator>();
 
             services.AddScoped<IDbRepository<Organization>, DbRepository<Organization>>();
             services.AddScoped<IDbRepository<Request>, DbRepository<Request>>();
