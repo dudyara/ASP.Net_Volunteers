@@ -134,6 +134,18 @@
         }
 
         /// <summary>
+        /// ChangePassword
+        /// </summary>
+        /// <param name="dto">dto</param>
+        public async Task<IdentityResult> ChangePassword(PasswordDto dto)
+        {
+            var user = await _userManager.FindByIdAsync(dto.UserId.ToString());
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            await Repository.SaveChangesAsync();
+            return result;
+        }
+
+        /// <summary>
         /// AddUser
         /// </summary>
         /// <param name="dto">dto organization</param>
@@ -210,6 +222,7 @@
                 {
                     var organizationDto = Mapper.Map<OrganizationDto>(organizationResult);
                     authenticateDto.Data = organizationDto;
+                    authenticateDto.UserId = user.Id;
                 }
                 else
                 {
