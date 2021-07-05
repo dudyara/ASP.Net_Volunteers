@@ -113,8 +113,10 @@
         [FromServices] UserService service)
         {
             var result = await service.ChangePassword(dto);
+            if (result.Succeeded == false)
+                return BadRequest("Неверный пароль");
             _logger.LogInformation("Изменен пароль пользователя " + dto.UserId + " " + DateTime.UtcNow.ToLongTimeString());
-            return Ok(result);
+            return Ok();
         }
     }
 }
