@@ -2,27 +2,22 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using NPOI.HSSF.UserModel;
     using Volunteers.Services.Dto;
 
     /// <summary>
-    /// ExcelMakeService
+    /// ExcelService
     /// </summary>
-    public class ExcelMakeService
+    public class ExcelService
     {
-
         /// <summary>
         /// Export
         /// </summary>
         /// <param name="requests">requests</param>
-        /// <param name="filePath">filePath</param>
-        public void Export(List<RequestDto> requests, string filePath)
+        /// <param name="stream">stream</param>
+        public void Export(List<RequestDto> requests, out Stream stream)
         {
-
-            DeletePreviousFile(filePath);
-
             // создание книги ЭКСЕЛЬ
             var workbook = new HSSFWorkbook();
 
@@ -37,16 +32,13 @@
                 var row = sheet.CreateRow(i);
 
                 row.CreateCell(0).SetCellValue(requests[i - 1].Name);
-
                 row.CreateCell(1).SetCellValue(requests[i - 1].Description);
-
                 row.CreateCell(2).SetCellValue(requests[i - 1].PhoneNumber);
-
                 row.CreateCell(3).SetCellValue(requests[i - 1].Comment);
-
                 row.CreateCell(4).SetCellValue(requests[i - 1].Owner);
 
-                row.CreateCell(5).SetCellValue(Convert.ToDateTime(requests[i - 1].Created).ToString("yy-MM-dd HH:mm"));
+                var isCreatedValid = DateTime.TryParse(requests[i - 1].Created, out var created);
+                row.CreateCell(5).SetCellValue(isCreatedValid ? $"{created:yy-MM-dd HH:mm}" : "Время не указано");
 
                 if (Convert.ToDateTime(requests[i - 1].Completed) == DateTime.MinValue)
                 {
@@ -63,8 +55,9 @@
             sheet.AutoSizeColumn(4);
             sheet.AutoSizeColumn(5);
 
-            using FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+            stream = new MemoryStream();
             workbook.Write(stream);
+            stream.Position = 0;
         }
 
         /// <summary>
@@ -81,18 +74,6 @@
             row.CreateCell(4).SetCellValue("Организация");
             row.CreateCell(5).SetCellValue("Дата создания");
             row.CreateCell(6).SetCellValue("Дата завершения");
-        }
-
-        /// <summary>
-        /// DeletePreviousFile
-        /// </summary>
-        /// <param name="filePath">files path</param>
-        private void DeletePreviousFile(string filePath)
-        {
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
         }
     }
 }

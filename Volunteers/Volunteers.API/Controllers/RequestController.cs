@@ -1,15 +1,10 @@
 ﻿namespace Volunteers.API.Controllers
 {
     using System;
-    using System.IO;
-    using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using NPOI.SS.UserModel;
-    using NPOI.XSSF.UserModel;
     using Volunteers.Entities;
     using Volunteers.Entities.Enums;
     using Volunteers.Services.Dto;
@@ -23,17 +18,14 @@
     public class RequestController : Controller
     {
         private readonly ILogger _logger;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
         /// <summary>
         /// ctor.
         /// </summary>
         /// <param name="logger">logger</param>
-        /// <param name="webHostEnvironment">webHostEnviroment</param>
-        public RequestController(ILogger<RequestController> logger, IWebHostEnvironment webHostEnvironment)
+        public RequestController(ILogger<RequestController> logger)
         {
             _logger = logger;
-            this._webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -142,28 +134,27 @@
         /// Получение экселя
         /// </summary>
         /// <param name="filter">filter</param>
-        /// <param name="excelMakeService">excelMakeService</param>
+        /// <param name="excelService">excelService</param>
         /// <param name="requestService">requestService</param>
-        [HttpGet("getReport")]
+        [HttpGet("export")]
 
-        public async Task<FileResult> GetFilesAsync(
+        public async Task<FileResult> Export(
             [FromQuery] RequestFilterExcelDto filter,
-            [FromServices] ExcelMakeService excelMakeService,
+            [FromServices] ExcelService excelService,
             [FromServices] RequestService requestService)
         {
-            // var filePath = contentRootPath + @"\DATAExcel.xls";
-            string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "Заявки.xls";
-
-            string path = Path.Combine(_webHostEnvironment.ContentRootPath, "DATAExcel.xls");
+            
             var requests = (await requestService.GetFilter(filter)).Result;
-            excelMakeService.Export(requests, path);
+            excelService.Export(requests, out var stream);
+
             if (filter.Start != DateTime.MinValue)
             {
                 fileName = $"Заявки от {filter.Start}.xls";
             }
 
-            return PhysicalFile(path, fileType, fileName);
+            string fileType = "application/octet-stream";
+            return File(stream, fileType, fileName);
         }
     }
 }
