@@ -155,9 +155,16 @@
             // var filePath = contentRootPath + @"\DATAExcel.xls";
             string fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             string fileName = "Заявки.xls";
-            if (string.IsNullOrWhiteSpace(webRootPath))
+            try
             {
-                _webHostEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "DATAExcel.xls");
+                if (string.IsNullOrWhiteSpace(webRootPath))
+                {
+                    _webHostEnvironment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "DATAExcel.xls");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("Ошибка: " + ex.Message);
             }
 
             string path = _webHostEnvironment.WebRootPath;
