@@ -51,6 +51,13 @@
             stream = new MemoryStream();
             workbook.Write(stream);
             stream.Position = 0;
+
+            sheet.AutoSizeColumn(0);
+            sheet.AutoSizeColumn(1);
+            sheet.AutoSizeColumn(2);
+            sheet.AutoSizeColumn(3);
+            sheet.AutoSizeColumn(4);
+            sheet.AutoSizeColumn(5);
         }
 
         /// <summary>
