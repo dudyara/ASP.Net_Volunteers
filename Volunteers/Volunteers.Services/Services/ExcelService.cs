@@ -38,14 +38,16 @@
                 row.CreateCell(4).SetCellValue(requests[i - 1].Owner);
 
                 var isCreatedValid = DateTime.TryParse(requests[i - 1].Created, out var created);
-                row.CreateCell(5).SetCellValue(isCreatedValid ? $"{created:yy-MM-dd HH:mm}" : "Время не указано");
+                row.CreateCell(5).SetCellValue(isCreatedValid ? $"{created:yy-MM-dd HH:mm}" : "Время не указано!");
 
                 if (Convert.ToDateTime(requests[i - 1].Completed) == DateTime.MinValue)
                 {
                     row.CreateCell(6).SetCellValue("Не завершен");
                 }
-
-                row.CreateCell(6).SetCellValue(Convert.ToDateTime(requests[i - 1].Completed).ToString("yy-MM-dd HH:mm"));
+                else
+                {
+                    row.CreateCell(6).SetCellValue(isCreatedValid ? $"{created:yy-MM-dd HH:mm}" : "Время не указано");
+                }
             }
 
             sheet.AutoSizeColumn(0);

@@ -138,6 +138,7 @@
         /// <param name="excelService">excelService</param>
         /// <param name="requestService">requestService</param>
         [HttpGet("export")]
+        [Authorize]
         public async Task<FileResult> Export(
             [FromQuery] RequestFilterExcelDto filter,
             [FromQuery] string contentType,

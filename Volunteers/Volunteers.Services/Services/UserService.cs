@@ -156,7 +156,7 @@
         public async Task<RegistrationDto> AddUserAsync(RegistrationDto dto, long? organizationId = null)
         {
             var checkEmail = await _organizationRepo.Get(org => org.User.Email == dto.Email).FirstOrDefaultAsync();
-            if (!(checkEmail == null))
+            if (checkEmail != null)
             {
                 throw new Exception("Пользователь с такой почтой уже существует");
             }
