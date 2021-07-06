@@ -41,9 +41,9 @@
                 .And.Conditional(filter.OrganizationId != 0)
                 .Where(x => x.OrganizationId == filter.OrganizationId)
                 .And.Conditional(filter.Status == RequestStatus.Execution)
-                .Where(x => filter.Start <= x.Created && x.Created <= filter.End)
+                .Where(x => filter.Start <= x.Created && x.Created <= filter.End.AddHours(23).AddMinutes(59).AddSeconds(59))
                 .And.Conditional(filter.Status == RequestStatus.Done)
-                .Where(x => filter.Start <= x.Completed && x.Completed <= filter.End))
+                .Where(x => filter.Start <= x.Completed && x.Completed <= filter.End.AddHours(23).AddMinutes(59).AddSeconds(59)))
                 .OrderBy(x => x.Created)
                 .GetResultPartAsync<RequestDto>(Mapper, filter.Skip, filter.Limit);
 
