@@ -138,7 +138,6 @@
         /// <param name="excelService">excelService</param>
         /// <param name="requestService">requestService</param>
         [HttpGet("export")]
-        [Produces("application/octet-stream")]
         public async Task<IActionResult> Export(
             [FromQuery] RequestFilterExcelDto filter,
             [FromQuery] string contentType,
