@@ -134,12 +134,14 @@
         /// Получение экселя
         /// </summary>
         /// <param name="filter">filter</param>
+        /// <param name="contentType">contentType</param>
         /// <param name="excelService">excelService</param>
         /// <param name="requestService">requestService</param>
         [HttpGet("export")]
         [Produces("application/octet-stream")]
         public async Task<IActionResult> Export(
             [FromQuery] RequestFilterExcelDto filter,
+            [FromQuery] string contentType,
             [FromServices] ExcelService excelService,
             [FromServices] RequestService requestService)
         {
@@ -156,7 +158,7 @@
                 }
 
                 string fileType = "application/octet-stream";
-                return File(stream, fileType, fileName);
+                return File(stream, contentType ?? fileType, fileName);
             }
             catch (Exception ex)
             {
