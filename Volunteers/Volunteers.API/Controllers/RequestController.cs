@@ -134,36 +134,27 @@
         /// Получение экселя
         /// </summary>
         /// <param name="filter">filter</param>
-        /// <param name="contentType">contentType</param>
         /// <param name="excelService">excelService</param>
         /// <param name="requestService">requestService</param>
         [HttpGet("export")]
         [Authorize]
         public async Task<FileResult> Export(
             [FromQuery] RequestFilterExcelDto filter,
-            [FromQuery] string contentType,
             [FromServices] ExcelService excelService,
             [FromServices] RequestService requestService)
         {
-            /*try
-            {*/
-                string fileName = "Заявки.xls";
+            string fileName = "Заявки.xls";
 
-                var requests = (await requestService.GetFilter(filter)).Result;
-                excelService.Export(requests, out var stream);
+            var requests = (await requestService.GetFilter(filter)).Result;
+            excelService.Export(requests, out var stream);
 
-                if (filter.Start != DateTime.MinValue)
-                {
-                    fileName = $"Заявки от {filter.Start}.xls";
-                }
+            if (filter.Start != DateTime.MinValue)
+            {
+                fileName = $"Заявки от {filter.Start}.xls";
+            }
 
-                string fileType = "application/vnd.ms-excel";
-                return File(stream, contentType ?? fileType, fileName);
-           /* }
-            catch (Exception ex)
-            {*/
-              /*  return BadRequest($"{ex.Message}{Environment.NewLine} {ex.StackTrace}");*/
-           /* }*/
+            string fileType = "application/vnd.ms-excel";
+            return File(stream, fileType, fileName);
         }
     }
 }
