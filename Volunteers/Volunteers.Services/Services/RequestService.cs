@@ -66,7 +66,7 @@
                     .And.Conditional(filter.Status == RequestStatus.Done)
                     .Where(x => filter.Start <= x.Completed && x.Completed <= filter.Final))
                 .OrderBy(x => x.Created)
-                .GetResultPartAsync<RequestDto>(Mapper, null, null);
+                .GetResultPartAsync<RequestDto>(Mapper);
             return result;
         }
 
