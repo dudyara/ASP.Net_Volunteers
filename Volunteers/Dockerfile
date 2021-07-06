@@ -21,6 +21,14 @@ RUN dotnet publish "Volunteers.API/Volunteers.API.csproj" --configuration $Confi
 # Runtime image used to run the application
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS runtime
 WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgdiplus libc6-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/lib/libgdiplus.so /usr/lib/gdiplus.dll
+
 COPY --from=build /app ./
 ENV ASPNETCORE_URLS=http://*:8080
 ENTRYPOINT ["dotnet", "Volunteers.API.dll"]
