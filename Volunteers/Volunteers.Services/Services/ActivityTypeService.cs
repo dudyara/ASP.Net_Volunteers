@@ -62,7 +62,9 @@
         /// <param name="id">id</param>
         public async Task<ActionResult<ActivityType>> Delete(long id)
         {
-            var activityType = await Repository.Get().Where(a => a.Organizations.Count == 0).FirstOrDefaultAsync(x => x.Id == id);
+            var activityType = await Repository.Get()
+                .Where(a => a.Organizations.All(o => o.IsDeleted == true) || (a.Organizations.Count == 0))
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (activityType == null)
                 return null;
             await DeleteAsync(id);
