@@ -44,7 +44,7 @@
             {
                 result = await Repository
                     .Get()
-                    .Where(a => a.Organizations.Count > 0)
+                    .Where(a => a.Organizations.Any(o => o.IsDeleted == false))
                     .ProjectTo<ActivityTypeDto>(Mapper.ConfigurationProvider)
                     .ToListAsync();
             }
