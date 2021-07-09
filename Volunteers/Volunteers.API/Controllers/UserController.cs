@@ -19,7 +19,7 @@
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly string _newPath2;
+        private readonly string _defaultPath;
         private readonly ILogger<UserController> _logger;
         private readonly IWebHostEnvironment _hostEnvironment;
 
@@ -33,7 +33,7 @@
         {
             _logger = logger;
             _hostEnvironment = hostEnvironment;
-            _newPath2 = Path.GetFullPath(Path.Combine(_hostEnvironment.ContentRootPath, @"..\"));
+            _defaultPath = Path.GetFullPath(Path.Combine(_hostEnvironment.ContentRootPath, @"..\"));
         }
 
         /// <summary>
@@ -130,22 +130,20 @@
         /// <summary>
         /// GetPolycy
         /// </summary>
-        /// <returns></returns>
         [HttpGet("GetPolicy")]
         public FileResult GetPolicy()
         {
-            var filePath = _newPath2 + @"Volunteers.DB\Policy_service.pdf";
+            var filePath = _defaultPath + @"Volunteers.DB\Policy_service.pdf";
             return PhysicalFile(filePath, "application/pdf", "Policy_service.pdf");
         }
 
         /// <summary>
         /// GetAgreement
         /// </summary>
-        /// <returns></returns>
         [HttpGet("GetAgreement")]
         public FileResult GetAgreement()
         {
-            var filePath = _newPath2 + @"Volunteers.DB\Agreement_service.pdf";
+            var filePath = _defaultPath + @"Volunteers.DB\Agreement_service.pdf";
             return PhysicalFile(filePath, "application/pdf", "Agreement_service.pdf");
         }
     }
