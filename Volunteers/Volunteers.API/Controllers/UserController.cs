@@ -1,8 +1,11 @@
 ﻿namespace Volunteers.API.Controllers
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Volunteers.Entities.Enums;
@@ -16,16 +19,21 @@
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly string _newPath2;
         private readonly ILogger<UserController> _logger;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="logger">logger</param>
+        /// <param name="hostEnvironment">hostEnviroment</param>
         public UserController(
-            ILogger<UserController> logger)
+            ILogger<UserController> logger, IWebHostEnvironment hostEnvironment)
         {
             _logger = logger;
+            _hostEnvironment = hostEnvironment;
+            _newPath2 = Path.GetFullPath(Path.Combine(_hostEnvironment.ContentRootPath, @"..\"));
         }
 
         /// <summary>
@@ -117,6 +125,28 @@
                 return BadRequest("Неверный пароль");
             _logger.LogInformation("Изменен пароль пользователя " + dto.UserId + " " + DateTime.UtcNow.ToLongTimeString());
             return Ok();
+        }
+
+        /// <summary>
+        /// GetPolycy
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetPolicy")]
+        public FileResult GetPolicy()
+        {
+            var filePath = _newPath2 + @"Volunteers.DB\Policy_service.pdf";
+            return PhysicalFile(filePath, "application/pdf", "Policy_service.pdf");
+        }
+
+        /// <summary>
+        /// GetAgreement
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAgreement")]
+        public FileResult GetAgreement()
+        {
+            var filePath = _newPath2 + @"Volunteers.DB\Agreement_service.pdf";
+            return PhysicalFile(filePath, "application/pdf", "Agreement_service.pdf");
         }
     }
 }
