@@ -130,20 +130,20 @@
         /// <summary>
         /// GetPolycy
         /// </summary>
-        [HttpGet("GetPolicy")]
+        [HttpGet("getPolicy")]
         public FileResult GetPolicy()
         {
-            var filePath = _defaultPath + @"Volunteers.DB\Policy_service.pdf";
+            var filePath = _defaultPath + @"Volunteers.DB\Files\Policy_service.pdf";
             return PhysicalFile(filePath, "application/pdf", "Policy_service.pdf");
         }
 
         /// <summary>
         /// GetAgreement
         /// </summary>
-        [HttpGet("GetAgreement")]
+        [HttpGet("getAgreement")]
         public FileResult GetAgreement()
         {
-            var filePath = _defaultPath + @"Volunteers.DB\Agreement_service.pdf";
+            var filePath = _defaultPath + @"Volunteers.DB\Files\Agreement_service.pdf";
             return PhysicalFile(filePath, "application/pdf", "Agreement_service.pdf");
         }
     }
