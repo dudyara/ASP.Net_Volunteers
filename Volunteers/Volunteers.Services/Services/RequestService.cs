@@ -167,7 +167,7 @@
         public async Task<ActionResult<Request>> Create(RequestCreateDto requestDto)
         {
             var request = Mapper.Map<Request>(requestDto);
-            request.Created = DateTime.Now;
+            request.Created = DateTime.UtcNow.AddHours(7);
             request.RequestStatus = RequestStatus.Waiting;
             await Repository.AddAsync(request);
             return request;
