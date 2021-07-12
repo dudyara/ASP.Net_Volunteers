@@ -32,7 +32,7 @@
                     await context.Response.WriteAsync("Код не задан");
                     break;
                 case 401:
-                    await context.Response.WriteAsync("Пользователь не аутентифицирован");
+                    await context.Response.WriteAsync("Пользователь не авторизован");
                     break;
                 case 403:
                     await context.Response.WriteAsync("У пользователя отсутствует доступ к объекту (на уровне бизнес-логики)");

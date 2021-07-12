@@ -16,11 +16,11 @@
         {
             RuleFor(p => p.NewPassword)
                 .NotEmpty()
-                    .WithMessage("Поле не должно быть пустым")
+                    .WithMessage("Поле не должно быть пустым.")
                 .MinimumLength(6)
-                    .WithMessage("Поле должно содержать как минимум 6 символов")
+                    .WithMessage("Поле должно содержать как минимум 6 символов.")
                 .Must(IsPasswordValid)
-                    .WithMessage("Пароль должен содержать строчные и заглавные буквы, цифры и символы");
+                    .WithMessage("Пароль должен содержать строчные и заглавные буквы, цифры и символы.");
         }
 
         private bool IsPasswordValid(string password)

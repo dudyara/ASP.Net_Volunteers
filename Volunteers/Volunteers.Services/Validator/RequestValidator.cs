@@ -16,18 +16,18 @@
         {
             RuleFor(p => p.Name)
                 .NotEmpty()
-                    .WithMessage("Поле не должно быть пустым")
+                    .WithMessage("Поле не должно быть пустым.")
                 .Must(NoSymbols)
-                    .WithMessage("Поле должно содержать только буквы")
+                    .WithMessage("Поле должно содержать только буквы.")
                 .Length(1, 100)
-                    .WithMessage("Количество символов должно быть от 1 до 100");
+                    .WithMessage("Количество символов должно быть от 1 до 100.");
             RuleFor(p => p.PhoneNumber)
                 .NotEmpty()
-                    .WithMessage("Поле не должно быть пустым")
+                    .WithMessage("Поле не должно быть пустым.")
                 .Length(10)
-                    .WithMessage("Количество символов должно быть 10")
+                    .WithMessage("Количество символов должно быть 10.")
                 .Must(IsPhoneValid)
-                    .WithMessage("Номер должен содержать только цифры");
+                    .WithMessage("Номер должен содержать только цифры.");
         }
 
         /// <summary>
