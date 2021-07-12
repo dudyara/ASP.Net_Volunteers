@@ -1,8 +1,11 @@
 ﻿namespace Volunteers.API.Controllers
 {
     using System;
+    using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Volunteers.Entities.Enums;
@@ -16,16 +19,19 @@
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly string _defaultPath;
         private readonly ILogger<UserController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="logger">logger</param>
+        /// <param name="hostEnvironment">hostEnviroment</param>
         public UserController(
-            ILogger<UserController> logger)
+            ILogger<UserController> logger, IWebHostEnvironment hostEnvironment)
         {
             _logger = logger;
+            _defaultPath = Path.GetFullPath(Path.Combine(hostEnvironment.ContentRootPath, @"..\"));
         }
 
         /// <summary>
@@ -117,6 +123,26 @@
                 return BadRequest("Неверный пароль");
             _logger.LogInformation("Изменен пароль пользователя " + dto.UserId + " " + DateTime.UtcNow.ToLongTimeString());
             return Ok();
+        }
+
+        /// <summary>
+        /// GetPolycy
+        /// </summary>
+        [HttpGet("getPolicy")]
+        public FileResult GetPolicy()
+        {
+            var filePath = _defaultPath + @"..\Files\Policy_service.pdf";
+            return PhysicalFile(filePath, "application/pdf", "Policy_service.pdf");
+        }
+
+        /// <summary>
+        /// GetAgreement
+        /// </summary>
+        [HttpGet("getAgreement")]
+        public FileResult GetAgreement()
+        {
+            var filePath = _defaultPath + @"..\Files\Agreement_service.pdf";
+            return PhysicalFile(filePath, "application/pdf", "Agreement_service.pdf");
         }
     }
 }
