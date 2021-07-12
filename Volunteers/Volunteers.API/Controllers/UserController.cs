@@ -133,7 +133,7 @@
         [HttpGet("getPolicy")]
         public FileResult GetPolicy()
         {
-            var filePath = _defaultPath + @"Volunteers.DB\Files\Policy_service.pdf";
+            var filePath = _defaultPath + @"..\Files\Policy_service.pdf";
             return PhysicalFile(filePath, "application/pdf", "Policy_service.pdf");
         }
 
@@ -143,7 +143,7 @@
         [HttpGet("getAgreement")]
         public FileResult GetAgreement()
         {
-            var filePath = _defaultPath + @"Volunteers.DB\Files\Agreement_service.pdf";
+            var filePath = _defaultPath + @"..\Files\Agreement_service.pdf";
             return PhysicalFile(filePath, "application/pdf", "Agreement_service.pdf");
         }
     }
