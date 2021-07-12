@@ -21,7 +21,6 @@
     {
         private readonly string _defaultPath;
         private readonly ILogger<UserController> _logger;
-        private readonly IWebHostEnvironment _hostEnvironment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
@@ -32,8 +31,7 @@
             ILogger<UserController> logger, IWebHostEnvironment hostEnvironment)
         {
             _logger = logger;
-            _hostEnvironment = hostEnvironment;
-            _defaultPath = Path.GetFullPath(Path.Combine(_hostEnvironment.ContentRootPath, @"..\"));
+            _defaultPath = Path.GetFullPath(Path.Combine(hostEnvironment.ContentRootPath, @"..\"));
         }
 
         /// <summary>
