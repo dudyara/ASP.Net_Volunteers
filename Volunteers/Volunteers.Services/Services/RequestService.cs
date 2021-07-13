@@ -62,9 +62,9 @@
                     .And.Conditional(filter.OrganizationId != 0)
                     .Where(x => x.OrganizationId == filter.OrganizationId)
                     .And.Conditional(filter.Status == RequestStatus.Execution)
-                    .Where(x => filter.Start <= x.Created && x.Created <= filter.Final.AddHours(23).AddMinutes(59).AddSeconds(59))
+                    .Where(x => filter.Start <= x.Created && x.Created <= filter.Final)
                     .And.Conditional(filter.Status == RequestStatus.Done)
-                    .Where(x => filter.Start <= x.Completed && x.Completed <= filter.Final.AddHours(23).AddMinutes(59).AddSeconds(59)))
+                    .Where(x => filter.Start <= x.Completed && x.Completed <= filter.Final))
                 .OrderBy(x => x.Created)
                 .GetResultPartAsync<RequestDto>(Mapper);
             return result;
