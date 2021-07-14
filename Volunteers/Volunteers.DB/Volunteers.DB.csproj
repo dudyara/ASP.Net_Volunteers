@@ -25,10 +25,4 @@
     <ProjectReference Include="..\Volunteers.Entities\Volunteers.Entities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Files\Policy_service.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
