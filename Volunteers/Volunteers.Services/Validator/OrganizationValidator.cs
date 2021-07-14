@@ -14,25 +14,25 @@
         /// </summary>
         public OrganizationValidator()
         {
-            string notEmptyMessage = "Поле не должно быть пустым";
+            string notEmptyMessage = "Поле не должно быть пустым.";
 
             RuleFor(p => p.Name)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage)
                 .Length(1, 200)
-                    .WithMessage("Поле должно содержать от 1 до 200 символов");
+                    .WithMessage("Поле должно содержать от 1 до 200 символов.");
             RuleFor(p => p.Manager)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage)
                 .Must(NoSymbols)
-                    .WithMessage("Поле должно содержать только буквы")
+                    .WithMessage("Поле должно содержать только буквы.")
                 .Length(1, 100)
-                    .WithMessage("Поле должно содержать от 1 до 100 символов");
+                    .WithMessage("Поле должно содержать от 1 до 100 символов.");
             RuleFor(p => p.Description)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage)
                 .Length(1, 500)
-                    .WithMessage("Поле должно содержать от 1 до 500 символов");
+                    .WithMessage("Поле должно содержать от 1 до 500 символов.");
             RuleForEach(p => p.ActivityTypes)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage);
@@ -40,24 +40,24 @@
                 .NotEmpty()
                     .WithMessage(notEmptyMessage)
                 .EmailAddress()
-                    .WithMessage("Неверный формат электронной почты");
+                    .WithMessage("Неверный формат электронной почты.");
             RuleForEach(p => p.PhoneNumbers)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage)
                 .Length(10)
-                    .WithMessage("Поле должно содержать 10 символов")
+                    .WithMessage("Поле должно содержать 10 символов.")
                 .Must(IsPhoneValid)
-                    .WithMessage("Поле может содержать только цифры");
+                    .WithMessage("Поле может содержать только цифры.");
             RuleFor(p => p.WorkingHours)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage)
                 .Length(1, 100)
-                    .WithMessage("Поле должно содержать от 1 до 100 символов");
+                    .WithMessage("Поле должно содержать от 1 до 100 символов.");
             RuleFor(p => p.Address)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage)
                 .Length(1, 100)
-                    .WithMessage("Поле должно содержать от 1 до 100 символов");
+                    .WithMessage("Поле должно содержать от 1 до 100 символов.");
             RuleFor(p => p.Location)
                 .NotEmpty()
                     .WithMessage(notEmptyMessage);

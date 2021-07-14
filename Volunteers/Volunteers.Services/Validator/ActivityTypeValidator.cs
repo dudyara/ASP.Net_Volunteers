@@ -16,11 +16,11 @@
         {
             RuleFor(p => p.TypeName)
                 .NotEmpty()
-                    .WithMessage("Поле не должно быть пустым")
+                    .WithMessage("Поле не должно быть пустым.")
                 .Must(NoSymbols)
-                    .WithMessage("Поле должно содержать только буквы")
+                    .WithMessage("Поле должно содержать только буквы.")
                 .Length(1, 50)
-                    .WithMessage("Количество символов должно быть от 1 до 50");
+                    .WithMessage("Количество символов должно быть от 1 до 50.");
         }
 
         /// <summary>
