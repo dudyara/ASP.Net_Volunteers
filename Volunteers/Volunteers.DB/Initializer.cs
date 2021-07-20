@@ -16,8 +16,8 @@
         /// <param name="roleManager">roleManager</param>
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            string adminEmail = "admin@mail.ru";
-            string password = "Avk21!";
+            string adminEmail = "test@test.ru";
+            string password = "Test1!";
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
                 await roleManager.CreateAsync(new Role { Name = "Admin" });
